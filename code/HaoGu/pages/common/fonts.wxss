@@ -15,17 +15,29 @@
 }
 
 .S4 {
-  font-size: 34rpx;
+  font-size: 30rpx;
 }
 
 .S5 {
-  font-size: 36rpx;
+  font-size: 32rpx;
 }
 
 .S6 {
-  font-size: 40rpx;
+  font-size: 34rpx;
 }
 
 .S7 {
+  font-size: 36rpx;
+}
+
+.S8 {
+  font-size: 40rpx;
+}
+
+.S9 {
+  font-size: 46rpx;
+}
+
+.S10 {
   font-size: 80rpx;
 }

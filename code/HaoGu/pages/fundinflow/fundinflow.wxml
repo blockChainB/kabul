@@ -1,0 +1,5 @@
+<!--pages/fundinflow/fundinflow.wxml-->
+<view class="container">
+    <canvas canvas-id="fundinflow_pie" style="box-sizing: border-box; border: 1px solid red; width: 100%; height: 422rpx;"/>
+</view>
+

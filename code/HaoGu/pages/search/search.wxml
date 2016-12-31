@@ -15,12 +15,10 @@
   <!--列表-->
   <block wx:key="optional" wx:for="{{stockArray}}" wx:for-item="item" wx:for-index="index">
     <view class="list_item" bindtap="onShowStockDetail">
+      <text class="item_type C3-font S1">沪A</text>
       <text class="item_name T1 S3">{{item.n}}</text>
       <text class="item_code T1 S2">{{item.c}}</text>
-      <view class="item_operation" bindtap="onAddOrDelStock">
-        <image src="../../images/optional_add.png"></image>
-        <text class="T3 S1">添加自选</text>
-      </view>
+      <image src="{{icon.option}}" bindtap="onAddOrDelStock"></image>
     </view>
     <template is="lineView"></template>
   </block>

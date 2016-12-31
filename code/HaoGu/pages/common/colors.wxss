@@ -1,86 +1,46 @@
 
 .B1 {
-  background-color: rgb(252, 252, 252);
+  background-color: rgb(239, 239, 244);
 }
 
 .B2 {
-  background-color: rgb(229, 231, 236);
+  background-color: rgb(255, 255, 255);
 }
 
 .B3 {
-  background-color: rgb(247, 247, 250);
+  background-color: rgb(248, 248, 248);
 }
 
 .B4 {
-  background-color: rgb(65, 66, 79);
-}
-
-.B5 {
   background-color: rgb(228, 228, 228);
 }
 
-.B6 {
+.B5 {
   background-color: rgb(178, 178, 178);
 }
 
 .C1-bg {
-  background-color: rgb(230, 67, 64);
+  background-color: rgb(235, 51, 59);
 }
 
 .C2-bg {
-  background-color: rgb(243, 210, 209);
+  background-color: rgb(23, 176, 62);
 }
 
 .C3-bg {
-  background-color: rgb(9, 187, 7);
-}
-
-.C4-bg {
-  background-color: rgb(198, 234, 198);
-}
-
-.C5-bg {
   background-color: rgb(87, 107, 149);
 }
 
-.C6-bg {
-  background-color: rgb(214, 218, 226);
-}
-
-.C7-bg {
-  background-color: rgb(255, 255, 255);
-}
-
 .C1-font {
-  color: rgb(230, 67, 64);
+  color: rgb(235, 51, 59);
 }
 
 .C2-font {
-  color: rgb(243, 210, 209);
+  color: rgb(23, 176, 62);
 }
 
 .C3-font {
-  color: rgb(9, 187, 7);
-}
-
-.C4-font {
-  color: rgb(198, 234, 198);
-}
-
-.C5-font {
   color: rgb(87, 107, 149);
-}
-
-.C6-font {
-  color: rgb(214, 218, 226);
-}
-
-.C7-font {
-  color: rgb(255, 255, 255);
-}
-
-.T0 {
-  color: rgb(255, 255, 255);
 }
 
 .T1 {
@@ -96,5 +56,5 @@
 }
 
 .T4 {
-  color: #000;
+  color: rgb(255, 255, 255);
 }

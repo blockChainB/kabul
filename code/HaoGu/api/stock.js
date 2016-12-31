@@ -13,9 +13,9 @@ function search({key = ""} = {}) {
             showFailMsg: false,
             method: 'GET',
             data: {
-                url: "http://m.emoney.cn/getinfo/search.aspx?key=" + key,
+                key: key,
             },
-            url: `${Service.BaseUrl}`,
+            url: 'http://m.emoney.cn/getinfo/search.aspx',
         }).then(function (res) {
             if (res.statusCode == 200) {
                 resolve(res.data.data);
@@ -181,11 +181,38 @@ let DynamicValueRequireField = {
     FallHeadGoodsName: -20004, // 板块领跌股名称
 }
 
+function getNews({id, cls} = {}) {
+    var promise = new Promise(function (resolve, reject) {
+        Service.request({
+            showLoading: false,
+            showFailMsg: false,
+            data: {
+                stock: id,
+                cls: cls
+            },
+            url: `${Service.BaseUrl}6300`,
+        }).then(function (res) {
+            if (res.statusCode == 200) {
+                console.log('stock news: ',res.data)
+                // var result = parser.parseMinutesData(res.data)
+                // resolve(result);
+            } else {
+                resolve([]);
+            }
+        }, function (res) {
+            console.log("request klines fail:", res)
+            reject(res);
+        });
+    });
+    return promise;
+}
+
 module.exports = {
     search: search,
     getKLines: getKLines,
     getMinutes: getMinutes,
     requestDynaValueData: requestDynaValueData,
-    DynamicValueRequireField: DynamicValueRequireField
+    DynamicValueRequireField: DynamicValueRequireField,
+    getNews: getNews
 }
 

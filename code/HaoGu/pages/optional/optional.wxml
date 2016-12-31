@@ -1,5 +1,11 @@
 
 <!--pages/optional/optional.wxml-->
-<view class="view_container">
-  <image src="../../images/optional_search.png" bindtap="onSearchEvent"></image>
-</view>
+
+  <view class="container">
+
+    <image class="search-image" src="../../images/icon_optional_search.png" bindtap="onSearchEvent" ></image>
+
+    <button class="fundflow-btn" bindtap="onFundflowEvent">资金图</button>
+
+  </view>
+

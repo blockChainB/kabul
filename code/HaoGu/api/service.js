@@ -1,6 +1,8 @@
 import Promise from './lib/es6-promise-min';
 
-let BaseUrl = "http://192.168.3.51:8094/?X-Protocol-Id="
+// let BaseUrl = "http://192.168.3.51:8094/?X-Protocol-Id="    // 邬  K线
+// let BaseUrl = "http://120.55.169.35:1121/?X-Protocol-Id="    // 郭磊  K线
+let BaseUrl = "http://192.168.8.189:2368/?X-Protocol-Id="      // 郭磊   个股新闻
 var TranferUrl = "https://mobiletest.emoney.cn/wxapp/transfer"
 
 function request(options) {
@@ -14,6 +16,7 @@ function request(options) {
         showLoading: true,
         showFailMsg: true
     }, options);
+    console.log(opts)
 
     var promise = new Promise(function (resolve, reject) {
         opts.success = function (res) {

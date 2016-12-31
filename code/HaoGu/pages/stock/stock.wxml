@@ -1,0 +1,80 @@
+<import src="../common/KLineView/KLineView.wxml" />
+
+<!-- 个股头部指标 -->
+<view id="section_quotation">
+    <!-- 价格、涨跌、涨跌幅 -->
+    <view class="quota_price" style="color:{{quotationColor}};">{{quotation.price}}</view>
+    <view class="quota_zd" style="color:{{quotationColor}};">{{quotation.zd}}</view>
+    <view class="quota_zdf" style="color:{{quotationColor}};">{{quotation.zdf}}</view>
+
+    <!-- 开盘、最高、最低 -->
+    <text class="quota_item quota_row1 quota_colum3">开盘：</text>
+    <text class="quota_item quota_row2 quota_colum3">最高：</text>
+    <text class="quota_item quota_row3 quota_colum3">最低：</text>
+    <text class="quota_item quota_row1 quota_colum4">{{quotation.open}}</text>
+    <text class="quota_item quota_row2 quota_colum4">{{quotation.high}}</text>
+    <text class="quota_item quota_row3 quota_colum4">{{quotation.low}}</text>
+
+    <!-- 换手、市盈、市净 -->
+    <text class="quota_item quota_row1 quota_colum5">换手：</text>
+    <text class="quota_item quota_row2 quota_colum5">市盈：</text>
+    <text class="quota_item quota_row3 quota_colum5">市净：</text>
+    <text class="quota_item quota_row1 quota_colum6">{{quotation.hs}}</text>
+    <text class="quota_item quota_row2 quota_colum6">{{quotation.sy}}</text>
+    <text class="quota_item quota_row3 quota_colum6">{{quotation.sj}}</text>
+
+    <!-- 成交量、净流、总值 -->
+    <text class="quota_item quota_row4 quota_colum1">成交量：</text>
+    <text class="quota_item quota_row4 quota_colum3">净流：</text>
+    <text class="quota_item quota_row4 quota_colum5">总值：</text>
+    <text class="quota_item quota_row4 quota_colum2">{{quotation.cjl}}</text>
+    <text class="quota_item quota_row4 quota_colum4">{{quotation.jl}}</text>
+    <text class="quota_item quota_row4 quota_colum6">{{quotation.zz}}</text>
+
+    <!-- 成交额、量比、流值 -->
+    <text class="quota_item quota_row5 quota_colum1">成交额：</text>
+    <text class="quota_item quota_row5 quota_colum3">量比：</text>
+    <text class="quota_item quota_row5 quota_colum5">流值：</text>
+    <text class="quota_item quota_row5 quota_colum2">{{quotation.cje}}</text>
+    <text class="quota_item quota_row5 quota_colum4">{{quotation.lb}}</text>
+    <text class="quota_item quota_row5 quota_colum6">{{quotation.lz}}</text>
+</view>
+
+<!-- 走势图 -->
+<view id="selector_time">
+    <text>分时</text>
+    <text>日线</text>
+    <text>周线</text>
+    <text>月线</text>
+    <text>60分钟</text>
+</view>
+<view id="canvas_and_indicator">
+    <template is="KLineView" data="{{kLineData}}" />
+</view>
+
+<!-- 新闻、资金、公告、研报 -->
+<view id="selector_info">
+    <text>新闻</text>
+    <text>资金</text>
+    <text>公告</text>
+    <text>研报</text>
+</view>
+<swiper current="{{currentInfoIndex}}">
+    <!-- 新闻 -->
+    <swiper-item>新闻</swiper-item>
+    
+    <!-- 资金 -->
+    <swiper-item>资金</swiper-item>
+    
+    <!-- 公告 -->
+    <swiper-item>公告</swiper-item>
+    
+    <!-- 研报 -->
+    <swiper-item>研报</swiper-item>
+</swiper>
+
+<!-- 添加自选 -->
+<view id="section_add_zxg">
+    <image id="img_zxg" src="../../images/add_zxg.png"></image>
+    <text id="tv_zxg">添加自选</text>
+</view>

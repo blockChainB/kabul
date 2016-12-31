@@ -16,5 +16,21 @@ Page({
                 // complete
             }
         })
+    },
+
+    onFundflowEvent: function (e) {
+        console.log("onFundflowEvent");
+        wx.navigateTo({
+            url:'../fundinflow/fundinflow',
+            success: function (res) {
+                // success
+            },
+            fail: function () {
+                // fail
+            },
+            complete: function () {
+                // complete
+            }
+        })
     }
 })

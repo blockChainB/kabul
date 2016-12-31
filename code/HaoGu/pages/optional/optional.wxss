@@ -1,12 +1,23 @@
 /* pages/optional/optional.wxss */
 
-.view_container {
-  width: 100%;
-  height: 100%;
+.search-image {
+  position: fixed;
+  width: 90rpx;
+  height: 90rpx;
+  right: 20rpx;
+  bottom: 20rpx;
 }
 
-.view_container image {
-  width: 100rpx;
-  height: 100rpx;
-  background-color: #ff0000;
+.fundflow-btn{
+  position: fixed;
+  height: 90rpx;
+  right: 120rpx;
+  bottom: 20rpx;
+  background: deepskyblue;
+  color: white;
+  font-weight:bold;
 }
+
+
+
+

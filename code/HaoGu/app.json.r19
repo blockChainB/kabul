@@ -1,21 +1,12 @@
 {
   "pages": [
-    "pages/stock/stock",
     "pages/optional/optional",
     "pages/kanpan/kanpan",
     "pages/haogu/haogu",
-<<<<<<< .mine
-    "pages/search/search"
-    
-||||||| .r18
-    "pages/search/search",
-    "pages/stock/stock"
-=======
     "pages/search/search",
     "pages/stock/stock",
     "pages/fundinflow/fundinflow"
 
->>>>>>> .r19
   ],
   "window": {
     "navigationBarBackgroundColor": "#37383b",

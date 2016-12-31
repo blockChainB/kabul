@@ -1,0 +1,167 @@
+@import "../common/KLineView/KLineView.wxss";
+
+#section_quotation {
+    width: 750rpx;
+    height: 213rpx;
+    margin-top: 21rpx;
+    position: relative;
+}
+
+.quota_price {
+    width: 280rpx;
+    height: 80rpx;
+    position: absolute;
+    font-size: 52rpx;
+    text-align: center;
+    line-height: 80rpx;
+}
+
+.quota_zdf {
+    width: 140rpx;
+    height: 47rpx;
+    position: absolute;
+    top: 70rpx;
+    left: 0;
+    line-height: 47rpx;
+    text-align: right;
+    padding-right: 8rpx;
+    box-sizing: border-box;
+}
+
+.quota_zd {
+    width: 140rpx;
+    height: 47rpx;
+    position: absolute;
+    top: 70rpx;
+    left: 140rpx;
+    line-height: 47rpx;
+    text-align: left;
+    padding-left: 8rpx;
+    box-sizing: border-box;
+}
+
+#section_quotation .quota_arrow {
+    width: 2rpx;
+    height: 8rpx;
+}
+
+#section_quotation .quota_item {
+    font-size: 26rpx;
+    color: #888888;
+}
+
+#section_quotation .quota_row1 {
+    position: absolute;
+    top: 10rpx;
+}
+
+#section_quotation .quota_row2 {
+    position: absolute;
+    top: 50rpx;
+}
+
+#section_quotation .quota_row3 {
+    position: absolute;
+    top: 90rpx;
+}
+
+#section_quotation .quota_row4 {
+    position: absolute;
+    top: 140rpx;
+}
+
+#section_quotation .quota_row5 {
+    position: absolute;
+    top: 181rpx;
+}
+
+#section_quotation .quota_colum1 {
+    position: absolute;
+    left: 30rpx;
+}
+
+#section_quotation .quota_colum2 {
+    position: absolute;
+    left: 135rpx;
+}
+
+#section_quotation .quota_colum3 {
+    position: absolute;
+    left: 293rpx;
+}
+
+#section_quotation .quota_colum4 {
+    position: absolute;
+    left: 372rpx;
+}
+
+#section_quotation .quota_colum5 {
+    position: absolute;
+    left: 554rpx;
+}
+
+#section_quotation .quota_colum6 {
+    position: absolute;
+    left: 632rpx;
+}
+
+#selector_time {
+    width: 710rpx;
+    height: 60rpx;
+    background-color: #f8f8f8;
+    margin: 16rpx auto 14rpx auto;
+    box-sizing: border-box;
+    border: 1rpx solid #dadada;
+    border-radius: 6rpx;
+}
+
+#selector_time text {
+    display: inline-block;
+    width: 20%;
+    height: 100%;
+    border-right: 1rpx solid #dadada;
+    box-sizing: border-box;
+    text-align: center;
+    line-height: 60rpx;
+}
+
+#selector_time text:last-child {
+    border: none;
+}
+
+#selector_info {
+    width: 710rpx;
+    height: 60rpx;
+    background-color: #f8f8f8;
+    margin: 16rpx auto 14rpx auto;
+    box-sizing: border-box;
+    border: 1rpx solid #dadada;
+    border-radius: 6rpx;
+}
+
+#selector_info text {
+    display: inline-block;
+    width: 25%;
+    height: 100%;
+    border-right: 1rpx solid #dadada;
+    box-sizing: border-box;
+    text-align: center;
+    line-height: 60rpx;
+}
+
+#selector_info text:last-child {
+    border: none;
+}
+
+#section_add_zxg {
+    position: fixed;
+    bottom: 0;
+    width: 750rpx;
+    height: 98rpx;
+    border-top: 1rpx solid #b2b2b2;
+}
+
+#img_zxg {
+    width: 48rpx;
+    height: 48rpx;
+}
