@@ -1,0 +1,27 @@
+<import src="../common/SearchBar/SearchBar.wxml" />
+<import src="../common/line.wxml" />
+<view style="position:relative;">
+
+  <!--搜索框-->
+  <view class="search">
+    <template is="SearchBar" data="{{searchData}}" />
+  </view>
+
+  <!--提示文字-->
+  <view class="prompt B2">
+    <text class="T3 S2">最近浏览的股票</text>
+  </view>
+
+  <!--列表-->
+  <block wx:key="optional" wx:for="{{stockArray}}" wx:for-item="item" wx:for-index="index">
+    <view class="list_item" bindtap="onShowStockDetail">
+      <text class="item_name T1 S3">{{item.n}}</text>
+      <text class="item_code T1 S2">{{item.c}}</text>
+      <view class="item_operation" bindtap="onAddOrDelStock">
+        <image src="../../images/optional_add.png"></image>
+        <text class="T3 S1">添加自选</text>
+      </view>
+    </view>
+    <template is="lineView"></template>
+  </block>
+</view>

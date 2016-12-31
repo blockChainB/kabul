@@ -1,0 +1,14 @@
+<template name="StockCell">
+  <view class="cell_stock" longtap="onLongTapEvent">
+    <view class="super" style="background-color:#ff0000">
+      <text>{{item.name}}</text>
+      <text>{{item.code}}</text>
+    </view>
+    <view class="super" style="background-color:#00ff00">
+      <text>{{item.price}}</text>
+    </view>
+    <view class="super" style="background-color:#0000ff" longtap="onLongTapEvent">
+      <text>{{item.zdf}}</text>
+    </view>
+  </view>
+</template>

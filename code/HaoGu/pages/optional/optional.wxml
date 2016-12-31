@@ -1,0 +1,5 @@
+
+<!--pages/optional/optional.wxml-->
+<view class="view_container">
+  <image src="../../images/optional_search.png" bindtap="onSearchEvent"></image>
+</view>

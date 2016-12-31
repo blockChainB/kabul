@@ -1,0 +1,31 @@
+.S1 {
+  font-size: 22rpx;
+}
+
+.S1_1 {
+  font-size: 24rpx;
+}
+
+.S2 {
+  font-size: 26rpx;
+}
+
+.S3 {
+  font-size: 28rpx;
+}
+
+.S4 {
+  font-size: 34rpx;
+}
+
+.S5 {
+  font-size: 36rpx;
+}
+
+.S6 {
+  font-size: 40rpx;
+}
+
+.S7 {
+  font-size: 80rpx;
+}

@@ -1,0 +1,27 @@
+.search_bar {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  height: 60rpx;
+  border-style: solid;
+  border-color: darkgray;
+  border-width: 1px;
+  border-radius: 12rpx;
+  align-items: center;
+  box-sizing: border-box;
+  padding-left: 20rpx;
+  padding-right: 20rpx;
+}
+
+.search_bar input {
+  position: absolute;
+  left: 60rpx;
+  right: 70rpx;
+}
+
+.search_bar image {
+    position: absolute;
+    width: 40rpx;
+    height: 40rpx;
+    right: 20rpx;
+}

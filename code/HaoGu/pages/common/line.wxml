@@ -1,0 +1,3 @@
+<template name="lineView">
+    <view class="B5" style="width:100%; height:1px;"></view>    
+</template>
