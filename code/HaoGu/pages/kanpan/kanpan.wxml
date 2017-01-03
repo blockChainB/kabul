@@ -1,55 +1,45 @@
 <import src="../common/line.wxml" />
 <import src="../common/StockCell/StockCell.wxml" />
 <view style="position:relative;">
+  <block wx:if="{{bkArr.length>0}}">
 
-  <!--板块-->
-  <view class="bk_tip_container B1">
-    <text class="S2 T2" style="margin-left:30rpx;">热门板块</text>
-  </view>
-  <template is="lineView" />
-  <view class="bk_container">
-    <block wx:for="{{bkArr}}" wx:key="Id">
-      <view class="bk_item_container">
-        <view class="bk_item_data_container" data-item="{{item}}" bindtap="onBKItemClickEvent">
-          <text class="S4 T3">股权转让</text>
-          <view style="width:120rpx;margin-top:12rpx;">
-            <template is="lineView" />
+    <!--板块-->
+    <view class="bk_tip_container B1">
+      <text class="S2 T2" style="margin-left:30rpx;">热门板块</text>
+    </view>
+    <template is="lineView" />
+    <view class="bk_container">
+      <block wx:for="{{bkArr}}" wx:key="Id">
+        <view class="bk_item_container" hover="true" hover-class="navigator-hover">
+          <view class="bk_item_data_container" data-item="{{item}}" bindtap="onBKItemClickEvent">
+            <text class="S4 T3">股权转让</text>
+            <view style="width:120rpx;margin-top:12rpx;">
+              <template is="lineView" />
+            </view>
+            <text class="S1_1 T2" style="margin-top:12rpx;">中润资源</text>
+            <text class="S1_1" style="margin-top:5rpx;color:{{bkzdf>0?'#eb333b':(bkzdf<0?'#17b03e':'#b2b2b2')}}">{{bkzdf}}%</text>
           </view>
-          <text class="S1_1 T2" style="margin-top:12rpx;">中润资源</text>
-          <text class="S1_1 C1-font" style="margin-top:5rpx;">+4.0%</text>
+          <block wx:if="{{index<2}}">
+            <view class="Line_BG" style="width:1px; height:120rpx;" />
+          </block>
         </view>
-        <block wx:if="{{index<2}}">
-          <view class="B4" style="width:1px; height:120rpx;" />
-        </block>
-      </view>
-    </block>
-    <block wx:if="{{bkArr.length==1}}">
-      <text class="S1_1 T2 bk_item_data_container" style="width:500rpx">今日热点太少</text>
-    </block>
-    <block wx:elif="{{bkArr.length==2}}">
-      <text class="S1_1 T2 bk_item_data_container">今日热点太少</text>
-    </block>
-  </view>
+      </block>
+      <block wx:if="{{bkArr.length<=2}}">
+        <text class="S1_1 T2 bk_item_data_container" style="width:{{bkArr.length==1?'500rpx':'250rpx'}};">今日热点太少</text>
+      </block>
+    </view>
 
-  <!--分隔线-->
-  <template is="lineView" />
-  <view class="B1" style="width: 100%;height: 10rpx;" />
-  <template is="lineView" />
+    <!--分隔线-->
+    <template is="lineView" />
+    <view class="B1" style="width: 100%;height: 10rpx;" />
+    <template is="lineView" />
+  </block>
 
   <!--tab-->
   <view class="tab_container">
-    <block wx:for="{{tabArr}}"  wx:key="Id">
+    <block wx:for="{{tabArr}}" wx:key="Id">
       <view class="tab_item_container" data-index="{{index}}" bindtap="onTabItemClickEvent">
-        <block wx:if="{{currIndex==index}}">
-          <text class="S4 C1-font" style="font-weight:bold;">
-            {{item}}
-          </text>
-        </block>
-        <block wx:else>
-          <view class="S4 T3">
-            {{item}}
-          </view>
-        </block>
+        <text class="S4" style="font-weight:{{currIndex==index?'bold':'normal'}};color:{{currIndex==index?'#eb333b':'#353535'}};">{{item}}</text>
       </view>
     </block>
     <view class="C1-bg tab_item_sel_line_container" style="left:{{currIndex*20}}%;" />
@@ -57,23 +47,34 @@
   <template is="lineView" />
 
   <!--列表头-->
-  <view class="listview_header_container B1">
-    <text class="S2 T2" style="margin-left:30rpx">
-      名称
-    </text>
-    <text class="S2 T2">
-      最新价
-    </text>
-    <text class="S2 T2" style="margin-right:30rpx">
-      涨跌幅
-    </text>
+  <view class="lisetview_data_container B1" style="height: 70rpx">
+
+    <!--left-->
+    <view class="lisetview_item_left_container">
+      <text class="S2 T2">名称</text>
+    </view>
+
+    <!--middle-->
+    <view class="lisetview_item_middle_container">
+      <text class="S2 T2">最新价</text>
+    </view>
+
+    <!--middle-->
+    <view class="lisetview_item_zdf_container" bindtap="onZDFSort">
+      <text class="S2 C1-font">{{isDownSort?'涨跌幅↑':'涨跌幅↓'}}</text>
+    </view>
+
+    <!--right-->
+    <view class="lisetview_item_right_container">
+      <text class="S2 T2">终选时间</text>
+    </view>
   </view>
   <template is="lineView" />
 
   <!--列表-->
-  <view class="lisetview_container">
-    <block wx:for="{{goodsArr1}}"  wx:key="Id">
-      <template is="StockCell"/>
+  <view>
+    <block wx:for="{{goodsArr}}" wx:key="Id">
+      <template is="StockCell" data="{{data:item}}" />
     </block>
   </view>
 </view>

@@ -60,26 +60,31 @@ Page({
 
         that.setData(that.data)
 
-        optionalUtil.updateOptional(stock.code)
+        Api.stock.commitOptionals({
+            goodsId:stock.code
+        }).then(function (res) {
+            console.log("添加自选股", res)
+        }, function (res) {
+            console.log("添加自选股", res)
+        })
+
+        // Api.stock.requestOptionals({
+            
+        // }).then(function (res) {
+        //     console.log("添加自选股", res)
+        // }, function (res) {
+        //     console.log("添加自选股", res)
+        // })
     },
 
     onShowStockDetail: function (e) {
         console.log("onShowStockDetail", e)
 
-
-        var code = e.currentTarget.id.replace(">", "")
-        wx.navigateTo({
-            url: '../stock/stock?code=' + code,
-            success: function (res) {
-                // success
-                console.log("res=====", res)
-            },
-            fail: function () {
-                // fail
-            },
-            complete: function () {
-                // complete
-            }
-        })
+        if (e.detail.x < 315) {
+            var code = e.currentTarget.id.replace(">", "")
+            wx.navigateTo({
+                url: '../stock/stock?code=' + code,
+            })
+        }
     }
 })

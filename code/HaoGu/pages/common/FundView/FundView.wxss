@@ -31,7 +31,7 @@
 .container-tenday-fundinflow{
   position: relative;
   margin-left: 30rpx;
-  margin-right: 40rpx;
+  margin-right: 30rpx;
   padding-top:42rpx;
   padding-bottom: 15rpx;
 }

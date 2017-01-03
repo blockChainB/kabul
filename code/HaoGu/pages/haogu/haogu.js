@@ -26,15 +26,20 @@ Page({
     // 页面关闭
   },
 
+  onPullDownRefresh: function () {
+    this.getData()
+  },
+
   getData: function () {
     var that = this
     Api.haogu.getHaoguList({
-
+      listType: []
     }).then(function (results) {
+      wx.stopPullDownRefresh()
       that.data.array = results;
       that.setData(that.data)
     }, function (res) {
-
+      wx.stopPullDownRefresh()
     })
   },
 
@@ -42,16 +47,6 @@ Page({
     var code = e.currentTarget.id.replace(">", "")
     wx.navigateTo({
       url: '../stock/stock?code=' + code,
-      success: function (res) {
-        // success
-        console.log("res=====", res)
-      },
-      fail: function () {
-        // fail
-      },
-      complete: function () {
-        // complete
-      }
     })
   }
 })

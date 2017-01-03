@@ -1,29 +1,15 @@
 var Api = require("../../api/api.js")
 var KLineView = require('../common/KLineView/KLineView.js')
 var NewsItem = require('NewsItem.js')
+var fundview = require('../common/FundView/FundView.js');
+var Quotation = require('../../models/Quotation.js')
 
 Page({
 
     data: {
         // 个股头部数据
-        quotation: {
-            price: '23.45',
-            zd: '10.53',
-            zdf: '5.53%',
-            open: '21.66',
-            high: '21.55',
-            low: '50.27',
-            hs: '1.50%',
-            sy: '1.50',
-            sj: '3.59',
-            cjl: '21.55',
-            jl: '-2796.3万',
-            zz: '560亿',
-            cje: '50.27',
-            lb: '1.59',
-            lz: '144.2亿'
-        },
-        goodsId: 600602,
+        quotation: {},
+        goodsId: 600600,
         quotationColor: '#eb333b',
         currentTimeIndex: 0,
         currentInfoIndex: 0,
@@ -33,56 +19,81 @@ Page({
         },
         news: [],
         infoSwiperHeight: 0,
-        infoCls: '0'
+        infoCls: '0',
+        fundViewData: {}
     },
 
-    onLaunch: function () {
-
-    },
-
-    onReady: function () {
-        this.kLineView = new KLineView()
-        
+    onLoad: function (option) {
+        console.log('onLoad ', this.data.goodsId)
+        this.setData({goodsId: parseInt(option.id)})
+        console.log('onLoad ', this.data.goodsId)
+        initData(this)
     },
 
     onShow: function () {
-        // if (this.data.quotePeriod == 1) {
-        //     this.getMinuteData(this.data.goodsId, getCanvasId(this.data.quotePeriod), function () {
-        //         wx.hideNavigationBarLoading()
-        //     })
-        // } else {
-        //     this.getKlineData(this.data.goodsId, getCanvasId(this.data.quotePeriod), function () {
-        //         wx.hideNavigationBarLoading()
-        //     })
-        // }
-        // this.getNews('600600', '0', function() {
+        this.kLineView = new KLineView()
+        this.getQuotationTrend(function () {
+            wx.hideNavigationBarLoading()
+        })
+        this.getQuotationValue(function () {
+            wx.hideNavigationBarLoading()
+        })
+        this.getNews('600600', '0', function() {
+            wx.hideNavigationBarLoading()
+        })
+
+        
+       fundview.init(this);
+        fundview.show(this);
+        fundview.setJLValue(this, '1.52', '亿元');
+    },
+
+    onReady: function () {
+         
+    },
+
+    onPullDownRefresh: function (event) {
+        this.getQuotationTrend(function () {
+            wx.hideNavigationBarLoading()
+            wx.stopPullDownRefresh()
+        })
+        this.getQuotationValue(function () {
+            wx.hideNavigationBarLoading()
+            wx.stopPullDownRefresh()
+        })
+
+        // this.getNews(this.data.goodsId + '', this.data.infoCls, function() {
         //     wx.hideNavigationBarLoading()
         // })
     },
 
-    onPullDownRefresh: function (event) {
-        // if (this.data.quotePeriod == 1) {
-        //     this.getMinuteData(this.data.goodsId, getCanvasId(this.data.quotePeriod), function () {
-        //         wx.hideNavigationBarLoading()
-        //         wx.stopPullDownRefresh()
-        //     })
-        // } else {
-        //     this.getKlineData(this.data.goodsId, getCanvasId(this.data.quotePeriod), function () {
-        //         wx.hideNavigationBarLoading()
-        //         wx.stopPullDownRefresh()
-        //     })
-        // }
+    // 获取行情数据
+    getQuotationValue: function (callback) {
+        wx.showNavigationBarLoading()
+        var that = this
 
-        this.getNews(this.data.goodsId + '', this.data.infoCls, function() {
+        Api.stock.getQuotation({
+            id: that.data.goodsId
+        }).then(function (results) {
+            if (callback != null && typeof (callback) == 'function') {
+                callback()
+            }
+            // console.log('stock quotation value result ', results)
+            that.setData({quotation: results})
+            // console.log('canvas id ' + getCanvasId(that.data.quotePeriod))
+            // that.kLineView.drawMiniteCanvas(results, getCanvasId(that.data.quotePeriod))
+        }, function (res) {
+            console.log("------fail----", res)
             wx.hideNavigationBarLoading()
         })
     },
 
-    getMinuteData: function (goodsId, canvasId, callback) {
+    getMinuteData: function (callback) {
         wx.showNavigationBarLoading()
         var that = this
+
         Api.stock.getMinutes({
-            id: goodsId,
+            id: that.data.goodsId,
             date: 0,
             time: 0,
             mmp: false,
@@ -91,19 +102,20 @@ Page({
                 callback()
             }
             // console.log('stock minute result ', results)
-            that.kLineView.drawMiniteCanvas(results, canvasId)
-
+            // console.log('canvas id ' + getCanvasId(that.data.quotePeriod))
+            that.kLineView.drawMiniteCanvas(results, getCanvasId(that.data.quotePeriod))
         }, function (res) {
             console.log("------fail----", res)
             wx.hideNavigationBarLoading()
         })
     },
 
-    getKlineData: function (goodsId, canvasId, callback) {
+    getKlineData: function (callback) {
         wx.showNavigationBarLoading()
         var that = this
+
         Api.stock.getKLines({
-            id: goodsId,
+            id: that.data.goodsId,
             begin: 0,
             size: 200,
             period: that.data.quotePeriod,
@@ -113,13 +125,23 @@ Page({
             if (callback != null && typeof (callback) == 'function') {
                 callback()
             }
-            console.log('stock kline result ', results)
-            that.kLineView.drawKLineCanvas(results, canvasId)
-
+            // console.log('stock kline result ', results)
+            that.kLineView.drawKLineCanvas(results, getCanvasId(that.data.quotePeriod))
         }, function (res) {
             console.log("------fail----", res)
             wx.hideNavigationBarLoading()
         })
+    },
+
+    // 获取行情走势
+    getQuotationTrend: function (callback) {
+        if (this.data.quotePeriod == 1) {
+            // 获取分时走势
+            this.getMinuteData(callback)
+        } else {
+            // 获取K线走势
+            this.getKlineData(callback)
+        }
     },
 
     getNews: function (goodsId, cls, callback) {
@@ -130,17 +152,17 @@ Page({
             id: goodsId,
             cls: cls
         }).then(function (results) {
-            console.log('stock news result ', results)
+            // console.log('stock news result ', results)
 
             if (callback != null && typeof (callback) == 'function') {
                 callback()
             }
-            
+
             that.setData({
                 news: results.news
             })
             getInfoHeight(that)
-            // console.log('news: ', that.data.news)
+            console.log('news: ', that.data.news)
         }, function (res) {
             console.log("------fail----", res)
             wx.hideNavigationBarLoading()
@@ -156,53 +178,38 @@ Page({
             case "0":
                 period = 1;
                 canvasIndex = 0
-                if (this.kLineView.isCanvasDrawn(1)) break;
-                this.getMinuteData(this.data.goodsId, 1, function () {
-                    wx.hideNavigationBarLoading()
-                })
                 break;
             case "1":
                 period = 100;
                 canvasIndex = 1
-                if (this.kLineView.isCanvasDrawn(2)) break;
-                this.getKlineData(this.data.goodsId, 2, function () {
-                    wx.hideNavigationBarLoading()
-                })
                 break;
             case "2":
                 period = 101;
                 canvasIndex = 2
-                if (this.kLineView.isCanvasDrawn(3)) break;
-                this.getKlineData(this.data.goodsId, 3, function () {
-                    wx.hideNavigationBarLoading()
-                })
                 break;
             case "3":
                 period = 102;
                 canvasIndex = 3
-                if (this.kLineView.isCanvasDrawn(4)) break;
-                this.getKlineData(this.data.goodsId, 4, function () {
-                    wx.hideNavigationBarLoading()
-                })
                 break;
             case "4":
                 period = 60;
                 canvasIndex = 4
-                if (this.kLineView.isCanvasDrawn(5)) break;
-                this.getKlineData(this.data.goodsId, 5, function () {
-                    wx.hideNavigationBarLoading()
-                })
                 break;
         }
 
         this.setData({
-            currentTimeIndex: e.currentTarget.dataset.index,
+            currentTimeIndex: index,
             quotePeriod: period,
             quoteData: {
                 canvasIndex: canvasIndex
             }
         })
-        // console.log('onPeriodSelectorClick',this.data)
+
+        if (this.kLineView.isCanvasDrawn(canvasIndex + 1)) return;
+
+        this.getQuotationTrend(function () {
+            wx.hideNavigationBarLoading()
+        })
     },
 
     onInfoSelectorClick: function (e) {
@@ -271,5 +278,14 @@ function getInfoHeight(that) {
     var height = 80 * that.data.news.length + 98
     that.setData({
         infoSwiperHeight: height
+    })
+}
+
+function initData(that) {
+    // 初始化数据显示
+    // Quotation(price, zd, zdf, open, high, low, hsl, syl, sjl, cjl, jl, zz, cje, lb, ltsz, date, time, color, goodsId)
+    var quota = new Quotation('--', '--', '--', '--', '--', '--', '--', '--', '--', '--', '--', '--', '--', '--', '--', 0, 0, '#e64340', 0)
+    that.setData({
+        quotation: quota
     })
 }

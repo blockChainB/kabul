@@ -1,4 +1,4 @@
-// pages/optional/optional.js
+// pages/fund/fund.js
 Page({
   data:{},
   onLoad:function(options){

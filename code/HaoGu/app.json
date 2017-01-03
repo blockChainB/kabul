@@ -1,11 +1,15 @@
 {
   "pages": [
     "pages/optional/optional",
+    "pages/fundinflow/fundinflow",
     "pages/kanpan/kanpan",
     "pages/haogu/haogu",
     "pages/search/search",
+    "pages/stock/stock",
     "pages/fundinflow/fundinflow",
-    "pages/newsdetail/newsdetail"
+    "pages/newsdetail/newsdetail",
+    "pages/bk/bk",
+    "pages/fund/fund"
   ],
   "window": {
     "navigationBarBackgroundColor": "#37383b",

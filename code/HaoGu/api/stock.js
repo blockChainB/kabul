@@ -1,7 +1,8 @@
 var Service = require('./service.js')
-
 var parser = require('./parsers/stock-parser.js')
 var Util = require('../utils/util.js')
+var GoodsParams = require('../models/GoodsParams.js')
+var optionalUtil = require('../utils/optionalUtil.js')
 
 // 搜索股票
 function search({key = ""} = {}) {
@@ -44,7 +45,8 @@ function getMinutes({id, date, time, mmp = false} = {}) {
             last_recv_time: time,
             request_mmp: mmp
         },
-        url: `${Service.BaseUrl}20300`,
+        // url: `${Service.BaseUrl}20300`,
+        url: 'http://120.55.169.35:1121/?X-Protocol-Id=20300'
     }).then(function (res) {
         if (res.statusCode == 200) {
             // console.log('get minute result data ' , res.data)
@@ -79,7 +81,8 @@ function getKLines({id, begin, size, period, time = 0, ma = 7} = {}) {
             last_update_market_time: time,
             req_ma: ma
         },
-        url: `${Service.BaseUrl}20400`,
+        // url: `${Service.BaseUrl}20400`,
+        url: 'http://120.55.169.35:1121/?X-Protocol-Id=20400'
     }).then(function (res) {
         if (res.statusCode == 200) {
             // console.log('get kline result data ' , res.data)
@@ -147,7 +150,54 @@ function requestFundData({goods_id} = {}) {
         },
         url: `${Service.BaseUrl}20700`,
     }).then(function (res) {
-        console.log("=====res:", res)
+        // console.log("=====res:", res)
+        if (res.statusCode == 200) {
+            return res.data
+        } else {
+            return {}
+        }
+    }, function (res) {
+        return res
+    });
+    return promise;
+}
+
+// 获取自选股
+function requestOptionals() {
+    var promise = Service.request({
+        showLoading: false,
+        showFailMsg: false,
+        data: {
+            OpenId: getApp().globalData.openId
+        },
+        url: `${Service.BaseOptionalUrl}28100`,
+    }).then(function (res) {
+        if (res.statusCode == 200) {
+            if (res.data.result.code == 0) {
+                getApp().globalData.optionals = res.data.detail.GoodsId
+            }
+            return res.data
+        } else {
+            return res
+        }
+    }, function (res) {
+        return res
+    });
+    return promise;
+}
+
+// 更新自选股
+function commitOptionals({goodsId = []} = {}) {
+    optionalUtil.updateOptional(goodsId)
+    var promise = Service.request({
+        showLoading: false,
+        showFailMsg: false,
+        data: {
+            OpenId: getApp().globalData.openId,
+            GoodsId: getApp().globalData.optionals
+        },
+        url: `${Service.BaseOptionalUrl}28000`,
+    }).then(function (res) {
         if (res.statusCode == 200) {
             return res.data
         } else {
@@ -207,11 +257,72 @@ function getNews({id, cls} = {}) {
             stock: id,
             cls: cls
         },
-        url: `${Service.BaseUrl}6300`
+        // url: `${Service.BaseUrl}6300`,
+        url: 'http://192.168.8.189:2368/?X-Protocol-Id=6300'
     }).then(function (res) {
         if (res.statusCode == 200) {
             // console.log('stock news: ',res.data)
             var result = parser.parseNewsData(res.data)
+            return result
+        } else {
+            return []
+        }
+    }, function (res) {
+        return res
+    });
+    return promise;
+}
+
+/**
+ * 获取行情
+ */
+function getQuotation({id} = {}) {
+    var reqFileds = []
+    reqFileds.push(GoodsParams.ZXJ); // 最新价
+    reqFileds.push(GoodsParams.ZDF); // 涨跌幅
+    reqFileds.push(GoodsParams.ZHANGDIE); // 涨跌
+
+    reqFileds.push(GoodsParams.OPEN); // 开盘价
+    reqFileds.push(GoodsParams.HiGH); // 最高价
+    reqFileds.push(GoodsParams.LOW); // 最低价
+
+    reqFileds.push(GoodsParams.HSL); // 换手率
+    reqFileds.push(GoodsParams.SYL); // 市盈率
+    reqFileds.push(GoodsParams.SJL); // 市净率
+
+    reqFileds.push(GoodsParams.VOLUME); // 成交量
+    reqFileds.push(GoodsParams.JL); // 净流
+    reqFileds.push(GoodsParams.ZSZ); // 总市值
+
+    reqFileds.push(GoodsParams.AMOUNT); // 成交额
+    reqFileds.push(GoodsParams.LB); // 量比
+    reqFileds.push(GoodsParams.LTSZ); // 流通市值
+
+    reqFileds.push(GoodsParams.SUSPENSION); // 停牌信息
+
+    var reqIds = []
+    reqIds.push(id)
+
+    var promise = Service.request({
+        showLoading: false,
+        showFailMsg: false,
+        data: {
+            class_type: 4,
+            group_type: 0,
+            goods_id: reqIds,
+            req_fields: reqFileds,
+            sort_field: -9999,
+            sort_order: true,
+            req_begin: 0,
+            req_size: 0,
+            last_update_market_time: 0,
+            last_update_market_date: 0
+        },
+        url: 'http://192.168.8.189:1121/?X-Protocol-Id=20200'
+    }).then(function (res) {
+        if (res.statusCode == 200) {
+            // console.log('stock quotation raw : ',res.data)
+            var result = parser.parseStockQuotationValue(res.data)
             return result
         } else {
             return []
@@ -229,6 +340,8 @@ module.exports = {
     requestDynaValueData: requestDynaValueData,
     DynamicValueRequireField: DynamicValueRequireField,
     getNews: getNews,
-    requestFundData: requestFundData
+    requestFundData: requestFundData,
+    getQuotation: getQuotation,
+    requestOptionals: requestOptionals,
+    commitOptionals: commitOptionals
 }
-

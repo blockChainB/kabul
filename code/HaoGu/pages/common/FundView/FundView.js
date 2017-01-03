@@ -12,10 +12,10 @@ var mBuySmall = 0;
 var mSaleSmall = 0;
 
 //十日资金图
-var tenDayInFlow = new Array();
+var tenDayInFlow = "[]";
 
 
-
+const UNITS = 10000.0;
 //请求标志
 var mRequestSuccess = false;
 
@@ -31,57 +31,81 @@ var fundData = {
 };
 
 function init(that) {
-    that.setData({
-        fundViewData: fundData
-    });
+    updateDatabinding(that);
 
+}
 
-    //test
-    tenDayInFlow[0] = 600;
-    tenDayInFlow[1] = 1200;
-    tenDayInFlow[2] = -800;
-    tenDayInFlow[3] = -1400;
-    tenDayInFlow[4] = 300;
-    tenDayInFlow[5] = 750;
-    tenDayInFlow[6] = 600;
-    tenDayInFlow[7] = -500;
-    tenDayInFlow[8] = -1900;
-    tenDayInFlow[9] = 300;
-
-    if (!mRequestSuccess) {
-        requestFundData();
+/**
+ * dayinflow 净流 格式化后的值
+ * unit 单位 万元/亿元 等
+ */
+function setJLValue(that, dayinflow, unit) {
+    if (dayinflow && unit) {
+        fundData.dayinflow = dayinflow;
+        fundData.dayinflowUnit = unit;
+        updateDatabinding(that);
     }
+
+
+
+
 }
 
 function show(that) {
     if (!mRequestSuccess) {
-        requestFundData();
+        requestFundData()
+            .then(
+            function (res) {
+                if (res == 0) {
+                    drawOneDayPie(that);
+                    drawTenDayTrend(that);
+
+                    updateDatabinding(that);
+                }
+
+            },
+            function (fail) {
+
+            }
+            );
+    }
+    else {
+        drawOneDayPie(that);
+        drawTenDayTrend(that);
     }
 
-    drawOneDayPie(that);
-    drawTenDayTrend(that);
 
+
+}
+
+function updateDatabinding(that) {
+    that.setData({
+        fundViewData: fundData
+    });
 }
 
 function requestFundData() {
 
-    stockreq.requestFundData({
+    return stockreq.requestFundData({
         goods_id: 600600
     })
         .then(
         function (res) {
             console.log(JSON.stringify(res));
             praseFundResponse(res);
-            drawOneDayPie();
+            mRequestSuccess = true;
+            return 0;
         },
         function (err) {
-
+            mRequestSuccess = false;
+            return -1;
         }
         )
 
 };
 
 function praseFundResponse(res) {
+    console.log("sky funview praseFundResponse:", res);
     /**
      * {
     "currentday_inflow": "{\"Date\":20161230,\"bHuge\":1286844,\"sHuge\":0,\"bLarge\":15733365,\"sLarge\":13739223,\"bMiddle\":19535744,\"sMiddle\":16295416,\"bLittle\":12165874,\"sLittle\":18687188}",
@@ -140,6 +164,8 @@ function praseFundResponse(res) {
 
     mBuySmall = currentday_inflow_obj.bMiddle + currentday_inflow_obj.bLittle;
     mSaleSmall = currentday_inflow_obj.sMiddle + currentday_inflow_obj.sLittle;
+
+    tenDayInFlow = res.day_net_inflow;
 }
 
 function drawOneDayPie(that) {
@@ -248,9 +274,7 @@ function drawOneDayPie(that) {
     fundData.bSmall_proportion = (bSmall_p * 100).toFixed(0) + "%";
     fundData.sSmall_proportion = (sSmall_p * 100).toFixed(0) + "%";
 
-    that.setData({
-        fundViewData: fundData
-    });
+
 
 }
 
@@ -264,9 +288,9 @@ function drawTenDayTrend(that) {
     ctx.setLineWidth(mPer_item_w * 0.6);
     for (var i = 0; i < tenDayInFlow.length; i++) {
         var t_x1 = getX1PositionByIndex(i);
-        var t_y2 = getY2PositionByValue(tenDayInFlow[i]);
+        var t_y2 = getY2PositionByValue(tenDayInFlow[i].net_inflow / UNITS);
         ctx.beginPath();
-        ctx.setStrokeStyle(getZDPColor(tenDayInFlow[i]));
+        ctx.setStrokeStyle(getZDPColor(tenDayInFlow[i].net_inflow / UNITS));
         ctx.moveTo(t_x1, y1);
         ctx.lineTo(t_x1, t_y2);
         ctx.stroke();
@@ -281,21 +305,28 @@ function drawTenDayTrend(that) {
 
 
     ctx.draw();
+
+
+    fundData.firstDate = formatDateM_D(tenDayInFlow[0].date + "");
+    fundData.lastDate = formatDateM_D(tenDayInFlow[tenDayInFlow.length - 1].date + "");
 }
 
 function prepareDrawTendayInflow(datas) {
     var max = 0;
     for (var i = 0; i < datas.length; i++) {
-        if (Math.abs(datas[i]) > max) {
-            max = Math.abs(datas[i]);
+        if (Math.abs(datas[i].net_inflow / UNITS) > max) {
+            max = Math.abs(datas[i].net_inflow / UNITS);
         }
     }
 
     var ctx_h = canvasUtil.getLengthByRpx(220);
-    mValue_per_ypx = ctx_h / max;
+    mValue_per_ypx = ctx_h / (max * 2);
 
-    var ctx_w = getApp().globalData.screenWidth;
+    var ctx_w = getApp().globalData.screenWidth - canvasUtil.getLengthByRpx(60);
     mPer_item_w = ctx_w / datas.length;
+
+
+
 
 }
 
@@ -323,7 +354,33 @@ function getZDPColor(value) {
         return "#1dbf60";
 }
 
+function formatDateM_D(orgDate, separator) {
+    var fixDate = "";
+    var t_separator = "/";
+    if (separator) {
+        t_separator = separator;
+    }
+
+    var nlen = orgDate.length;
+    if (nlen >= 8) {
+        var tMonth = orgDate.substring(4, 6);
+        if (tMonth.startsWith("0")) {
+            tMonth = tMonth.replace("0", "");
+        }
+
+        var tDay = orgDate.substring(6, 8);
+        if (tDay.startsWith("0")) {
+            tDay = tDay.replace("0", "");
+        }
+
+        fixDate = tMonth + t_separator + tDay;
+    }
+
+    return fixDate;
+}
+
 module.exports = {
     init: init,
-    show: show
+    show: show,
+    setJLValue: setJLValue
 }

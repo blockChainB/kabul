@@ -6,7 +6,6 @@
   position: relative;
   width: 100%;
   background-color: #fff;
-  margin-bottom: 14rpx;
 }
 
 .list_item .item_title {
@@ -29,21 +28,17 @@
   margin-left: 10rpx;
 }
 
-.list_item .item_title_time {
-  position: absolute;
-  right: 20rpx;
-  top: 40rpx;
-}
-
 .list_item .item_desp {
-  width: 100%;
-  height: 52rpx;
-  align-items: center;
-  justify-content: center;
+  display: flex;
+  flex-direction: row;
+  height: 60rpx;
   padding-left: 20rpx;
+  padding-right: 20rpx;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.list_item .item_stock {
+.list_item .item_group {
   width: 100%;
   height: 80rpx;
   display: flex;
@@ -51,14 +46,22 @@
   align-items: center;
 }
 
-.list_item .item_stock text{
-    width: 25%;
-    text-align: center;
+.list_item .item_group_line {
+  position: absolute;
+  width: 1px;
 }
 
-.list_item .item_stock_line {
-    position: absolute;
-    top: 152rpx;
-    bottom: 20rpx;
-    width: 1px;
+.list_item .item_stock {
+  width: 25%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.list_item .item_stock text {
+  width: 100%;
+  text-align: center;
+  margin: 2rpx;
 }

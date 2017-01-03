@@ -1,23 +1,32 @@
 /* pages/optional/optional.wxss */
 
-.search-image {
-  position: fixed;
-  width: 90rpx;
-  height: 90rpx;
-  right: 20rpx;
-  bottom: 20rpx;
+.container_h-optionalcell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
 }
 
-.fundflow-btn{
-  position: fixed;
-  height: 90rpx;
-  right: 120rpx;
-  bottom: 20rpx;
-  background: deepskyblue;
-  color: white;
-  font-weight:bold;
+.container_h-justify-optional {
+  flex-direction: row;
+  height: 120rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  box-sizing: border-box;
 }
 
+.container_h-zd {
+  margin-top: 16rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-sizing: border-box;
+}
 
-
-
+.optional-cell-divideline {
+  width: 1px;
+  height: 80%;
+  background: #e4e4e4;
+}

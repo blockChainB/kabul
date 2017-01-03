@@ -1,5 +1,5 @@
 
-var optionalUtil = require("./optionalUtil.js")
+var Api = require('../api/api.js')
 
 function getOpenId(app) {
     wx.login({
@@ -19,7 +19,7 @@ function getOpenId(app) {
                 method: 'GET', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
                 success: function (res) {
                     app.globalData.openId = res.data.openid
-                    optionalUtil.requestOptional()
+                    requestOptionals()
                 },
                 fail: function (res) {
                     console.log("get openid fail", res)
@@ -36,6 +36,16 @@ function getOpenId(app) {
         complete: function () {
             // complete
         }
+    })
+}
+
+function requestOptionals() {
+    Api.stock.requestOptionals({
+
+    }).then(function (res) {
+
+    }, function (res) {
+
     })
 }
 

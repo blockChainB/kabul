@@ -1,5 +1,4 @@
 @import "../common/KLineView/KLineView.wxss";
-@import "../common/FundView/FundView.wxss";
 
 #section_quotation {
     width: 750rpx;
@@ -132,32 +131,6 @@
     border-radius: 0 8rpx 8rpx 0;
 }
 
-#selector_info {
-    width: 710rpx;
-    height: 60rpx;
-    background-color: #f8f8f8;
-    margin: 16rpx auto 14rpx auto;
-}
-
-#selector_info text {
-    display: inline-block;
-    width: 25%;
-    height: 100%;
-    box-sizing: border-box;
-    font-size: 26rpx;
-    color: #353535;
-    text-align: center;
-    line-height: 60rpx;
-}
-
-#selector_info text:first-child {
-    border-radius: 8rpx 0 0 8rpx;
-}
-
-#selector_info text:last-child {
-    border-radius: 0 8rpx 8rpx 0;
-}
-
 #section_add_zxg {
     position: fixed;
     bottom: 0;
@@ -180,32 +153,4 @@
 #section_add_zxg text {
     color: #576b95;
     font-size: 31rpx;
-}
-
-/* 新闻 */
-.news_item {
-    width: 100%;
-    height: 80rpx;
-    background-color: white;
-    border-top: 1rpx solid #e4e4e4;
-    position: relative;
-    box-sizing: border-box;
-}
-
-.news_item .time {
-    width: 112rpx;
-    height: 80rpx;
-    font-size: 25rpx;
-    color: #576b95;
-    line-height: 80rpx;
-    text-align: center;
-    display: inline-block;
-}
-
-.news_item .title {
-    font-size: 31rpx;
-    color: #353535;
-    position: absolute;
-    line-height: 80rpx;
-    left: 117rpx;
 }

@@ -4,32 +4,55 @@
     <view class="list_item">
 
       <!--标题-->
-      <view class="item_title">
+      <view class="item_title C3-bg">
         <image src="../../images/icon_haogu_title.png"></image>
-        <text class="item_title_name T3 S7">{{item.name}}</text>
-        <text class="item_title_time T1 S1">{{item.time}}</text>
+        <text class="item_title_name T4 S7">{{item.name}}</text>
       </view>
+      <block wx:key="selectGroup" wx:for="{{item.items}}" wx:for-item="selectItem" wx:for-index="selectIndex">
 
-      <!--描述-->
-      <view class="item_desp">
-        <text class="S3 T2">{{item.desp}}</text>
-      </view>
+        <!--描述-->
+        <view class="item_desp B1">
+          <text class="S3 T2">{{selectItem.desp}}</text>
+          <text class="T2 S1">{{selectItem.time}}</text>
+        </view>
 
-      <!--个股-->
-      <view>
-        <template is="lineView"></template>
-        <block wx:key="stockGroup" wx:for="{{item.stocks}}" wx:for-item="stockGroupItem" wx:for-index="stockGroupIndex">
-          <view class="item_stock">
-            <text class="C3-font S3" id=">{{stockGroupItem[0].code}}" bindtap="onStockDetailEvent">{{stockGroupItem[0].name}}</text>
-            <text class="C3-font S3" id=">{{stockGroupItem[1].code}}" bindtap="onStockDetailEvent">{{stockGroupItem[1].name}}</text>
-            <text class="C3-font S3" id=">{{stockGroupItem[2].code}}" bindtap="onStockDetailEvent">{{stockGroupItem[2].name}}</text>
-            <text class="C3-font S3" id=">{{stockGroupItem[3].code}}" bindtap="onStockDetailEvent">{{stockGroupItem[3].name}}</text>
-          </view>
-        </block>
-        <view class="item_stock_line B4" style="left:25%"></view>
-        <view class="item_stock_line B4" style="left:50%"></view>
-        <view class="item_stock_line B4" style="left:75%"></view>
-      </view>
+        <!--个股-->
+        <view>
+          <block wx:key="stockGroup" wx:for="{{selectItem.stocks}}" wx:for-item="stockGroupItem" wx:for-index="stockGroupIndex">
+            <view class="item_group">
+              <block wx:key="stock" wx:for="{{stockGroupItem}}" wx:for-item="stockItem" wx:for-index="stockIndex">
+                <view class="item_stock" id=">{{stockItem.code}}" bindtap="onStockDetailEvent">
+                  <text class="C3-font S3">{{stockItem.name}}</text>
+                  <text class="S1 T1">{{stockItem.code}}</text>
+                </view>
+
+                <!--<block wx:if="{{stockIndex != stockGroupItem.length-1 && stockIndex % 4 != 3}}">
+                  <view style="background-color:#00fff0; position:relative; width:1px; height:60%"></view>
+                </block>-->
+              </block>
+            </view>
+          </block>
+        </view>
+      </block>
+      <block wx:if="{{item.originalSelect > 3}}">
+        <view class="item_group_line B4" style="left:75%; top:160rpx; height:{{item.lineHeight1}}rpx;"></view>
+      </block>
+      <block wx:if="{{item.originalSelect > 2}}">
+        <view class="item_group_line B4" style="left:50%; top:160rpx; height:{{item.lineHeight1}}rpx;"></view>
+      </block>
+      <block wx:if="{{item.originalSelect > 1}}">
+        <view class="item_group_line B4" style="left:25%; top:160rpx; height:{{item.lineHeight1}}rpx;"></view>
+      </block>
+
+      <block wx:if="{{item.finalSelect > 3}}">
+        <view class="item_group_line B4" style="left:75%; top:{{260 + item.lineHeight1}}rpx; height:{{item.lineHeight2}}rpx;"></view>
+      </block>
+      <block wx:if="{{item.finalSelect > 2}}">
+        <view class="item_group_line B4" style="left:50%; top:{{260 + item.lineHeight1}}rpx; height:{{item.lineHeight2}}rpx;"></view>
+      </block>
+      <block wx:if="{{item.finalSelect > 1}}">
+        <view class="item_group_line B4" style="left:25%; top:{{260 + item.lineHeight1}}rpx; height:{{item.lineHeight2}}rpx;"></view>
+      </block>
     </view>
   </block>
 </view>

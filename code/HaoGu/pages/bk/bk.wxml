@@ -1,5 +1,4 @@
 <import src="../common/KLineView/KLineView.wxml" />
-<import src="../common/FundView/FundView.wxml" />
 
 <!-- 个股头部指标 -->
 <view id="section_quotation">
@@ -52,43 +51,18 @@
 </view>
 <template is="KLineView" data="{{...quoteData}}" />
 
-<!-- 新闻、资金、公告、研报 -->
-<view id="selector_info">
-    <text style="background-color:{{currentInfoIndex == 0 ? '#eb333b' : '#f8f8f8'}}; color:{{currentInfoIndex == 0 ? '#ffffff' : '#353535'}}; border:{{currentInfoIndex == 0 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}};"border-left: none; bindtap="onInfoSelectorClick" data-index="0">新闻</text>
-    <text style="background-color:{{currentInfoIndex == 1 ? '#eb333b' : '#f8f8f8'}}; color:{{currentInfoIndex == 1 ? '#ffffff' : '#353535'}}; border:{{currentInfoIndex == 1 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}}; border-left: none;" bindtap="onInfoSelectorClick" data-index="1">资金</text>
-    <text style="background-color:{{currentInfoIndex == 2 ? '#eb333b' : '#f8f8f8'}}; color:{{currentInfoIndex == 2 ? '#ffffff' : '#353535'}}; border:{{currentInfoIndex == 2 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}}; border-left: none;" bindtap="onInfoSelectorClick" data-index="2">公告</text>
-    <text style="background-color:{{currentInfoIndex == 3 ? '#eb333b' : '#f8f8f8'}}; color:{{currentInfoIndex == 3 ? '#ffffff' : '#353535'}}; border:{{currentInfoIndex == 3 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}}; border-left: none;" bindtap="onInfoSelectorClick" data-index="3">研报</text>
+<!-- 关联指数、个股 -->
+<view>
+    <text>股票名称</text>
+    <text>最新价</text>
+    <text>涨跌幅</text>
 </view>
-<swiper current="{{currentInfoIndex}}" duration="0" bindchange="onInfoSwiperChange" style="height: {{infoSwiperHeight}}rpx;">
-    <!-- 新闻 -->
-    <swiper-item>
-        <view class="news_item" wx:key="id" wx:for="{{news}}">
-            <text class="time"> {{item.time}} </text>
-            <text class="title"> {{item.title}} </text>
-        </view>
-    </swiper-item>
-    
-    <!-- 资金 -->
-    <swiper-item>
-        <template is="fundview" data="{{...fundViewData}}" />
-    </swiper-item>
-    
-    <!-- 公告 -->
-    <swiper-item>
-        <view class="news_item" wx:key="id" wx:for="{{news}}">
-            <text class="time"> {{item.time}} </text>
-            <text class="title"> {{item.title}} </text>
-        </view>
-    </swiper-item>
-    
-    <!-- 研报 -->
-    <swiper-item>
-        <view class="news_item" wx:key="id" wx:for="{{news}}">
-            <text class="time"> {{item.time}} </text>
-            <text class="title"> {{item.title}} </text>
-        </view>
-    </swiper-item>
-</swiper>
+<view wx:for="{{relatives}}">
+    <text>{{item.name}}</text>
+    <text>{{item.code}}</text>
+    <text>{{item.zxj}}</text>
+    <text>{{item.zdf}}</text>
+</view>
 
 <!-- 添加自选 -->
 <view id="section_add_zxg">

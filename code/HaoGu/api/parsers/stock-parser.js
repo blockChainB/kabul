@@ -4,8 +4,10 @@ var SearchItem = require('../../models/SearchItem.js')
 var MinuteData = require('../../models/MinuteData.js')
 var KLineData = require('../../models/KLineData.js')
 var NewsItem = require('../../pages/stock/NewsItem.js')
-
+var PbUtil = require('../../utils/PbUtil.js')
 var Util = require('../../utils/util.js')
+var GoodsParams = require('../../models/GoodsParams.js')
+var Quotation = require('../../models/Quotation.js')
 
 // 解析搜索数据
 function parseSearchData(array){
@@ -67,9 +69,49 @@ function parseNewsData(data) {
     return result
 }
 
+// 解析个股行情数据
+function parseStockQuotationValue(data) {
+    var ids = data.rep_fields
+    var values = data.quota_value[0].rep_field_value
+
+    var price = Util.formatPrice(PbUtil.getPbValue(ids, values, GoodsParams.ZXJ))
+    var zd = Util.formatZd(PbUtil.getPbValue(ids, values, GoodsParams.ZHANGDIE))
+    var zdf = Util.formatZdf(PbUtil.getPbValue(ids, values, GoodsParams.ZDF))
+    var zdColor = Util.getColorByZd(PbUtil.getPbValue(ids, values, GoodsParams.ZHANGDIE))
+    // console.log(price,zd,zdf, zdColor)
+
+    var open = Util.formatPrice(PbUtil.getPbValue(ids, values, GoodsParams.OPEN))
+    var high = Util.formatPrice(PbUtil.getPbValue(ids, values, GoodsParams.HiGH))
+    var low = Util.formatPrice(PbUtil.getPbValue(ids, values, GoodsParams.LOW))
+    // console.log(open,high,low)
+
+    var hsl = Util.formatHsl(PbUtil.getPbValue(ids, values, GoodsParams.HSL))
+    var syl = Util.formatSyl(PbUtil.getPbValue(ids, values, GoodsParams.SYL))
+    var sjl = Util.formatSyl(PbUtil.getPbValue(ids, values, GoodsParams.SJL))
+    // console.log(hsl, syl, sjl)
+
+    var cjl = Util.formatVolumn(PbUtil.getPbValue(ids, values, GoodsParams.VOLUME) / 100)
+    var jl = Util.formatJl(PbUtil.getPbValue(ids, values, GoodsParams.JL))
+    var zsz = Util.formatAmount(PbUtil.getPbValue(ids, values, GoodsParams.ZSZ))
+    // console.log(cjl, jl, zsz)
+
+    var amount = Util.formatAmount(PbUtil.getPbValue(ids, values, GoodsParams.AMOUNT))
+    var lb = Util.formatSyl(PbUtil.getPbValue(ids, values, GoodsParams.LB))
+    var ltsz = Util.formatAmount(PbUtil.getPbValue(ids, values, GoodsParams.LTSZ))
+    // console.log(amount, lb, ltsz)
+
+    var date = data.cur_update_market_date
+    var time = data.cur_update_market_time
+    var id = data.quota_value[0].goods_Id
+
+    //  Quotation(price, zd, zdf, open, high, low, hsl, syl, sjl, cjl, jl, zsz, amount, lb, ltsz, date, time, color, goodsId) 
+    return new Quotation(price, zd, zdf, open, high, low, hsl, syl, sjl, cjl, jl, zsz, amount, lb, ltsz, date, time, zdColor, id)
+}
+
 module.exports = {
     parseSearchData: parseSearchData,
     parseMinutesData: parseMinutesData,
     parseKLinesData: parseKLinesData,
-    parseNewsData: parseNewsData
+    parseNewsData: parseNewsData,
+    parseStockQuotationValue: parseStockQuotationValue
 }

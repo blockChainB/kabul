@@ -1,7 +1,8 @@
 <template name="StockCell">
   <import src="../line.wxml" />
-  <view class="lisetview_item_container" bindtap="onItemClickEvent">
+  <view class="lisetview_item_container" hover="true" hover-class="navigator-hover" bindtap="onItemClickEvent">
     <view class="lisetview_data_container">
+
       <!--left-->
       <view class="lisetview_item_left_container">
         <text class="S4 T3">永和智控</text>
@@ -13,11 +14,16 @@
         <text class="S7 T3">35.80</text>
       </view>
 
+      <!--middle-->
+      <view class="lisetview_item_zdf_container">
+        <view class="listview_item_zdf_bg" style="background-color:{{data>0?'#eb333b':(data<0?'#17b03e':'#b2b2b2')}}">
+          <text class="S4 T4 listview_item_zdf">{{data}}%</text>
+        </view>
+      </view>
+
       <!--right-->
       <view class="lisetview_item_right_container">
-        <view class="listview_item_zdf_bg">
-          <text class="S4 T4 listview_item_zdf">-2.0%</text>
-        </view>
+          <text class="S6 T2">10:31</text>
       </view>
     </view>
 

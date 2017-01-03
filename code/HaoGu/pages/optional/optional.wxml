@@ -1,11 +1,21 @@
 
 <!--pages/optional/optional.wxml-->
-
-  <view class="container">
-
-    <image class="search-image" src="../../images/icon_optional_search.png" bindtap="onSearchEvent" ></image>
-
-    <button class="fundflow-btn" bindtap="onFundflowEvent">资金图</button>
-
+<template name="indexCell">
+  <view class="container_h-optionalcell">
+    <text class="S4 T3">上证指数</text>
+    <view class="container_h-zd">
+      <text class="S2" style="color:{{'#ff0000'}}">+10.53</text>
+      <view style="width:15rpx"></view>
+      <text class="S2" style="color:{{'#00ff00'}}">+0.82%</text>
+    </view>
   </view>
+</template>
 
+
+<view class="container_h-justify-optional">
+  <template is="indexCell"></template>
+  <view class="optional-cell-divideline"></view>
+  <template is="indexCell"></template>
+  <view class="optional-cell-divideline"></view>
+  <template is="indexCell"></template>
+</view>
