@@ -4,7 +4,7 @@
     "pages/kanpan/kanpan",
     "pages/haogu/haogu",
     "pages/search/search",
-    "pages/fundinflow/fundinflow"
+    "pages/fundinflow/fundinflow",
     "pages/newsdetail/newsdetail"
   ],
   "window": {
