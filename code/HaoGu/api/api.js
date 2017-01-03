@@ -1,9 +1,7 @@
-var market = require('./market.js')
-var qingbao = require('./qingbao.js')
+var haogu = require('./haogu.js')
 var stock = require('./stock.js')
 
 module.exports = {
-    market: market,
-    qingbao: qingbao,
+    haogu: haogu,
     stock: stock,
 }

@@ -1,3 +1,7 @@
+.S0 {
+  font-size: 20rpx;
+}
+
 .S1 {
   font-size: 22rpx;
 }
@@ -40,4 +44,8 @@
 
 .S10 {
   font-size: 80rpx;
+}
+
+.S_BOLD{
+  font-weight:bold;
 }

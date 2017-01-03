@@ -9,7 +9,7 @@ var XAxisLayer = require('XAxisLayer.js')
 var GroupLayer = require('GroupLayer.js')
 var draw = require('../../../../utils/canvasUtil.js')
 
-function MinuteCanvas(windowWidth) {
+function MinuteCanvas() {
 	this.mIsInit = false;    // 是否已初始化分时绘图区域布局结构和设置
 
 	this.lineLayer = null
@@ -23,7 +23,6 @@ function MinuteCanvas(windowWidth) {
 	this.chartView = null
 	this.mXAxisLayer = null
 
-	this.windowWidth = windowWidth    // 屏幕宽度，像素单位
 	this.canvasWidth = 750    // 画布宽度，单位rpx
 	this.canvasHeight = 412    // 画布高度，单位rpx
 
@@ -31,11 +30,12 @@ function MinuteCanvas(windowWidth) {
 }
 
 // 初始化分时绘图布局
-MinuteCanvas.prototype.initLayers = function() {
+MinuteCanvas.prototype.initLayers = function () {
 	if (this.mIsInit == false) {
 
 		var that = this
-		var widthPerRpx = draw.getLengthByRpx(this.windowWidth, 1)
+		var widthPerRpx = draw.getLengthByRpx(1)
+		// console.log('width per ' + widthPerRpx)
 
 		this.lineLayer = new LineLayer()
 		this.lineLayer.setMaxCount(240)
@@ -53,7 +53,7 @@ MinuteCanvas.prototype.initLayers = function() {
 		this.priceLayer.setAxisCount(3)
 		this.priceLayer.setLengthPerRpx(widthPerRpx)
 		this.priceLayer.setPaddings(2, 2, 2, 2)
-		this.priceLayer.setOnFormatDataListener(function(data) {
+		this.priceLayer.setOnFormatDataListener(function (data) {
 			return data.toFixed(2)
 		})
 
@@ -64,7 +64,7 @@ MinuteCanvas.prototype.initLayers = function() {
 		this.rightAxisLayer.setMinWidthString("-99.99%");
 		this.rightAxisLayer.setLengthPerRpx(widthPerRpx)
 		this.rightAxisLayer.setPaddings(2, 2, 2, 2)
-		this.rightAxisLayer.setOnFormatDataListener(function(data) {
+		this.rightAxisLayer.setOnFormatDataListener(function (data) {
 			return (data * 100).toFixed(2) + '%'
 		})
 
@@ -87,7 +87,7 @@ MinuteCanvas.prototype.initLayers = function() {
 		this.columnarLayer = new ColumnarLayer()
 		this.columnarLayer.setColumnarWidth(0.8)
 		this.columnarLayer.setMaxCount(240)
-		this.columnarLayer.setOnDrawCallback(function(context, pos) {
+		this.columnarLayer.setOnDrawCallback(function (context, pos) {
 			// console.log('pos: ' + pos)
 			var color = '#F24957'
 			var currentPrice = that.lineLayer.getValue(pos)
@@ -110,13 +110,14 @@ MinuteCanvas.prototype.initLayers = function() {
 		this.bottomGroupLayer.setShowSide(this.stackLayer.SIDE_BOTTOM_H)
 
 		this.mXAxisLayer = new XAxisLayer()
-        this.mXAxisLayer.addValue("9:30");
-        this.mXAxisLayer.addValue("11:30 13:00");
-        this.mXAxisLayer.addValue("15:00");
+		this.mXAxisLayer.addValue("9:30");
+		this.mXAxisLayer.addValue("11:30 13:00");
+		this.mXAxisLayer.addValue("15:00");
 		this.mXAxisLayer.setLengthPerRpx(widthPerRpx)
 
-		var width = draw.getLengthByRpx(this.windowWidth, this.canvasWidth)
-		var height = draw.getLengthByRpx(this.windowWidth, this.canvasHeight)
+		var width = draw.getLengthByRpx(this.canvasWidth)
+		var height = draw.getLengthByRpx(this.canvasHeight)
+		// console.log('width: ' + width + ', height: ' + height)
 		this.chartView = new ChartView(0, 0, width * 1.0, height * 1.0)
 		this.chartView.addLayer(this.groupLayer)
 		this.chartView.addLayer(this.bottomGroupLayer)
@@ -133,7 +134,7 @@ MinuteCanvas.prototype.initLayers = function() {
 // market_date
 // minutes
 // }
-MinuteCanvas.prototype.addValues = function(obj) {
+MinuteCanvas.prototype.addValues = function (obj) {
 	if (this.mIsInit == false) {
 		this.initLayers();
 	}
@@ -141,13 +142,14 @@ MinuteCanvas.prototype.addValues = function(obj) {
 	if (this.mIsInit && obj != null) {
 		var values = obj.minutes
 		this.mClose = obj.close / 1000.0
+		// console.log('addValues ----> close ', this.mClose)
 
 		this.lineLayer.clear()
 		this.avgLayer.clear()
 		this.columnarLayer.clear()
 
 		for (var i = 0; i < values.length; i++) {
-			if (this.lineLayer.getValueCount() > 240) 
+			if (this.lineLayer.getValueCount() > 240)
 				break
 
 			this.addValue(values[i])
@@ -156,44 +158,46 @@ MinuteCanvas.prototype.addValues = function(obj) {
 }
 
 // 分时布局添加数据
-MinuteCanvas.prototype.addValue = function(value) {
+MinuteCanvas.prototype.addValue = function (value) {
 	if (this.mIsInit == false) {
 		this.initLayers();
 	}
 
 	if (this.mIsInit && value != null) {
 		var pos = minuteTimeToPos(value.time)
-			var price = value.price / 1000
-			var avg = value.avg / 1000
-			var column = value.column
+		var price = value.price / 1000
+		var avg = value.avg / 1000
+		var column = value.column
 
-			if (pos >= 0 && pos <= this.lineLayer.getValueCount()) {
-				this.lineLayer.setValue(pos, price)
-				this.avgLayer.setValue(pos, avg)
-				this.columnarLayer.setValue(pos, new ColumnarAtom(0, 0, 0, column))
-			} else if (pos > this.lineLayer.getValueCount()) {
-				var lastPrice = this.lineLayer.getLastValue()
-				var lastAvg = this.lineLayer.getLastValue()
-				if (lastPrice == 0) {
-					lastPrice = this.mClose
-					lastAvg = this.mClose
-				}
-
-				for (var j = 0; j < pos - this.lineLayer.getValueCount(); j++) {
-					this.lineLayer.addValue(lastPrice)
-					this.avgLayer.addValue(lastAvg)
-					this.columnarLayer.addValue(new ColumnarAtom(0, 0, 0, 0))
-				}
-
-				this.lineLayer.setValue(pos, price)
-				this.avgLayer.setValue(pos, avg)
-				this.columnarLayer.setValue(pos, new ColumnarAtom(0, 0, 0, column))
+		if (pos >= 0 && pos <= this.lineLayer.getValueCount()) {
+			this.lineLayer.setValue(pos, price)
+			this.avgLayer.setValue(pos, avg)
+			this.columnarLayer.setValue(pos, new ColumnarAtom(0, 0, 0, column))
+			// console.log('pos: ' + pos + ', price: ' + price)
+		} else if (pos > this.lineLayer.getValueCount()) {
+			var lastPrice = this.lineLayer.getLastValue()
+			var lastAvg = this.lineLayer.getLastValue()
+			if (lastPrice == 0) {
+				lastPrice = this.mClose
+				lastAvg = this.mClose
 			}
+
+			for (var j = 0; j < pos - this.lineLayer.getValueCount(); j++) {
+				this.lineLayer.addValue(lastPrice)
+				this.avgLayer.addValue(lastAvg)
+				this.columnarLayer.addValue(new ColumnarAtom(0, 0, 0, 0))
+			}
+
+			this.lineLayer.setValue(pos, price)
+			this.avgLayer.setValue(pos, avg)
+			this.columnarLayer.setValue(pos, new ColumnarAtom(0, 0, 0, column))
+			// console.log('pos: ' + pos + ', price: ' + price)
+		}
 	}
 }
 
 // 计算最大最小值
-MinuteCanvas.prototype.calculate = function() {
+MinuteCanvas.prototype.calculate = function () {
 	var minValue = 0
 	var maxValue = 0
 	var zdf = 0.1
@@ -233,25 +237,21 @@ MinuteCanvas.prototype.calculate = function() {
 }
 
 // 分时布局开始绘制
-MinuteCanvas.prototype.invalidate = function(id) {
+MinuteCanvas.prototype.invalidate = function (id) {
 	if (this.mIsInit == true) {
 		this.calculate()
 
-		var context = wx.createContext()
+		const context = wx.createCanvasContext(id)
 		this.chartView.onDraw(context)
-
-		wx.drawCanvas({
-			canvasId: id,
-			actions: context.getActions()
-		})
+		context.draw()
 	}
 }
 
-MinuteCanvas.prototype.setHeight = function(height) {
+MinuteCanvas.prototype.setHeight = function (height) {
 	this.canvasHeight = height
 }
 
-MinuteCanvas.prototype.setWidth = function(width) {
+MinuteCanvas.prototype.setWidth = function (width) {
 	this.canvasWidth = width
 }
 
@@ -260,18 +260,18 @@ module.exports = MinuteCanvas
 function minuteTimeToPos(time) {
 	var ret = 0
 
-    var h = parseInt(time / 100)
-    var m = time % 100
+	var h = parseInt(time / 100)
+	var m = time % 100
 
-    if (h >= 9 && h <= 11) {
-       ret = (h * 60 + m) - 570;  // 9 * 60 + 30
-       ret = ret > 120 ? 120 : ret
-    } else if (h >= 13 && h <= 15) {
-       ret = (h * 60 + m) - 780; // 13 * 60
-        ret = ret > 120 ? 240 : ret + 120;
-    }
+	if (h >= 9 && h <= 11) {
+		ret = (h * 60 + m) - 570;  // 9 * 60 + 30
+		ret = ret > 120 ? 120 : ret
+	} else if (h >= 13 && h <= 15) {
+		ret = (h * 60 + m) - 780; // 13 * 60
+		ret = ret > 120 ? 240 : ret + 120;
+	}
 
-    ret = ret > 0 ? ret - 1 : 0
+	ret = ret > 0 ? ret - 1 : 0
 
-    return ret
+	return ret
 }

@@ -5,45 +5,8 @@
     position: relative;
 }
 
-#canvas_container swiper {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 10;
-}
-
 #canvas_container canvas {
     width: 100%;
     height: 100%;
     position: absolute;
-    left: 0;
-    top: 0;
-    z-index: 1;
-}
-
-#canvas_indicator {
-    width: 750rpx;
-    height: 36rpx;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#canvas_indicator1 {
-    width: 23rpx;
-    height: 0;
-    border-width: 3rpx;
-    border-style: solid;
-    border-radius: 6rpx;
-}
-
-#canvas_indicator2 {
-    width: 23rpx;
-    height: 0;
-    margin-left: 5rpx;
-    border-width: 3rpx;
-    border-style: solid;
-    border-radius: 6rpx;
 }

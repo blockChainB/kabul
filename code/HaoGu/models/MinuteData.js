@@ -6,7 +6,7 @@ function MinuteData(time, price, avg, column, amount) {
     this.column = column;
     this.amount = amount;
     this.toString = function() {
-        return time + ', ' + price + ', ' + avg + ', ' + column + '\n'
+        return time + ', ' + price + ', ' + avg + ', ' + column + ', ' + amount + '\n'
     }
 }
 

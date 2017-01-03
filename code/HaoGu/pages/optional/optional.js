@@ -2,9 +2,8 @@ Page({
 
 
     onSearchEvent: function (e) {
-        console.log("onseachevent")
-
         wx.navigateTo({
+            // url: '../newsdetail/newsdetail',
             url: '../search/search',
             success: function (res) {
                 // success

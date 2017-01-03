@@ -1,0 +1,38 @@
+<template name="fundview">
+
+  <import src="../line.wxml" />
+  <import src="number_lable.wxml" />
+  <view class="container-fundinflow">
+    <canvas canvas-id="fundinflow_pie" style="width: 100%; height:100%;" />
+    <view class="container-fundinflow-lable">
+      <text class="S2 T3 fundinflow-text-lbale">当日净流</text>
+      <text class="S8 T3 S_BOLD fundinflow-text-lbale">{{dayinflow}}</text>
+      <text class="S2 T2 fundinflow-text-lbale">{{dayinflowUnit}}</text>
+    </view>
+  </view>
+  <view class="container_h-justify container-fundinflow-numberlable">
+    <template is="number_lable" data="{{bgcolor:'#e60012', number:'1', lable:'主力流入', proportion:bLarge_proportion, proportion_color:'C1-font'}}" />
+    <template is="number_lable" data="{{bgcolor:'#f95d5b', number:'3', lable:'散户流入', proportion:bSmall_proportion, proportion_color:'C1-font'}}" />
+  </view>
+  <view class="container_h-justify container-fundinflow-numberlable">
+    <template is="number_lable" data="{{bgcolor:'#009600', number:'2', lable:'主力流出', proportion:sLarge_proportion, proportion_color:'C2-font'}}" />
+    <template is="number_lable" data="{{bgcolor:'#1dbf60', number:'4', lable:'散户流出', proportion:sSmall_proportion, proportion_color:'C2-font'}}" />
+  </view>
+  <template is="dashed_lineView" />
+  <view class="container_h-justify container-tenday-fundinflow">
+    <text class="S3 T3">近十日主力净流</text>
+    <view class="container_h">
+      <view style="width:18rpx; height:18rpx; background:#f24957"></view>
+      <text class="S1 T2 tenday-fundinflow-flag">流入</text>
+      <view style="margin-left:38rpx;width:18rpx; height:18rpx; background:#1dbf60"></view>
+      <text class="S1 T2 tenday-fundinflow-flag">流出</text>
+    </view>
+  </view>
+  <view class="container-tenday-fundinflow">
+    <canvas canvas-id="fundinflow_tenday" style="width: 100%; height:220rpx;" />
+    <view class="container_h-justify tenday-fundinflow-date">
+      <text class="S1 T2">{{firstDate}}</text>
+      <text class="S1 T2">{{lastDate}}</text>
+    </view>
+  </view>
+</template>

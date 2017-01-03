@@ -1,2 +1,35 @@
-<!--pages/haogu/haogu.wxml-->
-<text>pages/haogu/haogu.wxml</text>
+<import src="../common/line.wxml" />
+<view class="B4" style="position:relative;">
+  <block wx:key="haogu" wx:for="{{array}}" wx:for-item="item" wx:for-index="index">
+    <view class="list_item">
+
+      <!--标题-->
+      <view class="item_title">
+        <image src="../../images/icon_haogu_title.png"></image>
+        <text class="item_title_name T3 S7">{{item.name}}</text>
+        <text class="item_title_time T1 S1">{{item.time}}</text>
+      </view>
+
+      <!--描述-->
+      <view class="item_desp">
+        <text class="S3 T2">{{item.desp}}</text>
+      </view>
+
+      <!--个股-->
+      <view>
+        <template is="lineView"></template>
+        <block wx:key="stockGroup" wx:for="{{item.stocks}}" wx:for-item="stockGroupItem" wx:for-index="stockGroupIndex">
+          <view class="item_stock">
+            <text class="C3-font S3" id=">{{stockGroupItem[0].code}}" bindtap="onStockDetailEvent">{{stockGroupItem[0].name}}</text>
+            <text class="C3-font S3" id=">{{stockGroupItem[1].code}}" bindtap="onStockDetailEvent">{{stockGroupItem[1].name}}</text>
+            <text class="C3-font S3" id=">{{stockGroupItem[2].code}}" bindtap="onStockDetailEvent">{{stockGroupItem[2].name}}</text>
+            <text class="C3-font S3" id=">{{stockGroupItem[3].code}}" bindtap="onStockDetailEvent">{{stockGroupItem[3].name}}</text>
+          </view>
+        </block>
+        <view class="item_stock_line B4" style="left:25%"></view>
+        <view class="item_stock_line B4" style="left:50%"></view>
+        <view class="item_stock_line B4" style="left:75%"></view>
+      </view>
+    </view>
+  </block>
+</view>

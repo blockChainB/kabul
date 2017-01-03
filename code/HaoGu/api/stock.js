@@ -1,5 +1,3 @@
-import Promise from './lib/es6-promise-min';
-
 var Service = require('./service.js')
 
 var parser = require('./parsers/stock-parser.js')
@@ -7,25 +5,26 @@ var Util = require('../utils/util.js')
 
 // 搜索股票
 function search({key = ""} = {}) {
-    var promise = new Promise(function (resolve, reject) {
-        Service.request({
-            showLoading: false,
-            showFailMsg: false,
-            method: 'GET',
-            data: {
-                key: key,
-            },
-            url: 'http://m.emoney.cn/getinfo/search.aspx',
-        }).then(function (res) {
-            if (res.statusCode == 200) {
-                resolve(res.data.data);
-            } else {
-                resolve([]);
-            }
-        }, function (res) {
-            reject(res);
-        });
+
+    var promise = Service.request({
+        showLoading: false,
+        showFailMsg: false,
+        method: 'GET',
+        data: {
+            key: key,
+        },
+        url: 'http://m.emoney.cn/getinfo/search.aspx',
+    }).then(function (res) {
+        if (res.statusCode == 200) {
+            var results = parser.parseSearchData(res.data.data)
+            return results
+        } else {
+            return []
+        }
+    }, function (res) {
+        return res
     });
+
     return promise;
 }
 
@@ -36,28 +35,26 @@ function search({key = ""} = {}) {
  * request_mmp:是否请求买卖盘(5档行情)
  */
 function getMinutes({id, date, time, mmp = false} = {}) {
-    var promise = new Promise(function (resolve, reject) {
-        Service.request({
-            showLoading: false,
-            showFailMsg: false,
-            data: {
-                goods_id: id,
-                last_update_market_date: date,
-                last_recv_time: time,
-                request_mmp: mmp
-            },
-            url: `${Service.BaseUrl}20300`,
-        }).then(function (res) {
-            if (res.statusCode == 200) {
-                var result = parser.parseMinutesData(res.data)
-                resolve(result);
-            } else {
-                resolve([]);
-            }
-        }, function (res) {
-            console.log("request klines fail:", res)
-            reject(res);
-        });
+    var promise = Service.request({
+        showLoading: false,
+        showFailMsg: false,
+        data: {
+            goods_id: id,
+            last_update_market_date: date,
+            last_recv_time: time,
+            request_mmp: mmp
+        },
+        url: `${Service.BaseUrl}20300`,
+    }).then(function (res) {
+        if (res.statusCode == 200) {
+            // console.log('get minute result data ' , res.data)
+            var result = parser.parseMinutesData(res.data)
+            return result
+        } else {
+            return []
+        }
+    }, function (res) {
+        return res
     });
     return promise;
 }
@@ -71,30 +68,28 @@ function getMinutes({id, date, time, mmp = false} = {}) {
  * ma:1：5日，2：10日，4：20日，7：5、10、20日都包含
  */
 function getKLines({id, begin, size, period, time = 0, ma = 7} = {}) {
-    var promise = new Promise(function (resolve, reject) {
-        Service.request({
-            showLoading: false,
-            showFailMsg: false,
-            data: {
-                goods_id: id,
-                req_begin: begin,
-                req_size: size,
-                req_period: period,
-                last_update_market_time: time,
-                req_ma: ma
-            },
-            url: `${Service.BaseUrl}20400`,
-        }).then(function (res) {
-            if (res.statusCode == 200) {
-                var results = parser.parseKLinesData(res.data.k_lines)
-                resolve(results);
-            } else {
-                resolve([]);
-            }
-        }, function (res) {
-            console.log("request klines fail:", res)
-            reject(res);
-        });
+    var promise = Service.request({
+        showLoading: false,
+        showFailMsg: false,
+        data: {
+            goods_id: id,
+            req_begin: begin,
+            req_size: size,
+            req_period: period,
+            last_update_market_time: time,
+            req_ma: ma
+        },
+        url: `${Service.BaseUrl}20400`,
+    }).then(function (res) {
+        if (res.statusCode == 200) {
+            // console.log('get kline result data ' , res.data)
+            var results = parser.parseKLinesData(res.data.k_lines)
+            return results
+        } else {
+            return []
+        }
+    }, function (res) {
+        return res
     });
     return promise;
 }
@@ -114,33 +109,52 @@ function getKLines({id, begin, size, period, time = 0, ma = 7} = {}) {
  * last_update_market_date：上次更新日期，初始填0
  */
 function requestDynaValueData({clazz, group = 0, codes, req_fields, sort_field = -9999, sort_order = true, begin = 0, size, date = 0, time = 0} = {}) {
-    var promise = new Promise(function (resolve, reject) {
-        Service.request({
-            showLoading: false,
-            showFailMsg: false,
-            data: {
-                class_type: clazz,
-                group_type: group,
-                goods_id: codes,
-                req_fields: req_fields,
-                sort_field: sort_field,
-                sort_order: sort_order,
-                req_begin: 0,
-                req_size: size,
-                last_update_market_time: time,
-                sort_orlast_update_market_dateder: date
-            },
-            url: `${Service.BaseUrl}20200`,
-        }).then(function (res) {
-            if (res.statusCode == 200) {
-                resolve(res.data);
-            } else {
-                resolve([]);
-            }
-        }, function (res) {
-            console.log("request klines fail:", res)
-            reject(res);
-        });
+    var promise = Service.request({
+        showLoading: false,
+        showFailMsg: false,
+        data: {
+            class_type: clazz,
+            group_type: group,
+            goods_id: codes,
+            req_fields: req_fields,
+            sort_field: sort_field,
+            sort_order: sort_order,
+            req_begin: 0,
+            req_size: size,
+            last_update_market_time: time,
+            sort_orlast_update_market_dateder: date
+        },
+        url: `${Service.BaseUrl}20200`,
+    }).then(function (res) {
+        if (res.statusCode == 200) {
+            return res.data
+        } else {
+            return []
+        }
+    }, function (res) {
+        return res
+    });
+    return promise;
+}
+
+// 十日净流数据
+function requestFundData({goods_id} = {}) {
+    var promise = Service.request({
+        showLoading: false,
+        showFailMsg: false,
+        data: {
+            goods_id: goods_id
+        },
+        url: `${Service.BaseUrl}20700`,
+    }).then(function (res) {
+        console.log("=====res:", res)
+        if (res.statusCode == 200) {
+            return res.data
+        } else {
+            return {}
+        }
+    }, function (res) {
+        return res
     });
     return promise;
 }
@@ -181,28 +195,29 @@ let DynamicValueRequireField = {
     FallHeadGoodsName: -20004, // 板块领跌股名称
 }
 
+/** 
+ * id 股票Id，字符串
+ * cls 新闻类型，字符串  (0/1/2)
+*/
 function getNews({id, cls} = {}) {
-    var promise = new Promise(function (resolve, reject) {
-        Service.request({
-            showLoading: false,
-            showFailMsg: false,
-            data: {
-                stock: id,
-                cls: cls
-            },
-            url: `${Service.BaseUrl}6300`,
-        }).then(function (res) {
-            if (res.statusCode == 200) {
-                console.log('stock news: ',res.data)
-                // var result = parser.parseMinutesData(res.data)
-                // resolve(result);
-            } else {
-                resolve([]);
-            }
-        }, function (res) {
-            console.log("request klines fail:", res)
-            reject(res);
-        });
+    var promise = Service.request({
+        showLoading: false,
+        showFailMsg: false,
+        data: {
+            stock: id,
+            cls: cls
+        },
+        url: `${Service.BaseUrl}6300`
+    }).then(function (res) {
+        if (res.statusCode == 200) {
+            // console.log('stock news: ',res.data)
+            var result = parser.parseNewsData(res.data)
+            return result
+        } else {
+            return []
+        }
+    }, function (res) {
+        return res
     });
     return promise;
 }
@@ -213,6 +228,7 @@ module.exports = {
     getMinutes: getMinutes,
     requestDynaValueData: requestDynaValueData,
     DynamicValueRequireField: DynamicValueRequireField,
-    getNews: getNews
+    getNews: getNews,
+    requestFundData: requestFundData
 }
 

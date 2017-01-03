@@ -1,1 +1,85 @@
 /* pages/kanpan/kanpan.wxss */
+@import "/pages/common/StockCell/StockCell.wxss";
+.bk_tip_container {
+  position: relative;
+  width: 100%;
+  height: 70rpx;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.bk_container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.bk_item_container {
+  width: 250rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bk_item_data_container {
+  width: 249rpx;
+  height: 160rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.tab_container {
+  position: relative;
+  width: 100%;
+  height: 100rpx;
+  display: flex;
+  align-items: center;
+}
+
+.tab_item_container {
+  width: 20%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tab_item_container text {
+  width: 100%;
+  height: 100rpx;
+  text-align: center;
+}
+
+.tab_item_sel_line_container {
+  width: 20%;
+  height: 5rpx;
+  position: absolute;
+  bottom: 0;
+  background-color: C1-font;
+}
+
+.listview_header_container {
+  position: relative;
+  width: 100%;
+  height: 70rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.listview_header_container text {
+  height: 100%;
+  line-height: 100%;
+  text-align: center;
+}
+
+.lisetview_container {
+  width: 100%;
+  height: 110rpx;
+  align-items: center;
+}
+
+

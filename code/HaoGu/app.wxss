@@ -2,12 +2,6 @@
 @import "/pages/common/colors.wxss";
 @import "/pages/common/fonts.wxss";
 
-
-page{
-  height: 100%;
-  width: 100%;
-}
-
 .container {
   min-height: 100%;
   display: flex;
@@ -15,7 +9,23 @@ page{
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-} 
+}
 
+.container_h {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-sizing: border-box;
+}
 
+.container_h-justify {
+  flex-direction: row;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
 
+.item_select {
+  background-color: lightgrey;
+}

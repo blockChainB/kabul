@@ -1,20 +1,62 @@
-.cell_stock {
+.lisetview_item_container {
   width: 100%;
-  height: 150rpx;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  height: 110rpx;
+  align-items: center;
+  justify-content: center;
 }
 
-.cell_stock .super {
+.lisetview_data_container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lisetview_item_left_container {
   width: 250rpx;
   height: 100%;
   display: flex;
   flex-direction: column;
-  align-content: center;
-  justify-content: center
+  padding-left: 30rpx;
+  justify-content: center;
 }
 
-.cell_stock .super text {
-  text-align: center;
+.lisetview_item_middle_container {
+  width: 250rpx;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.lisetview_item_right_container {
+  width: 250rpx;
+  height: 100%;
+  display: flex;
+  padding-right: 30rpx;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.listview_item_zdf_bg {
+  width: 138rpx;
+  height: 60rpx;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  background-color: #17b03e;
+}
+
+.listview_item_zdf {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }

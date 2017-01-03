@@ -298,6 +298,22 @@ function LineLayer() {
 		return this.values[pos]
 	}
 
+	this.getValues = function(pos) {
+		return this.values
+	}
+
+	this.getValueCount = function() {
+		return this.values.length
+	}
+
+	this.getLastValue = function() {
+		if (this.getValueCount() > 0) {
+            return this.getValue(this.getValueCount() - 1);
+        }
+
+        return 0;
+	}
+
 	this.moveStartPos = function(offset) {
 		var newPos = this.mStartPos + offset
 		this.setStartPos(newPos)
@@ -359,18 +375,6 @@ function LineLayer() {
                 this.mMaxCount = count;
             }
         }
-	}
-
-	this.getValueCount = function() {
-		return this.values.length
-	}
-
-	this.getLastValue = function() {
-		if (this.getValueCount() > 0) {
-            return this.getValue(this.getValueCount() - 1);
-        }
-
-        return 0;
 	}
 
 	this.resetData = function() {

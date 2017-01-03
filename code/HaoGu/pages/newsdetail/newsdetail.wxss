@@ -1,0 +1,21 @@
+/* pages/newsdetail/newsdetail.wxss */
+
+.detail_container {
+  padding: 30rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.detial_title {
+  line-height: 60rpx;
+}
+
+.detail_time {
+  margin-top: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.detail_detail {
+  margin-top: 40rpx;
+  line-height: 60rpx;
+}

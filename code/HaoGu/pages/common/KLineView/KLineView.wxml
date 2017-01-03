@@ -1,14 +1,15 @@
 <template name="KLineView">
   <view id="canvas_container">
-    <canvas canvas-id="1" hidden="{{kLineData.currentIndex != 0}}"></canvas>
-    <canvas canvas-id="2" hidden="{{kLineData.currentIndex != 1}}"></canvas>
-    <swiper current="{{kLineData.currentIndex}}" bindchange="onKLineChangedEvent" bindtap="onKLineTapEvent">
-      <swiper-item></swiper-item>
-      <swiper-item></swiper-item>
-    </swiper>
-  </view>
-  <view id="canvas_indicator">
-    <view id="canvas_indicator1" style="border-color: {{kLineData.leftIndicatorColor}}"></view>
-    <view id="canvas_indicator2" style="border-color: {{kLineData.rightIndicatorColor}}"></view>
+    <canvas canvas-id="1" hidden="{{canvasIndex != 0}}"/>
+    <canvas canvas-id="2" hidden="{{canvasIndex != 1}}"/>
+    <canvas canvas-id="3" hidden="{{canvasIndex != 2}}"/>
+    <canvas canvas-id="4" hidden="{{canvasIndex != 3}}"/>
+    <canvas canvas-id="5" hidden="{{canvasIndex != 4}}"/>
+
+    <!--<canvas canvas-id="1" hidden="{{canvasIndex != 0}}" style="background-color:#ffdddd"/>
+    <canvas canvas-id="2" hidden="{{canvasIndex != 1}}" style="background-color:#ddffff"/>
+    <canvas canvas-id="3" hidden="{{canvasIndex != 2}}" style="background-color:#ddddff"/>
+    <canvas canvas-id="4" hidden="{{canvasIndex != 3}}" style="background-color:#ddffdd"/>
+    <canvas canvas-id="5" hidden="{{canvasIndex != 4}}" style="background-color:#dddddd"/>-->
   </view>
 </template>

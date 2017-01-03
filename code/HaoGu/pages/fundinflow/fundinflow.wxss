@@ -1,1 +1,1 @@
-/* pages/fundinflow/fundinflow.wxss */
+@import "../common/FundView/FundView.wxss";

@@ -2,9 +2,10 @@
   display: flex;
   flex-direction: row;
   position: relative;
+  width: 690rpx;
   height: 60rpx;
   border-style: solid;
-  border-color: darkgray;
+  border-color: rgb(228, 228, 228);
   border-width: 1px;
   border-radius: 12rpx;
   align-items: center;
@@ -20,8 +21,8 @@
 }
 
 .search_bar image {
-    position: absolute;
-    width: 40rpx;
-    height: 40rpx;
-    right: 20rpx;
+  position: absolute;
+  width: 40rpx;
+  height: 40rpx;
+  right: 20rpx;
 }

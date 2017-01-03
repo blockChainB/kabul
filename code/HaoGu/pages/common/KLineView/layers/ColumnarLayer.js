@@ -37,6 +37,10 @@ function ColumnarLayer() {
 		return this.mValues[pos]
 	}
 
+	this.getValues = function(pos) {
+		return this.mValues
+	}
+
     this.clear = function() {
         this.mValues = []
         this.mMinValue = 0

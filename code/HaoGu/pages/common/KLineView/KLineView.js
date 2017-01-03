@@ -1,93 +1,81 @@
 var MinuteCanvas = require('./layers/MinuteCanvas.js')
 var KLineCanvas = require('./layers/KLineCanvas.js')
 
-let NorColorForIndicator = '#888888'
-let SelColorForIndicator = '#ffffff'
-var windowWidth = 375
-let isHasGetWidth = false    // 是否已获取屏幕宽度
+function KLineView() {
 
-function init(that) {
-    var tempData = Object.assign({
-        kLineData: {
-            currentIndex: 0,
-            leftIndicatorColor: SelColorForIndicator,
-            rightIndicatorColor: NorColorForIndicator,
+    this.drawnList = {
+        minute: false,
+        day: false,
+        week: false,
+        month: false,
+        hour: false
+    }
+
+    this.isCanvasDrawn = function(canvasId) {
+        var result = false
+
+        switch(canvasId) {
+            case 1:
+                result = this.drawnList.minute;
+                break;
+            case 2:
+                result = this.drawnList.day;
+                break;
+            case 3:
+                result = this.drawnList.week;
+                break;
+            case 4:
+                result = this.drawnList.month;
+                break;
+            case 5:
+                result = this.drawnList.hour;
+                break;
         }
-    }, that.data)
-    that.setData(tempData)
-    
-    if (isHasGetWidth == false) {
-        // 手机屏幕宽度不会变，只需获取一次。
-        wx.getSystemInfo({
-            success: function (res) {
-                windowWidth = res.windowWidth
-            }
-        })
+        // console.log('canvasId ' + canvasId + ', result ' + result)
+        // console.log(this.drawnList)
 
-        isHasGetWidth = true
+        return result;
     }
 
-    // console.log(tempData, that.data, windowWidth)
-}
+    this.drawMiniteCanvas = function(array, canvasId) {
+        var canvas = new MinuteCanvas()
+        canvas.addValues(array)
+        canvas.invalidate('' + canvasId)
 
-// 滑动一次，吊用两次，必须使用e
-function onChangedEvent(e, that, callback) {
-    var leftColor = NorColorForIndicator
-    if (e.detail.current == 0) {
-        leftColor = NorColorForIndicator
-    } else {
-        leftColor = SelColorForIndicator
+        this.setCanvasDrawn(canvasId)
     }
 
-    changeIndex(leftColor, that, callback)
-}
+    this.drawKLineCanvas = function(array, canvasId) {
+        // console.log('canvasId ' + canvasId)
 
-function onTapEvent(that, callback) {
-    changeIndex(that.data.kLineData.leftIndicatorColor, that, callback)
-}
+        var canvas = new KLineCanvas()
+        canvas.addValues(array)
+        canvas.invalidate('' + canvasId)
 
-function drawMiniteCanvas(array) {
-    var canvas = new MinuteCanvas(windowWidth)
-    canvas.addValues(array)
-    canvas.invalidate(1)
-}
-
-function drawKLineCanvas(array) {
-    var canvas = new KLineCanvas(windowWidth)
-    canvas.addValues(array)
-    canvas.invalidate(2)
-}
-
-function changeIndex(leftColor, that, callback) {
-
-    if (leftColor == SelColorForIndicator) {
-        that.setData({
-            kLineData: {
-                leftIndicatorColor: NorColorForIndicator,
-                rightIndicatorColor: SelColorForIndicator,
-                currentIndex: 1,
-            }
-        })
-    } else {
-        that.setData({
-            kLineData: {
-                leftIndicatorColor: SelColorForIndicator,
-                rightIndicatorColor: NorColorForIndicator,
-                currentIndex: 0,
-            }
-        })
+        this.setCanvasDrawn(canvasId)
     }
 
-    if (typeof (callback) == 'function') {
-        callback()
+    this.setCanvasDrawn = function(canvasId) {
+        switch(canvasId) {
+            case 1:
+                this.drawnList.minute = true;
+                break;
+            case 2:
+                this.drawnList.day = true;
+                break;
+            case 3:
+                this.drawnList.week = true;
+                break;
+            case 4:
+                this.drawnList.month = true;
+                break;
+            case 5:
+                this.drawnList.hour = true;
+                break;
+        }
+        // console.log('setCanvasDrawn',this.drawnList)
     }
+
 }
 
-
-module.exports = {
-    init: init,
-    onChangedEvent: onChangedEvent,
-    onTapEvent: onTapEvent,
-    drawMiniteCanvas: drawMiniteCanvas,
-    drawKLineCanvas: drawKLineCanvas
-}
+module.exports = KLineView

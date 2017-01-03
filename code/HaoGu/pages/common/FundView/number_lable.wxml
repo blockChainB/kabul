@@ -1,0 +1,10 @@
+<template name="number_lable">
+  <view class="container_h">
+    <view style=" width:26rpx; height:26rpx; background-color:{{bgcolor}}; border-radius:13rpx;">
+      <text class="S1" style="height:100%; line-height:26rpx; display:block; color:#FFF; text-align:center;">{{number}}</text>
+    </view>
+    <text class="S2 T2" style="margin-left:16rpx; ">{{lable}}</text>
+
+    <text class="S2 {{proportion_color}}" style="margin-left:16rpx; ">{{proportion}}</text>
+  </view>
+</template>

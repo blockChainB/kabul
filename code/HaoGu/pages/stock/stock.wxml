@@ -42,39 +42,52 @@
 
 <!-- 走势图 -->
 <view id="selector_time">
-    <text>分时</text>
-    <text>日线</text>
-    <text>周线</text>
-    <text>月线</text>
-    <text>60分钟</text>
+    <text style="background-color:{{currentTimeIndex == 0 ? '#eb333b' : '#f8f8f8'}}; color:{{currentTimeIndex == 0 ? '#ffffff' : '#353535'}}; border:{{currentTimeIndex == 0 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}};"border-left: none; bindtap="onPeriodSelectorClick" data-index="0">分时</text>
+    <text style="background-color:{{currentTimeIndex == 1 ? '#eb333b' : '#f8f8f8'}}; color:{{currentTimeIndex == 1 ? '#ffffff' : '#353535'}}; border:{{currentTimeIndex == 1 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}}; border-left: none;" bindtap="onPeriodSelectorClick" data-index="1">日线</text>
+    <text style="background-color:{{currentTimeIndex == 2 ? '#eb333b' : '#f8f8f8'}}; color:{{currentTimeIndex == 2 ? '#ffffff' : '#353535'}}; border:{{currentTimeIndex == 2 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}}; border-left: none;" bindtap="onPeriodSelectorClick" data-index="2">周线</text>
+    <text style="background-color:{{currentTimeIndex == 3 ? '#eb333b' : '#f8f8f8'}}; color:{{currentTimeIndex == 3 ? '#ffffff' : '#353535'}}; border:{{currentTimeIndex == 3 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}}; border-left: none;" bindtap="onPeriodSelectorClick" data-index="3">月线</text>
+    <text style="background-color:{{currentTimeIndex == 4 ? '#eb333b' : '#f8f8f8'}}; color:{{currentTimeIndex == 4 ? '#ffffff' : '#353535'}}; border:{{currentTimeIndex == 4 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}}; border-left: none;" bindtap="onPeriodSelectorClick" data-index="4">60分钟</text>
 </view>
-<view id="canvas_and_indicator">
-    <template is="KLineView" data="{{kLineData}}" />
-</view>
+<template is="KLineView" data="{{...quoteData}}" />
 
 <!-- 新闻、资金、公告、研报 -->
 <view id="selector_info">
-    <text>新闻</text>
-    <text>资金</text>
-    <text>公告</text>
-    <text>研报</text>
+    <text style="background-color:{{currentInfoIndex == 0 ? '#eb333b' : '#f8f8f8'}}; color:{{currentInfoIndex == 0 ? '#ffffff' : '#353535'}}; border:{{currentInfoIndex == 0 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}};"border-left: none; bindtap="onInfoSelectorClick" data-index="0">新闻</text>
+    <text style="background-color:{{currentInfoIndex == 1 ? '#eb333b' : '#f8f8f8'}}; color:{{currentInfoIndex == 1 ? '#ffffff' : '#353535'}}; border:{{currentInfoIndex == 1 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}}; border-left: none;" bindtap="onInfoSelectorClick" data-index="1">资金</text>
+    <text style="background-color:{{currentInfoIndex == 2 ? '#eb333b' : '#f8f8f8'}}; color:{{currentInfoIndex == 2 ? '#ffffff' : '#353535'}}; border:{{currentInfoIndex == 2 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}}; border-left: none;" bindtap="onInfoSelectorClick" data-index="2">公告</text>
+    <text style="background-color:{{currentInfoIndex == 3 ? '#eb333b' : '#f8f8f8'}}; color:{{currentInfoIndex == 3 ? '#ffffff' : '#353535'}}; border:{{currentInfoIndex == 3 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}}; border-left: none;" bindtap="onInfoSelectorClick" data-index="3">研报</text>
 </view>
-<swiper current="{{currentInfoIndex}}">
+<swiper current="{{currentInfoIndex}}" duration="0" bindchange="onInfoSwiperChange" style="height: {{infoSwiperHeight}}rpx;">
     <!-- 新闻 -->
-    <swiper-item>新闻</swiper-item>
+    <swiper-item>
+        <view class="news_item" wx:key="id" wx:for="{{news}}">
+            <text class="time"> {{item.time}} </text>
+            <text class="title"> {{item.title}} </text>
+        </view>
+    </swiper-item>
     
     <!-- 资金 -->
     <swiper-item>资金</swiper-item>
     
     <!-- 公告 -->
-    <swiper-item>公告</swiper-item>
+    <swiper-item>
+        <view class="news_item" wx:key="id" wx:for="{{news}}">
+            <text class="time"> {{item.time}} </text>
+            <text class="title"> {{item.title}} </text>
+        </view>
+    </swiper-item>
     
     <!-- 研报 -->
-    <swiper-item>研报</swiper-item>
+    <swiper-item>
+        <view class="news_item" wx:key="id" wx:for="{{news}}">
+            <text class="time"> {{item.time}} </text>
+            <text class="title"> {{item.title}} </text>
+        </view>
+    </swiper-item>
 </swiper>
 
 <!-- 添加自选 -->
 <view id="section_add_zxg">
-    <image id="img_zxg" src="../../images/add_zxg.png"></image>
-    <text id="tv_zxg">添加自选</text>
+    <image src="../../images/add_zxg.png"></image>
+    <text>添加自选</text>
 </view>

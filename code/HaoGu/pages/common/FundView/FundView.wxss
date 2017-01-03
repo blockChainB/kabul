@@ -1,0 +1,54 @@
+/* pages/fundinflow/fundinflow.wxss */
+
+
+.container-fundinflow {
+  position: relative;
+  width: 100%;
+  height: 320rpx;
+  align-items: center;
+}
+.container-fundinflow-lable {
+  position: absolute;
+  top:50%;
+  margin-top: -50rpx;
+  min-height:110rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+  overflow-x: hidden;
+  vertical-align: middle;
+} 
+
+.container-fundinflow-numberlable{
+  position: relative;
+  margin-left: 140rpx;
+  margin-right: 140rpx;
+  padding-bottom: 22rpx;
+}
+
+.container-tenday-fundinflow{
+  position: relative;
+  margin-left: 30rpx;
+  margin-right: 40rpx;
+  padding-top:42rpx;
+  padding-bottom: 15rpx;
+}
+
+.fundinflow-text-lbale{
+  margin-top: -8rpx;
+}
+
+
+.tenday-fundinflow-flag{
+  margin-left: 8rpx;
+}
+
+.tenday-fundinflow-date{
+  margin-top: 15rpx;
+  margin-left: 8rpx;
+  margin-right: 16rpx;
+}
+
+

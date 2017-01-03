@@ -1,31 +1,22 @@
-//app.js
+var draw = require('utils/canvasUtil.js')
+var appUtil = require("./utils/appUtil.js")
+
 App({
   onLaunch: function () {
     //调用API从本地缓存中获取数据
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
+    try {
+      draw.getScreenWidthPx()
+    } catch (e) {}
+
+    appUtil.getOpenId(this)
   },
-  getUserInfo: function (cb) {
-    var that = this
-    if (this.globalData.userInfo) {
-      typeof cb == "function" && cb(this.globalData.userInfo)
-    } else {
-      //调用登录接口
-      wx.login({
-        success: function () {
-          wx.getUserInfo({
-            success: function (res) {
-              that.globalData.userInfo = res.userInfo
-              typeof cb == "function" && cb(that.globalData.userInfo)
-            }
-          })
-        }
-      })
-    }
-  },
+
   globalData: {
-    userInfo: null,
-    screenWidth:0
+    screenWidth: 0,
+    openId: "",
+    optionals: ""
   }
 })

@@ -3,22 +3,17 @@
 <view style="position:relative;">
 
   <!--搜索框-->
-  <view class="search">
+  <view class="search_view B1">
     <template is="SearchBar" data="{{searchData}}" />
-  </view>
-
-  <!--提示文字-->
-  <view class="prompt B2">
-    <text class="T3 S2">最近浏览的股票</text>
   </view>
 
   <!--列表-->
   <block wx:key="optional" wx:for="{{stockArray}}" wx:for-item="item" wx:for-index="index">
-    <view class="list_item" bindtap="onShowStockDetail">
-      <text class="item_type C3-font S1">沪A</text>
-      <text class="item_name T1 S3">{{item.n}}</text>
-      <text class="item_code T1 S2">{{item.c}}</text>
-      <image src="{{icon.option}}" bindtap="onAddOrDelStock"></image>
+    <view class="list_item" id="{{item.code}}" hover="true" hover-class="item_select" bindtap="onShowStockDetail">
+      <text class="item_type C3-font S1">{{item.type}}</text>
+      <text class="item_name T3 S5">{{item.name}}</text>
+      <text class="item_code T1 S7">{{item.code}}</text>
+      <image id="{{index}}" src="{{item.optionPath}}" bindtap="onAddOrDelStock"></image>
     </view>
     <template is="lineView"></template>
   </block>

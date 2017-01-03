@@ -10,7 +10,7 @@ var GroupLayer = require('GroupLayer.js')
 var draw = require('../../../../utils/canvasUtil.js')
 var util = require('../../../../utils/util.js')
 
-function KLineCanvas(windowWidth) {
+function KLineCanvas() {
 	this.mIsInit = false;    // 是否已初始化K线绘图区域布局结构和设置
 
 	this.kLineAxisLayer = null
@@ -25,7 +25,6 @@ function KLineCanvas(windowWidth) {
 	this.mXAxisLayer = null
 	this.chartView = null
 
-	this.windowWidth = windowWidth    // 屏幕宽度，像素单位
 	this.canvasWidth = 750    // 画布宽度，单位rpx
 	this.canvasHeight = 412    // 画布高度，单位rpx
 }
@@ -35,11 +34,12 @@ KLineCanvas.prototype.initLayers = function() {
 	if (this.mIsInit == false) {
 
 		var that = this
-		var widthPerRpx = draw.getLengthByRpx(this.windowWidth, 1)
+		var widthPerRpx = draw.getLengthByRpx(1)
 
-		var strokeWidth = draw.getLengthByRpx(this.windowWidth, 2)    // 影线宽度
-		var columnWidth = draw.getLengthByRpx(this.windowWidth, 7)    // K线宽度
-		var baseWidth = draw.getLengthByRpx(this.windowWidth, 10)    // K线中1个K线和它相邻的1个space的宽度和
+		var strokeWidth = draw.getLengthByRpx(2)    // 影线宽度
+		var columnWidth = draw.getLengthByRpx(7)    // K线宽度
+		var baseWidth = draw.getLengthByRpx(10)    // K线中1个K线和它相邻的1个space的宽度和
+		this.windowWidth = draw.getLengthByRpx(750)
 		var columnCount = Math.floor(this.windowWidth / baseWidth)    // K线个数
 
 		// 初始化
@@ -179,9 +179,12 @@ KLineCanvas.prototype.initLayers = function() {
 		this.mXAxisLayer = new XAxisLayer()
 		this.mXAxisLayer.setLengthPerRpx(widthPerRpx)
 
-		var width = draw.getLengthByRpx(this.windowWidth, this.canvasWidth)
-		var height = draw.getLengthByRpx(this.windowWidth, this.canvasHeight)
+		var width = draw.getLengthByRpx(this.canvasWidth)
+		var height = draw.getLengthByRpx(this.canvasHeight)
 		this.chartView = new ChartView(0, 0, width * 1.0, height * 1.0)
+
+		console.log('width: ' + width + ', height: ' + height + ', perWidth: ' + widthPerRpx + ', strokeWidth: ' 
+			+ strokeWidth + ', columnWidth: ' + columnWidth + ', baseWidth: ' + baseWidth)
 
 		this.chartView.addLayer(this.kLineGroupLayer)
 		this.chartView.addLayer(this.volumnGroupLayer)
@@ -210,6 +213,8 @@ KLineCanvas.prototype.addValues = function(values) {
             this.ma20Layer.addValue(data.ma20);
 		}
 	}
+
+	// console.log('add values finish, kline values ' + this.ma20Layer.getValues() + ', value count ' + this.ma20Layer.getValueCount())
 }
 
 // 分时布局添加数据
@@ -234,7 +239,7 @@ KLineCanvas.prototype.addValue = function(value) {
 // 计算最大最小值
 KLineCanvas.prototype.calculate = function() {
 	// 添加value之后，需要重新设置maxCount，以确定startPos位置
-	var baseWidth = draw.getLengthByRpx(this.windowWidth, 10)    // K线中1个K线和它相邻的1个space的宽度和
+	var baseWidth = draw.getLengthByRpx(10)    // K线中1个K线和它相邻的1个space的宽度和
 	var columnCount = Math.floor(this.windowWidth / baseWidth)    // K线个数
 	this.kLineLayer.setMaxCount(columnCount);
 	this.ma5Layer.setMaxCount(columnCount);
@@ -280,13 +285,9 @@ KLineCanvas.prototype.invalidate = function(id) {
 	if (this.mIsInit == true) {
 		this.calculate()
 
-		var context = wx.createContext()
+		const context = wx.createCanvasContext(id)
 		this.chartView.onDraw(context)
-
-		wx.drawCanvas({
-			canvasId: id,
-			actions: context.getActions()
-		})
+		context.draw()
 	}
 }
 
