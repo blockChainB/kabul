@@ -1,5 +1,4 @@
 <template name="fundview">
-
   <import src="../line.wxml" />
   <import src="number_lable.wxml" />
   <view class="container-fundinflow">

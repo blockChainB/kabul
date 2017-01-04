@@ -48,5 +48,11 @@ Page({
     wx.navigateTo({
       url: '../stock/stock?code=' + code,
     })
+  },
+
+  onStockSearchEvent:function(e) {
+    wx.navigateTo({
+      url: '../search/search'
+    })
   }
 })

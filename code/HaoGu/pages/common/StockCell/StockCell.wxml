@@ -16,7 +16,7 @@
 
       <!--middle-->
       <view class="lisetview_item_zdf_container">
-        <view class="listview_item_zdf_bg" style="background-color:{{data>0?'#eb333b':(data<0?'#17b03e':'#b2b2b2')}}">
+        <view class="listview_item_zdf_bg {{data>0?'C1-bg':(data<0?'C2-bg':'B5')}}">
           <text class="S4 T4 listview_item_zdf">{{data}}%</text>
         </view>
       </view>

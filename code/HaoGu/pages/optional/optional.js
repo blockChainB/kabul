@@ -15,5 +15,11 @@ Page({
   },
   onUnload:function(){
     // 页面关闭
+  },
+
+  onStockSearchEvent: function (e) {
+    wx.navigateTo({
+      url: '../search/search'
+    })
   }
 })

@@ -29,3 +29,12 @@
 .item_select {
   background-color: lightgrey;
 }
+
+.icon_search {
+  position: fixed;
+  width: 100rpx;
+  height: 100rpx;
+  right: 40rpx;
+  bottom: 30rpx;
+  z-index: 500;
+}

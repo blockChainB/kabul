@@ -39,6 +39,15 @@ function getOpenId(app) {
     })
 }
 
+//网络类型
+function getNetWorkType() {
+    wx.getNetworkType({
+        success: function (res) {
+            getApp().globalData.netWorkType = res.networkType
+        }
+    })
+}
+
 function requestOptionals() {
     Api.stock.requestOptionals({
 
@@ -50,5 +59,6 @@ function requestOptionals() {
 }
 
 module.exports = {
-    getOpenId: getOpenId
+    getOpenId: getOpenId,
+    getNetWorkType: getNetWorkType,
 }

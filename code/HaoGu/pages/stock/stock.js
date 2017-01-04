@@ -4,12 +4,16 @@ var NewsItem = require('NewsItem.js')
 var fundview = require('../common/FundView/FundView.js');
 var Quotation = require('../../models/Quotation.js')
 
+var Util = require('../../utils/util.js')
+
 Page({
 
     data: {
         // 个股头部数据
         quotation: {},
         goodsId: 600600,
+        goodsName: '青岛啤酒',
+        goodsCode: '600600',
         quotationColor: '#eb333b',
         currentTimeIndex: 0,
         currentInfoIndex: 0,
@@ -17,16 +21,27 @@ Page({
         quoteData: {
             canvasIndex: 0
         },
-        news: [],
-        infoSwiperHeight: 0,
+        news: [],               // 新闻列表数据
+        notices: [],            // 公告列表数据
+        research: [],           // 研报列表数据
+        infoSwiperHeight: 0,    // 新闻列表、资金图高度
         infoCls: '0',
         fundViewData: {}
     },
 
     onLoad: function (option) {
-        console.log('onLoad ', this.data.goodsId)
-        this.setData({goodsId: parseInt(option.id)})
-        console.log('onLoad ', this.data.goodsId)
+        if (option.hasOwnProperty('id') && option.hasOwnProperty('name') && option.hasOwnProperty('code')) {
+            this.setData({
+                goodsId: parseInt(option.id),
+                goodsName: option.name,
+                goodsCode: option.code
+            })
+        }
+
+        wx.setNavigationBarTitle({
+            title: `${this.data.goodsName} (${this.data.goodsCode})`
+        })
+
         initData(this)
     },
 
@@ -38,18 +53,18 @@ Page({
         this.getQuotationValue(function () {
             wx.hideNavigationBarLoading()
         })
-        this.getNews('600600', '0', function() {
+        this.getNews('600600', '0', function () {
             wx.hideNavigationBarLoading()
         })
 
-        
-       fundview.init(this);
+
+        fundview.init(this);
         fundview.show(this);
         fundview.setJLValue(this, '1.52', '亿元');
     },
 
     onReady: function () {
-         
+
     },
 
     onPullDownRefresh: function (event) {
@@ -79,12 +94,14 @@ Page({
                 callback()
             }
             // console.log('stock quotation value result ', results)
-            that.setData({quotation: results})
-            // console.log('canvas id ' + getCanvasId(that.data.quotePeriod))
-            // that.kLineView.drawMiniteCanvas(results, getCanvasId(that.data.quotePeriod))
+            if (results != null) {
+                that.setData({ quotation: results })
+            }
         }, function (res) {
             console.log("------fail----", res)
-            wx.hideNavigationBarLoading()
+            if (callback != null && typeof (callback) == 'function') {
+                callback()
+            }
         })
     },
 
@@ -243,13 +260,21 @@ Page({
             currentInfoIndex: index,
             infoCls: cls
         })
+
+        getInfoHeight(this)
     },
 
     onInfoSwiperChange: function (e) {
         var index = e.detail.current
         this.setData({ currentInfoIndex: index })
-    }
+    },
 
+    onNewsDetailEvent: function (e) {
+        var item = this.data.news[parseInt(e.currentTarget.id)]
+        wx.navigateTo({
+            url: '../newsdetail/newsdetail?time=' + item.time + '&url=' + Util.urlNavigateEncode(item.url)
+        })
+    }
 })
 
 function getCanvasId(period) {
@@ -274,8 +299,31 @@ function getCanvasId(period) {
     return 1;
 }
 
+// 单位: rpx
 function getInfoHeight(that) {
-    var height = 80 * that.data.news.length + 98
+    var height = 0
+    var index = parseInt(that.data.currentInfoIndex)
+
+    switch (index) {
+        case 0:    // 新闻
+            height = 80 * that.data.news.length
+            break;
+        case 1:    // 资金
+            height = 900
+            break;
+        case 2:    // 公告
+            height = 80 * that.data.notices.length
+            break;
+        case 3:    // 研报
+            height = 80 * that.data.research.length
+            break;
+    }
+
+    // 添加自选Bottom的高度
+    height += 98
+
+    console.log('height', height, index)
+
     that.setData({
         infoSwiperHeight: height
     })

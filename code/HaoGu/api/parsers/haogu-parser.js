@@ -87,6 +87,51 @@ function testData() {
                     "SecuAbbr": "南风化工",   //--股票名称
                     "isSystem": 1            //--类型（1初选2终选）
                 },
+                {
+                    "SecuCode": "000737",    //--股票代码
+                    "SecuAbbr": "南风化工",   //--股票名称
+                    "isSystem": 1            //--类型（1初选2终选）
+                },
+                {
+                    "SecuCode": "000737",    //--股票代码
+                    "SecuAbbr": "南风化工",   //--股票名称
+                    "isSystem": 1            //--类型（1初选2终选）
+                },
+                {
+                    "SecuCode": "000737",    //--股票代码
+                    "SecuAbbr": "南风化工",   //--股票名称
+                    "isSystem": 1            //--类型（1初选2终选）
+                },
+                {
+                    "SecuCode": "000737",    //--股票代码
+                    "SecuAbbr": "南风化工",   //--股票名称
+                    "isSystem": 1            //--类型（1初选2终选）
+                },
+                {
+                    "SecuCode": "000737",    //--股票代码
+                    "SecuAbbr": "南风化工",   //--股票名称
+                    "isSystem": 1            //--类型（1初选2终选）
+                },
+                {
+                    "SecuCode": "000737",    //--股票代码
+                    "SecuAbbr": "南风化工",   //--股票名称
+                    "isSystem": 1            //--类型（1初选2终选）
+                },
+                {
+                    "SecuCode": "000737",    //--股票代码
+                    "SecuAbbr": "南风化工",   //--股票名称
+                    "isSystem": 1            //--类型（1初选2终选）
+                },
+                {
+                    "SecuCode": "000737",    //--股票代码
+                    "SecuAbbr": "南风化工",   //--股票名称
+                    "isSystem": 1            //--类型（1初选2终选）
+                },
+                {
+                    "SecuCode": "000737",    //--股票代码
+                    "SecuAbbr": "南风化工",   //--股票名称
+                    "isSystem": 2            //--类型（1初选2终选）
+                },
             ]
         }
     ]
@@ -105,8 +150,6 @@ function HaoGuSelectItem(desp, time, stocks) {
             array = []
         }
     }
-
-    console.log("groups", groups, stocks)
 
     this.stocks = groups
 }
@@ -143,13 +186,7 @@ function HaoGuItem(data) {
         var finalItem = new HaoGuSelectItem(desp, time, finals)
 
         this.items.push(finalItem)
-
     }
-
-    this.originalSelect = originals.length
-    this.lineHeight1 = parseInt(this.originalSelect / 4) * 80 + 40
-    this.finalSelect = finals.length
-    this.lineHeight2 = parseInt(this.finalSelect / 4) * 80 + 40
 }
 
 // parse

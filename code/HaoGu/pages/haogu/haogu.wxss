@@ -49,6 +49,8 @@
 .list_item .item_group_line {
   position: absolute;
   width: 1px;
+  top: 20rpx;
+  bottom: 20rpx;
 }
 
 .list_item .item_stock {

@@ -53,12 +53,11 @@
 .listview_item_zdf_bg {
   width: 138rpx;
   height: 60rpx;
-  border-radius: 3px;
+  border-radius: 8rpx;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   justify-content: center;
-  background-color: #17b03e;
 }
 
 .listview_item_zdf {

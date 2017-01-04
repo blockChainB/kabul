@@ -10,11 +10,12 @@ function getHotBK({key = ""} = {}) {
         data: {
             key: key,
         },
-        url: `${Service.BaseUrl}20501`,
+        url: `${Service.BaseUrl}27200`,
     }).then(function (res) {
         console.log("***********xie,",res)
         if (res.statusCode == 200) {
-            var results = parser.parseHotBKData(res.data.data)
+            var results =parser.parseHotBKData(res.data.detail);
+               console.log("***********xie results,",results)
             return results
         } else {
             return []

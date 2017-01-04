@@ -1,4 +1,5 @@
 {
 	"navigationBarTitleText": "看盘",
+	"navigationBarTextStyle": "white",
 	"enablePullDownRefresh": true
 }

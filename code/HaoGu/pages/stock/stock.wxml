@@ -3,95 +3,128 @@
 
 <!-- 个股头部指标 -->
 <view id="section_quotation">
-    <!-- Quotation(price, zd, zdf, open, high, low, hsl, syl, sjl, cjl, jl, zz, cje, lb, ltsz, date, time, color, goodsId) -->
-    <!-- 价格、涨跌、涨跌幅 -->
-    <view class="quota_price" style="color:{{quotation.color}};">{{quotation.price}}</view>
-    <view class="quota_zd" style="color:{{quotation.color}};">{{quotation.zd}}</view>
-    <view class="quota_zdf" style="color:{{quotation.color}};">{{quotation.zdf}}</view>
 
-    <!-- 开盘、最高、最低 -->
-    <text class="quota_item quota_row1 quota_colum3">开盘：</text>
-    <text class="quota_item quota_row2 quota_colum3">最高：</text>
-    <text class="quota_item quota_row3 quota_colum3">最低：</text>
-    <text class="quota_item quota_row1 quota_colum4">{{quotation.open}}</text>
-    <text class="quota_item quota_row2 quota_colum4">{{quotation.high}}</text>
-    <text class="quota_item quota_row3 quota_colum4">{{quotation.low}}</text>
+  <!-- Quotation(price, zd, zdf, open, high, low, hsl, syl, sjl, cjl, jl, zz, cje, lb, ltsz, date, time, color, goodsId) -->
 
-    <!-- 换手、市盈、市净 -->
-    <text class="quota_item quota_row1 quota_colum5">换手：</text>
-    <text class="quota_item quota_row2 quota_colum5">市盈：</text>
-    <text class="quota_item quota_row3 quota_colum5">市净：</text>
-    <text class="quota_item quota_row1 quota_colum6">{{quotation.hsl}}</text>
-    <text class="quota_item quota_row2 quota_colum6">{{quotation.syl}}</text>
-    <text class="quota_item quota_row3 quota_colum6">{{quotation.sjl}}</text>
+  <!-- 价格、涨跌、涨跌幅 -->
+  <view class="quota_price" style="color:{{quotation.color}};">{{quotation.price}}</view>
+  <view class="quota_zd" style="color:{{quotation.color}};">{{quotation.zd}}</view>
+  <view class="quota_zdf" style="color:{{quotation.color}};">{{quotation.zdf}}</view>
 
-    <!-- 成交量、净流、总值 -->
-    <text class="quota_item quota_row4 quota_colum1">成交量：</text>
-    <text class="quota_item quota_row4 quota_colum3">净流：</text>
-    <text class="quota_item quota_row4 quota_colum5">总值：</text>
-    <text class="quota_item quota_row4 quota_colum2">{{quotation.cjl}}</text>
-    <text class="quota_item quota_row4 quota_colum4">{{quotation.jl}}</text>
-    <text class="quota_item quota_row4 quota_colum6">{{quotation.zz}}</text>
+  <!-- 开盘、最高、最低 -->
+  <text class="quota_item quota_row1 quota_colum3">开盘：</text>
+  <text class="quota_item quota_row2 quota_colum3">最高：</text>
+  <text class="quota_item quota_row3 quota_colum3">最低：</text>
+  <text class="quota_item quota_row1 quota_colum4">{{quotation.open}}</text>
+  <text class="quota_item quota_row2 quota_colum4">{{quotation.high}}</text>
+  <text class="quota_item quota_row3 quota_colum4">{{quotation.low}}</text>
 
-    <!-- 成交额、量比、流值 -->
-    <text class="quota_item quota_row5 quota_colum1">成交额：</text>
-    <text class="quota_item quota_row5 quota_colum3">量比：</text>
-    <text class="quota_item quota_row5 quota_colum5">流值：</text>
-    <text class="quota_item quota_row5 quota_colum2">{{quotation.cje}}</text>
-    <text class="quota_item quota_row5 quota_colum4">{{quotation.lb}}</text>
-    <text class="quota_item quota_row5 quota_colum6">{{quotation.ltsz}}</text>
+  <!-- 换手、市盈、市净 -->
+  <text class="quota_item quota_row1 quota_colum5">换手：</text>
+  <text class="quota_item quota_row2 quota_colum5">市盈：</text>
+  <text class="quota_item quota_row3 quota_colum5">市净：</text>
+  <text class="quota_item quota_row1 quota_colum6">{{quotation.hsl}}</text>
+  <text class="quota_item quota_row2 quota_colum6">{{quotation.syl}}</text>
+  <text class="quota_item quota_row3 quota_colum6">{{quotation.sjl}}</text>
+
+  <!-- 成交量、净流、总值 -->
+  <text class="quota_item quota_row4 quota_colum1">成交量：</text>
+  <text class="quota_item quota_row4 quota_colum3">净流：</text>
+  <text class="quota_item quota_row4 quota_colum5">总值：</text>
+  <text class="quota_item quota_row4 quota_colum2">{{quotation.cjl}}</text>
+  <text class="quota_item quota_row4 quota_colum4">{{quotation.jl}}</text>
+  <text class="quota_item quota_row4 quota_colum6">{{quotation.zz}}</text>
+
+  <!-- 成交额、量比、流值 -->
+  <text class="quota_item quota_row5 quota_colum1">成交额：</text>
+  <text class="quota_item quota_row5 quota_colum3">量比：</text>
+  <text class="quota_item quota_row5 quota_colum5">流值：</text>
+  <text class="quota_item quota_row5 quota_colum2">{{quotation.cje}}</text>
+  <text class="quota_item quota_row5 quota_colum4">{{quotation.lb}}</text>
+  <text class="quota_item quota_row5 quota_colum6">{{quotation.ltsz}}</text>
 </view>
 
 <!-- 走势图 -->
 <view id="selector_time">
-    <text style="background-color:{{currentTimeIndex == 0 ? '#eb333b' : '#f8f8f8'}}; color:{{currentTimeIndex == 0 ? '#ffffff' : '#353535'}}; border:{{currentTimeIndex == 0 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}};"border-left: none; bindtap="onPeriodSelectorClick" data-index="0">分时</text>
-    <text style="background-color:{{currentTimeIndex == 1 ? '#eb333b' : '#f8f8f8'}}; color:{{currentTimeIndex == 1 ? '#ffffff' : '#353535'}}; border:{{currentTimeIndex == 1 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}}; border-left: none;" bindtap="onPeriodSelectorClick" data-index="1">日线</text>
-    <text style="background-color:{{currentTimeIndex == 2 ? '#eb333b' : '#f8f8f8'}}; color:{{currentTimeIndex == 2 ? '#ffffff' : '#353535'}}; border:{{currentTimeIndex == 2 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}}; border-left: none;" bindtap="onPeriodSelectorClick" data-index="2">周线</text>
-    <text style="background-color:{{currentTimeIndex == 3 ? '#eb333b' : '#f8f8f8'}}; color:{{currentTimeIndex == 3 ? '#ffffff' : '#353535'}}; border:{{currentTimeIndex == 3 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}}; border-left: none;" bindtap="onPeriodSelectorClick" data-index="3">月线</text>
-    <text style="background-color:{{currentTimeIndex == 4 ? '#eb333b' : '#f8f8f8'}}; color:{{currentTimeIndex == 4 ? '#ffffff' : '#353535'}}; border:{{currentTimeIndex == 4 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}}; border-left: none;" bindtap="onPeriodSelectorClick" data-index="4">60分钟</text>
+  <text style="background-color:{{currentTimeIndex == 0 ? '#eb333b' : '#f8f8f8'}}; color:{{currentTimeIndex == 0 ? '#ffffff' : '#353535'}}; border:{{currentTimeIndex == 0 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}};" border-left: none;
+  bindtap="onPeriodSelectorClick" data-index="0">分时</text>
+  <text style="background-color:{{currentTimeIndex == 1 ? '#eb333b' : '#f8f8f8'}}; color:{{currentTimeIndex == 1 ? '#ffffff' : '#353535'}}; border:{{currentTimeIndex == 1 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}}; border-left: none;"
+  bindtap="onPeriodSelectorClick" data-index="1">日线</text>
+  <text style="background-color:{{currentTimeIndex == 2 ? '#eb333b' : '#f8f8f8'}}; color:{{currentTimeIndex == 2 ? '#ffffff' : '#353535'}}; border:{{currentTimeIndex == 2 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}}; border-left: none;"
+  bindtap="onPeriodSelectorClick" data-index="2">周线</text>
+  <text style="background-color:{{currentTimeIndex == 3 ? '#eb333b' : '#f8f8f8'}}; color:{{currentTimeIndex == 3 ? '#ffffff' : '#353535'}}; border:{{currentTimeIndex == 3 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}}; border-left: none;"
+  bindtap="onPeriodSelectorClick" data-index="3">月线</text>
+  <text style="background-color:{{currentTimeIndex == 4 ? '#eb333b' : '#f8f8f8'}}; color:{{currentTimeIndex == 4 ? '#ffffff' : '#353535'}}; border:{{currentTimeIndex == 4 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}}; border-left: none;"
+  bindtap="onPeriodSelectorClick" data-index="4">60分钟</text>
 </view>
 <template is="KLineView" data="{{...quoteData}}" />
 
 <!-- 新闻、资金、公告、研报 -->
 <view id="selector_info">
-    <text style="background-color:{{currentInfoIndex == 0 ? '#eb333b' : '#f8f8f8'}}; color:{{currentInfoIndex == 0 ? '#ffffff' : '#353535'}}; border:{{currentInfoIndex == 0 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}};"border-left: none; bindtap="onInfoSelectorClick" data-index="0">新闻</text>
-    <text style="background-color:{{currentInfoIndex == 1 ? '#eb333b' : '#f8f8f8'}}; color:{{currentInfoIndex == 1 ? '#ffffff' : '#353535'}}; border:{{currentInfoIndex == 1 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}}; border-left: none;" bindtap="onInfoSelectorClick" data-index="1">资金</text>
-    <text style="background-color:{{currentInfoIndex == 2 ? '#eb333b' : '#f8f8f8'}}; color:{{currentInfoIndex == 2 ? '#ffffff' : '#353535'}}; border:{{currentInfoIndex == 2 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}}; border-left: none;" bindtap="onInfoSelectorClick" data-index="2">公告</text>
-    <text style="background-color:{{currentInfoIndex == 3 ? '#eb333b' : '#f8f8f8'}}; color:{{currentInfoIndex == 3 ? '#ffffff' : '#353535'}}; border:{{currentInfoIndex == 3 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}}; border-left: none;" bindtap="onInfoSelectorClick" data-index="3">研报</text>
+  <text style="background-color:{{currentInfoIndex == 0 ? '#eb333b' : '#f8f8f8'}}; color:{{currentInfoIndex == 0 ? '#ffffff' : '#353535'}}; border:{{currentInfoIndex == 0 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}};" border-left: none;
+  bindtap="onInfoSelectorClick" data-index="0">新闻</text>
+  <text style="background-color:{{currentInfoIndex == 1 ? '#eb333b' : '#f8f8f8'}}; color:{{currentInfoIndex == 1 ? '#ffffff' : '#353535'}}; border:{{currentInfoIndex == 1 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}}; border-left: none;"
+  bindtap="onInfoSelectorClick" data-index="1">资金</text>
+  <text style="background-color:{{currentInfoIndex == 2 ? '#eb333b' : '#f8f8f8'}}; color:{{currentInfoIndex == 2 ? '#ffffff' : '#353535'}}; border:{{currentInfoIndex == 2 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}}; border-left: none;"
+  bindtap="onInfoSelectorClick" data-index="2">公告</text>
+  <text style="background-color:{{currentInfoIndex == 3 ? '#eb333b' : '#f8f8f8'}}; color:{{currentInfoIndex == 3 ? '#ffffff' : '#353535'}}; border:{{currentInfoIndex == 3 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}}; border-left: none;"
+  bindtap="onInfoSelectorClick" data-index="3">研报</text>
 </view>
 <swiper current="{{currentInfoIndex}}" duration="0" bindchange="onInfoSwiperChange" style="height: {{infoSwiperHeight}}rpx;">
-    <!-- 新闻 -->
-    <swiper-item>
-        <view class="news_item" wx:key="id" wx:for="{{news}}">
-            <text class="time"> {{item.time}} </text>
-            <text class="title"> {{item.title}} </text>
-        </view>
-    </swiper-item>
-    
-    <!-- 资金 -->
-    <swiper-item>
-        <template is="fundview" data="{{...fundViewData}}" />
-    </swiper-item>
-    
-    <!-- 公告 -->
-    <swiper-item>
-        <view class="news_item" wx:key="id" wx:for="{{news}}">
-            <text class="time"> {{item.time}} </text>
-            <text class="title"> {{item.title}} </text>
-        </view>
-    </swiper-item>
-    
-    <!-- 研报 -->
-    <swiper-item>
-        <view class="news_item" wx:key="id" wx:for="{{news}}">
-            <text class="time"> {{item.time}} </text>
-            <text class="title"> {{item.title}} </text>
-        </view>
-    </swiper-item>
+
+  <!-- 新闻 -->
+  <swiper-item>
+    <block wx:key="id" wx:for="{{news}}" wx:for-item="item" wx:for-index="index">
+      <view class="news_item" id="{{index}}" bindtap="onNewsDetailEvent">
+        <text class="time"> {{item.time}} </text>
+        <text class="title"> {{item.title}} </text>
+      </view>
+    </block>
+
+    <!--<view class="news_item" wx:key="id" wx:for="{{news}}">
+      <text class="time"> {{item.time}} </text>
+      <text class="title"> {{item.title}} </text>
+    </view>-->
+  </swiper-item>
+
+  <!-- 资金 -->
+  <swiper-item>
+    <template is="fundview" data="{{...fundViewData}}" />
+  </swiper-item>
+
+  <!-- 公告 -->
+  <swiper-item>
+    <block wx:key="id" wx:for="{{news}}" wx:for-item="item" wx:for-index="index">
+      <view class="news_item" id="{{index}}" bindtap="onNewsDetailEvent">
+        <text class="time"> {{item.time}} </text>
+        <text class="title"> {{item.title}} </text>
+      </view>
+    </block>
+
+    <!--<view class="news_item" wx:key="id" wx:for="{{news}}">
+      <text class="time"> {{item.time}} </text>
+      <text class="title"> {{item.title}} </text>
+    </view>-->
+  </swiper-item>
+
+  <!-- 研报 -->
+  <swiper-item>
+    <block wx:key="id" wx:for="{{news}}" wx:for-item="item" wx:for-index="index">
+      <view class="news_item" id="{{index}}" bindtap="onNewsDetailEvent">
+        <text class="time"> {{item.time}} </text>
+        <text class="title"> {{item.title}} </text>
+      </view>
+    </block>
+
+    <!--<view class="news_item" wx:key="id" wx:for="{{news}}">
+      <text class="time"> {{item.time}} </text>
+      <text class="title"> {{item.title}} </text>
+    </view>-->
+  </swiper-item>
 </swiper>
 
 <!-- 添加自选 -->
 <view id="section_add_zxg">
-    <image src="../../images/add_zxg.png"></image>
-    <text>添加自选</text>
+  <image src="../../images/add_zxg.png"></image>
+  <text>添加自选</text>
 </view>

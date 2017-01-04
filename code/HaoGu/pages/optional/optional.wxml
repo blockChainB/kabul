@@ -10,8 +10,6 @@
     </view>
   </view>
 </template>
-
-
 <view class="container_h-justify-optional">
   <template is="indexCell"></template>
   <view class="optional-cell-divideline"></view>
@@ -19,3 +17,6 @@
   <view class="optional-cell-divideline"></view>
   <template is="indexCell"></template>
 </view>
+
+<!--搜索按钮-->
+<image class="icon_search" src="../../images/icon_optional_search.png" bindtap="onStockSearchEvent"></image>

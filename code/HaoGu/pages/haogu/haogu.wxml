@@ -1,5 +1,5 @@
 <import src="../common/line.wxml" />
-<view class="B4" style="position:relative;">
+<view class="B4">
   <block wx:key="haogu" wx:for="{{array}}" wx:for-item="item" wx:for-index="index">
     <view class="list_item">
 
@@ -17,7 +17,7 @@
         </view>
 
         <!--个股-->
-        <view>
+        <view style="position: relative;">
           <block wx:key="stockGroup" wx:for="{{selectItem.stocks}}" wx:for-item="stockGroupItem" wx:for-index="stockGroupIndex">
             <view class="item_group">
               <block wx:key="stock" wx:for="{{stockGroupItem}}" wx:for-item="stockItem" wx:for-index="stockIndex">
@@ -25,34 +25,25 @@
                   <text class="C3-font S3">{{stockItem.name}}</text>
                   <text class="S1 T1">{{stockItem.code}}</text>
                 </view>
-
-                <!--<block wx:if="{{stockIndex != stockGroupItem.length-1 && stockIndex % 4 != 3}}">
-                  <view style="background-color:#00fff0; position:relative; width:1px; height:60%"></view>
-                </block>-->
               </block>
             </view>
+
+            <!--分割线-->
+            <block wx:if="{{stockGroupItem.length > 3}}">
+              <view class="item_group_line B4" style="left:75%;"></view>
+            </block>
+            <block wx:if="{{stockGroupItem.length > 2}}">
+              <view class="item_group_line B4" style="left:50%;"></view>
+            </block>
+            <block wx:if="{{stockGroupItem.length > 1}}">
+              <view class="item_group_line B4" style="left:25%;"></view>
+            </block>
           </block>
         </view>
-      </block>
-      <block wx:if="{{item.originalSelect > 3}}">
-        <view class="item_group_line B4" style="left:75%; top:160rpx; height:{{item.lineHeight1}}rpx;"></view>
-      </block>
-      <block wx:if="{{item.originalSelect > 2}}">
-        <view class="item_group_line B4" style="left:50%; top:160rpx; height:{{item.lineHeight1}}rpx;"></view>
-      </block>
-      <block wx:if="{{item.originalSelect > 1}}">
-        <view class="item_group_line B4" style="left:25%; top:160rpx; height:{{item.lineHeight1}}rpx;"></view>
-      </block>
-
-      <block wx:if="{{item.finalSelect > 3}}">
-        <view class="item_group_line B4" style="left:75%; top:{{260 + item.lineHeight1}}rpx; height:{{item.lineHeight2}}rpx;"></view>
-      </block>
-      <block wx:if="{{item.finalSelect > 2}}">
-        <view class="item_group_line B4" style="left:50%; top:{{260 + item.lineHeight1}}rpx; height:{{item.lineHeight2}}rpx;"></view>
-      </block>
-      <block wx:if="{{item.finalSelect > 1}}">
-        <view class="item_group_line B4" style="left:25%; top:{{260 + item.lineHeight1}}rpx; height:{{item.lineHeight2}}rpx;"></view>
       </block>
     </view>
   </block>
 </view>
+
+<!--搜索按钮-->
+<image class="icon_search" src="../../images/icon_optional_search.png" bindtap="onStockSearchEvent"></image>

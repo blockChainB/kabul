@@ -8,9 +8,11 @@ var PbUtil = require('../../utils/PbUtil.js')
 var Util = require('../../utils/util.js')
 var GoodsParams = require('../../models/GoodsParams.js')
 var Quotation = require('../../models/Quotation.js')
+var RelativeItem = require('../../pages/bk/RelativeItem.js')
+var BkQuotation = require('../../pages/bk/BkQuotation.js')
 
 // 解析搜索数据
-function parseSearchData(array){
+function parseSearchData(array) {
     var results = []
 
     for (var i = 0; i < array.length; i++) {
@@ -25,9 +27,12 @@ function parseSearchData(array){
 function parseMinutesData(data) {
     var array = data.trend_line
     var minutes = []
-    for (var i = 0; i < array.length; i++) {
-        var item = new MinuteData(array[i].time, array[i].price, array[i].ave, array[i].volume, array[i].amount)
-        minutes.push(item)
+    
+    if (array != null && array.length > 0) {
+        for (var i = 0; i < array.length; i++) {
+            var item = new MinuteData(array[i].time, array[i].price, array[i].ave, array[i].volume, array[i].amount)
+            minutes.push(item)
+        }
     }
 
     var result = {
@@ -71,41 +76,119 @@ function parseNewsData(data) {
 
 // 解析个股行情数据
 function parseStockQuotationValue(data) {
-    var ids = data.rep_fields
-    var values = data.quota_value[0].rep_field_value
+    var quotas = data.quota_value
+    if (quotas != null && quotas.length > 0) {
+        var ids = data.rep_fields
+        var values = data.quota_value[0].rep_field_value
 
-    var price = Util.formatPrice(PbUtil.getPbValue(ids, values, GoodsParams.ZXJ))
-    var zd = Util.formatZd(PbUtil.getPbValue(ids, values, GoodsParams.ZHANGDIE))
-    var zdf = Util.formatZdf(PbUtil.getPbValue(ids, values, GoodsParams.ZDF))
-    var zdColor = Util.getColorByZd(PbUtil.getPbValue(ids, values, GoodsParams.ZHANGDIE))
-    // console.log(price,zd,zdf, zdColor)
+        var price = Util.formatPrice(PbUtil.getPbValue(ids, values, GoodsParams.ZXJ))
+        var zd = Util.formatZd(PbUtil.getPbValue(ids, values, GoodsParams.ZHANGDIE))
+        var zdf = Util.formatZdf(PbUtil.getPbValue(ids, values, GoodsParams.ZDF))
+        var zdColor = Util.getColorByZd(PbUtil.getPbValue(ids, values, GoodsParams.ZHANGDIE))
+        // console.log(price,zd,zdf, zdColor)
 
-    var open = Util.formatPrice(PbUtil.getPbValue(ids, values, GoodsParams.OPEN))
-    var high = Util.formatPrice(PbUtil.getPbValue(ids, values, GoodsParams.HiGH))
-    var low = Util.formatPrice(PbUtil.getPbValue(ids, values, GoodsParams.LOW))
-    // console.log(open,high,low)
+        var open = Util.formatPrice(PbUtil.getPbValue(ids, values, GoodsParams.OPEN))
+        var high = Util.formatPrice(PbUtil.getPbValue(ids, values, GoodsParams.HiGH))
+        var low = Util.formatPrice(PbUtil.getPbValue(ids, values, GoodsParams.LOW))
+        // console.log(open,high,low)
 
-    var hsl = Util.formatHsl(PbUtil.getPbValue(ids, values, GoodsParams.HSL))
-    var syl = Util.formatSyl(PbUtil.getPbValue(ids, values, GoodsParams.SYL))
-    var sjl = Util.formatSyl(PbUtil.getPbValue(ids, values, GoodsParams.SJL))
-    // console.log(hsl, syl, sjl)
+        var hsl = Util.formatHsl(PbUtil.getPbValue(ids, values, GoodsParams.HSL))
+        var syl = Util.formatSyl(PbUtil.getPbValue(ids, values, GoodsParams.SYL))
+        var sjl = Util.formatSyl(PbUtil.getPbValue(ids, values, GoodsParams.SJL))
+        // console.log(hsl, syl, sjl)
 
-    var cjl = Util.formatVolumn(PbUtil.getPbValue(ids, values, GoodsParams.VOLUME) / 100)
-    var jl = Util.formatJl(PbUtil.getPbValue(ids, values, GoodsParams.JL))
-    var zsz = Util.formatAmount(PbUtil.getPbValue(ids, values, GoodsParams.ZSZ))
-    // console.log(cjl, jl, zsz)
+        var cjl = Util.formatVolumn(PbUtil.getPbValue(ids, values, GoodsParams.VOLUME) / 100)
+        var jl = Util.formatJl(PbUtil.getPbValue(ids, values, GoodsParams.JL))
+        var zsz = Util.formatAmount(PbUtil.getPbValue(ids, values, GoodsParams.ZSZ))
+        // console.log(cjl, jl, zsz)
 
-    var amount = Util.formatAmount(PbUtil.getPbValue(ids, values, GoodsParams.AMOUNT))
-    var lb = Util.formatSyl(PbUtil.getPbValue(ids, values, GoodsParams.LB))
-    var ltsz = Util.formatAmount(PbUtil.getPbValue(ids, values, GoodsParams.LTSZ))
-    // console.log(amount, lb, ltsz)
+        var amount = Util.formatAmount(PbUtil.getPbValue(ids, values, GoodsParams.AMOUNT))
+        var lb = Util.formatSyl(PbUtil.getPbValue(ids, values, GoodsParams.LB))
+        var ltsz = Util.formatAmount(PbUtil.getPbValue(ids, values, GoodsParams.LTSZ))
+        // console.log(amount, lb, ltsz)
 
-    var date = data.cur_update_market_date
-    var time = data.cur_update_market_time
-    var id = data.quota_value[0].goods_Id
+        var date = data.cur_update_market_date
+        var time = data.cur_update_market_time
+        var id = data.quota_value[0].goods_Id
 
-    //  Quotation(price, zd, zdf, open, high, low, hsl, syl, sjl, cjl, jl, zsz, amount, lb, ltsz, date, time, color, goodsId) 
-    return new Quotation(price, zd, zdf, open, high, low, hsl, syl, sjl, cjl, jl, zsz, amount, lb, ltsz, date, time, zdColor, id)
+        //  Quotation(price, zd, zdf, open, high, low, hsl, syl, sjl, cjl, jl, zsz, amount, lb, ltsz, date, time, color, goodsId) 
+        return new Quotation(price, zd, zdf, open, high, low, hsl, syl, sjl, cjl, jl, zsz, amount, lb, ltsz, date, time, zdColor, id)
+    }
+
+    return null
+}
+
+// 解析版块行情数据
+function parseBkQuotationValue(data) {
+    var quotas = data.quota_value
+    if (quotas != null && quotas.length > 0) {
+        var ids = data.rep_fields
+        var values = data.quota_value[0].rep_field_value
+
+        var price = Util.formatPrice(PbUtil.getPbValue(ids, values, GoodsParams.ZXJ))
+        var zd = Util.formatZd(PbUtil.getPbValue(ids, values, GoodsParams.ZHANGDIE))
+        var zdf = Util.formatZdf(PbUtil.getPbValue(ids, values, GoodsParams.ZDF))
+        var zdColor = Util.getColorByZd(PbUtil.getPbValue(ids, values, GoodsParams.ZHANGDIE))
+        // console.log(price,zd,zdf, zdColor)
+
+        var open = Util.formatPrice(PbUtil.getPbValue(ids, values, GoodsParams.OPEN))
+        var high = Util.formatPrice(PbUtil.getPbValue(ids, values, GoodsParams.HiGH))
+        var low = Util.formatPrice(PbUtil.getPbValue(ids, values, GoodsParams.LOW))
+        // console.log(open,high,low)
+
+        var hsl = Util.formatHsl(PbUtil.getPbValue(ids, values, GoodsParams.HSL))
+        var zs = PbUtil.getPbValue(ids, values, GoodsParams.RISE)
+        var ds = PbUtil.getPbValue(ids, values, GoodsParams.FALL)
+        // console.log(hsl, zs, ds)
+
+        var cjl = Util.formatVolumn(PbUtil.getPbValue(ids, values, GoodsParams.VOLUME) / 100)
+        var jl = Util.formatJl(PbUtil.getPbValue(ids, values, GoodsParams.JL))
+        var pj = PbUtil.getPbValue(ids, values, GoodsParams.EQUAL)
+        // console.log(cjl, jl, pj)
+
+        var amount = Util.formatAmount(PbUtil.getPbValue(ids, values, GoodsParams.AMOUNT))
+        var lb = Util.formatSyl(PbUtil.getPbValue(ids, values, GoodsParams.LB))
+        var zf = Util.formatZdf(PbUtil.getPbValue(ids, values, GoodsParams.ZHENFU))
+        // console.log(amount, lb, zf)
+
+        var date = data.cur_update_market_date
+        var time = data.cur_update_market_time
+        var id = data.quota_value[0].goods_Id
+
+        //  BkQuotation(price, zd, zdf, open, high, low, hsl, syl, sjl, cjl, jl, zsz, amount, lb, ltsz, date, time, color, goodsId) 
+        return new BkQuotation(price, zd, zdf, open, high, low, hsl, zs, ds, cjl, jl, pj, amount, lb, zf, date, time, zdColor, id)
+    }
+
+    return null
+}
+
+// 解析关联item
+function parseRelativeItem(data) {
+    var quotas = []
+
+    var size = data.total_size
+    if (size > 0) {
+        for (var i = 0; i < size; i++) {
+            var fields = data.rep_fields
+            var values = data.quota_value[i].rep_field_value
+
+            var goodsId = data.quota_value[i].goods_Id
+            var goodsName = PbUtil.getPbValue(fields, values, GoodsParams.GOODS_NAME)
+            var goodsCode = PbUtil.getPbValue(fields, values, GoodsParams.GOODS_CODE)
+            var price = Util.formatPrice(PbUtil.getPbValue(fields, values, GoodsParams.ZXJ))
+            var zdf = Util.formatZdf(PbUtil.getPbValue(fields, values, GoodsParams.ZDF))
+            var zdfColor = Util.getColorByZd(PbUtil.getPbValue(fields, values, GoodsParams.ZHANGDIE))
+
+            // RelativeItem(name, code, price, zdf, color)
+            quotas.push(new RelativeItem(goodsId, goodsName, goodsCode, price, zdf, zdfColor))
+        }
+    }
+
+    return {
+        date: data.cur_update_market_date,
+        time: data.cur_update_market_time,
+        relatives: quotas
+    };
 }
 
 module.exports = {
@@ -113,5 +196,7 @@ module.exports = {
     parseMinutesData: parseMinutesData,
     parseKLinesData: parseKLinesData,
     parseNewsData: parseNewsData,
-    parseStockQuotationValue: parseStockQuotationValue
+    parseStockQuotationValue: parseStockQuotationValue,
+    parseBkQuotationValue: parseBkQuotationValue,
+    parseRelativeItem: parseRelativeItem
 }

@@ -131,6 +131,7 @@
     border-radius: 0 8rpx 8rpx 0;
 }
 
+/* 添加自选 */
 #section_add_zxg {
     position: fixed;
     bottom: 0;
@@ -153,4 +154,92 @@
 #section_add_zxg text {
     color: #576b95;
     font-size: 31rpx;
+}
+
+/* 关联个股标题 */
+#section_relative_title {
+    width: 100%;
+    height: 71rpx;
+    background-color: #efeff4;
+    box-sizing: border-box;
+    border-top: 1rpx solid #e4e4e4;
+    border-bottom: 1rpx solid #e4e4e4;
+    position: relative;
+}
+
+#section_relative_title text {
+    font-size: 26rpx;
+    color: #888888;
+    display: inline-block;
+    height: 71rpx;
+    line-height: 71rpx;
+    position: absolute;
+}
+
+#section_relative_title .name {
+    left: 23rpx;
+}
+
+#section_relative_title .zxj {
+    left: 50%;
+    transform: translate(-50%)
+}
+
+#section_relative_title .zdf {
+    right: 45rpx;
+    color: #eb333b;
+}
+
+#section_relatives {
+    padding-bottom: 98rpx;
+}
+
+/* 关联个股列表条目 */
+#section_relative_item {
+    width: 100%;
+    height: 100rpx;
+    background-color: white;
+    box-sizing: border-box;
+    border-bottom: 1rpx solid #e4e4e4;
+    position: relative;
+}
+
+#section_relative_item text {
+    position: absolute;
+}
+
+#section_relative_item .name {
+    left: 22rpx;
+    top: 17rpx;
+    color: #353535;
+    font-size: 31rpx;
+}
+
+#section_relative_item .code {
+    left: 22rpx;
+    bottom: 8rpx;
+    color: #888888;
+    font-size: 22rpx;
+}
+
+#section_relative_item .zxj {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #353535;
+    font-size: 26rpx;
+}
+
+#section_relative_item .zdf {
+    width: 140rpx;
+    height: 59rpx;
+    top: 50%;
+    transform: translate(0, -50%);
+    line-height: 59rpx;
+    text-align: center;
+    display: inline-block;
+    right: 28rpx;
+    color: white;
+    font-size: 26rpx;
+    border-radius: 8rpx;
 }
