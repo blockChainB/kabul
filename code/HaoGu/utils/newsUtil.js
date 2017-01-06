@@ -26,7 +26,7 @@ function loadReadNews() {
 }
 
 function isNewsRead(newsId) {
-    var index = getApp().globalData.readNews.indexOf(newsId)
+    var index = getApp().globalData.readNews.indexOf(newsId + '')
     if (index >= 0) {
         return true
     } else {

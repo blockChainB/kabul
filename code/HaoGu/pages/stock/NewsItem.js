@@ -6,6 +6,7 @@ function NewsItem(url, from, newsId, pt, sortId, title) {
 	this.time = formatTime(pt)
 	this.sortId = sortId
 	this.title = title
+	this.isRead = false    // 是否已阅读
 
 	function formatTime(pt) {
 		// 2015-10-19 13:21:00.000  -->  02-13

@@ -76,8 +76,8 @@
   <!-- 新闻 -->
   <view hidden="{{currentInfoIndex != 0}}">
     <view class="news_item" hover="true" hover-class="item_select" wx:key="id" wx:for="{{news}}" bindtap="onNewsDetailEvent" data-news-item="{{item}}" data-news-type="0">
-      <text class="time"> {{item.time}} </text>
-      <text class="title"> {{item.title}} </text>
+      <text class="time" style="color: {{item.isRead ? '#888888' : '#576b95'}};"> {{item.time}} </text>
+      <text class="title" style="color: {{item.isRead ? '#888888' : '#353535'}};"> {{item.title}} </text>
     </view>
     <view class="showOnInfoEmpty" bindtap="onInfoEmptyClick" hidden="{{news.length != 0}}">暂无数据，请点击重试</view>
   </view>
@@ -90,8 +90,8 @@
   <!-- 公告 -->
   <view hidden="{{currentInfoIndex != 2}}">
     <view class="news_item" hover="true" hover-class="item_select" wx:key="id" wx:for="{{notices}}" bindtap="onNewsDetailEvent" data-news-item="{{item}}" data-news-type="1">
-      <text class="time"> {{item.time}} </text>
-      <text class="title"> {{item.title}} </text>
+      <text class="time" style="color: {{item.isRead ? '#888888' : '#576b95'}};"> {{item.time}} </text>
+      <text class="title" style="color: {{item.isRead ? '#888888' : '#353535'}};"> {{item.title}} </text>
     </view>
     <view class="showOnInfoEmpty" bindtap="onInfoEmptyClick" hidden="{{notices.length != 0}}">暂无数据，请点击重试</view>
   </view>
@@ -99,8 +99,8 @@
   <!-- 研报 -->
   <view hidden="{{currentInfoIndex != 3}}">
     <view class="news_item" hover="true" hover-class="item_select" wx:key="id" wx:for="{{research}}" bindtap="onNewsDetailEvent" data-news-item="{{item}}" data-news-type="2">
-      <text class="time"> {{item.time}} </text>
-      <text class="title"> {{item.title}} </text>
+      <text class="time" style="color: {{item.isRead ? '#888888' : '#576b95'}};"> {{item.time}} </text>
+      <text class="title" style="color: {{item.isRead ? '#888888' : '#353535'}};"> {{item.title}} </text>
     </view>
     <view class="showOnInfoEmpty" bindtap="onInfoEmptyClick" hidden="{{research.length != 0}}">暂无数据，请点击重试</view>
   </view>

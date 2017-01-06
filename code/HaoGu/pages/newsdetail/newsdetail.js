@@ -12,26 +12,35 @@ Page({
     url: ''
   },
   onLoad: function (options) {
+    // 更新标题
+    var goodsName = '未知股票'
+    var newsType = '新闻'
+
+    if (options.hasOwnProperty('goodsName')) {
+      goodsName = options.goodsName
+    }
+    if (options.hasOwnProperty('type')) {
+      var type = options.type
+      if (type == '0') {
+        newsType = '新闻'
+      } else if (type == '1') {
+        newsType = '公告'
+      } else if (type == '2') {
+        newsType = '研报'
+      }
+    }
+
+    wx.setNavigationBarTitle({
+      title: `${goodsName} ${newsType}`
+    })
+
     newsUtil.updateReadNews(options.id)
 
     this.setData({
       time: options.time,
       url: options.url
     })
-    this.time = options.time
     this.getData(options.id, options.type, Util.urlNavigateDecode(options.url))
-  },
-  onReady: function () {
-    // 页面渲染完成
-  },
-  onShow: function () {
-    // 页面显示
-  },
-  onHide: function () {
-    // 页面隐藏
-  },
-  onUnload: function () {
-    // 页面关闭
   },
 
   onShareAppMessage: function () {

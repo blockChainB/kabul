@@ -6,6 +6,7 @@ var Quotation = require('../../models/Quotation.js')
 
 var optionalUtil = require('../../utils/optionalUtil.js')
 var Util = require('../../utils/util.js')
+var newsUtil = require('../../utils/newsUtil.js')
 
 Page({
 
@@ -65,6 +66,8 @@ Page({
     onShow: function () {
         this.startAutoRequest()
         this.isCurrentGoodsInZxgList()
+        // 刷新资讯列表颜色
+        updateItemColor(this)
     },
 
     onHide: function () {
@@ -240,6 +243,9 @@ Page({
                     research: results.research
                 })
             }
+
+            // 刷新资讯列表颜色
+            updateItemColor(that)
         }, function (res) {
             console.log("------fail----", res)
             wx.hideNavigationBarLoading()
@@ -293,7 +299,7 @@ Page({
         let index = e.currentTarget.dataset.index
         let cls = '0'
 
-        switch(index) {
+        switch (index) {
             case '0':
                 cls = '0';
                 break;
@@ -325,18 +331,20 @@ Page({
     },
 
     onNewsDetailEvent: function (e) {
+        console.log('onNewsDetailEvent', e)
         var newsItem = e.currentTarget.dataset.newsItem
         var newsType = e.currentTarget.dataset.newsType
 
         var data = e.currentTarget.dataset
         var url = Util.urlNavigateEncode(newsItem.url)
+        var stockName = this.data.goodsName
         wx.navigateTo({
-            url: `../newsdetail/newsdetail?time=${newsItem.time}&id=${newsItem.newsId}&url=${url}&type=${newsType}`
+            url: `../newsdetail/newsdetail?time=${newsItem.time}&id=${newsItem.newsId}&url=${url}&type=${newsType}&goodsName=${stockName}`
         })
     },
 
     // 添加删除自选股
-    onZxgTap: function(e) {
+    onZxgTap: function (e) {
         console.log("page stock onZxgTap", e)
         var that = this
 
@@ -398,7 +406,7 @@ Page({
     },
 
     // 查询股票是否在自选股中中
-    isCurrentGoodsInZxgList: function() {
+    isCurrentGoodsInZxgList: function () {
         var isIn = optionalUtil.isOptional(this.data.goodsId)
         this.setData({
             isAddToZxg: isIn
@@ -435,4 +443,31 @@ function initData(that) {
     that.setData({
         quotation: quota
     })
+}
+
+// 刷新列表颜色
+function updateItemColor(that) {
+    var inforIndex = that.data.currentInfoIndex
+    var array = []
+    if (inforIndex == '0') {
+        // 新闻
+        array = updateItemValues(that.data.news)
+        that.setData({ news: array })
+    } else if (inforIndex == '1') {
+        // 公告
+        array = updateItemValues(that.data.notices)
+        that.setData({ notices: array })
+    } else if (inforIndex == '2') {
+        // 研报
+        array = updateItemValues(that.data.research)
+        that.setData({ research: array })
+    }
+}
+
+function updateItemValues(array) {
+    for (var i = 0; i < array.length; i++) {
+        var item = array[i]
+        item.isRead = newsUtil.isNewsRead(item.newsId)
+    }
+    return array
 }

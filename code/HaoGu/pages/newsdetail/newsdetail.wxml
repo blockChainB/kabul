@@ -1,6 +1,5 @@
-
-<!--pages/newsdetail/newsdetail.wxml-->
 <import src="../common/line.wxml" />
+
 <view class="detail_container">
   <text class="detial_title T3 S9">{{title}}</text>
   <text class="detail_time T2 S2">{{time}}</text>
