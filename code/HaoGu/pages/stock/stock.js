@@ -331,7 +331,6 @@ Page({
     },
 
     onNewsDetailEvent: function (e) {
-        console.log('onNewsDetailEvent', e)
         var newsItem = e.currentTarget.dataset.newsItem
         var newsType = e.currentTarget.dataset.newsType
 
