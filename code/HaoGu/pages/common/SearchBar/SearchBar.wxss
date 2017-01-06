@@ -3,7 +3,7 @@
   flex-direction: row;
   position: relative;
   width: 690rpx;
-  height: 60rpx;
+  height: 70rpx;
   border-style: solid;
   border-color: rgb(228, 228, 228);
   border-width: 1px;
@@ -16,6 +16,7 @@
 
 .search_bar input {
   position: absolute;
+  height: 100%;
   left: 60rpx;
   right: 70rpx;
 }
@@ -23,6 +24,6 @@
 .search_bar image {
   position: absolute;
   width: 40rpx;
-  height: 40rpx;
+  height: 100%;
   right: 20rpx;
 }

@@ -10,7 +10,7 @@ var GroupLayer = require('GroupLayer.js')
 var draw = require('../../../../utils/canvasUtil.js')
 var util = require('../../../../utils/util.js')
 
-function KLineCanvas() {
+function KLineCanvas(period) {
 	this.mIsInit = false;    // 是否已初始化K线绘图区域布局结构和设置
 
 	this.kLineAxisLayer = null
@@ -25,8 +25,9 @@ function KLineCanvas() {
 	this.mXAxisLayer = null
 	this.chartView = null
 
-	this.canvasWidth = 750    // 画布宽度，单位rpx
+	this.canvasWidth = 750     // 画布宽度，单位rpx
 	this.canvasHeight = 412    // 画布高度，单位rpx
+    this.mPeriod = period      // K线类型
 }
 
 // 初始化K线绘图布局
@@ -58,13 +59,13 @@ KLineCanvas.prototype.initLayers = function() {
 		})
 
 		this.kLineLayer = new ColumnarLayer()
+        this.kLineLayer.setPaddings(4 * widthPerRpx, 0, 4 * widthPerRpx, 0);
         this.kLineLayer.setMaxCount(columnCount);
         this.kLineLayer.setColumnarWidth(columnWidth);
         this.kLineLayer.setStrokeWidth(strokeWidth);
         this.kLineLayer.setOnDrawCallback(function(context, pos) {
         	var atom = that.kLineLayer.getValue(pos)
-        	var color = '#F24957'
-        	// var color = '#FF0000'
+        	var color = '#e64340'
 
         	var zdFlag = 0
         	if (atom.mClose > atom.mOpen) {
@@ -85,37 +86,38 @@ KLineCanvas.prototype.initLayers = function() {
         	}
 
         	if (zdFlag < 0) {
-        		color = '#1DBF60'
-        		// color = '#00FF00'
+        		color = '#09bb07'
         	}
 
         	context.setStrokeStyle(color)
         	context.setFillStyle(color)
 		})
 
-
 		this.ma5Layer = new LineLayer()
+        this.ma5Layer.setPaddings(4 * widthPerRpx, 0, 4 * widthPerRpx, 0);
 		this.ma5Layer.setColor('#febe00');
         this.ma5Layer.setMaxCount(columnCount);
-        this.ma5Layer.setStrokeWidth(0.5);
+        this.ma5Layer.setStrokeWidth(widthPerRpx);
         this.ma5Layer.setFloorValue(0, false);
 
         this.ma10Layer = new LineLayer()
+        this.ma10Layer.setPaddings(4 * widthPerRpx, 0, 4 * widthPerRpx, 0);
         this.ma10Layer.setColor('#4084d2');
         this.ma10Layer.setMaxCount(columnCount);
         this.ma10Layer.setFloorValue(0, false);
-        this.ma10Layer.setStrokeWidth(0.5);
+        this.ma10Layer.setStrokeWidth(widthPerRpx);
 
         this.ma20Layer = new LineLayer()
+        this.ma20Layer.setPaddings(4 * widthPerRpx, 0, 4 * widthPerRpx, 0);
         this.ma20Layer.setColor('#e319a3');
         this.ma20Layer.setMaxCount(columnCount);
         this.ma20Layer.setFloorValue(0, false);
-        this.ma20Layer.setStrokeWidth(0.5);
+        this.ma20Layer.setStrokeWidth(widthPerRpx);
 
         this.kLineStackLayer = new StackLayer();
         this.kLineStackLayer.setPaddings(0, 17, 0, 0);
-        this.kLineStackLayer.setBorderWidth(0.5);
-        this.kLineStackLayer.setBorderColor('#676872');
+        this.kLineStackLayer.setBorderWidth(widthPerRpx);
+        this.kLineStackLayer.setBorderColor('#dddddd');
         this.kLineStackLayer.setIsShowHPaddingLine(true);
         this.kLineStackLayer.showHGrid(2);
         this.kLineStackLayer.switchAvgLineIdentifyOn(true)
@@ -132,17 +134,16 @@ KLineCanvas.prototype.initLayers = function() {
 		this.kLineGroupLayer.setHeightPercent(0.72);
 
 		this.mVolumeLayer = new ColumnarLayer();
-        this.mVolumeLayer.setPaddings(0, 2, 0, 0);
-        this.mVolumeLayer.setBorderWidth(0.5);
-        this.mVolumeLayer.setBorderColor('#676872');
+        this.mVolumeLayer.setPaddings(4 * widthPerRpx, 2, 4 * widthPerRpx, 0);
+        this.mVolumeLayer.setBorderWidth(widthPerRpx);
+        this.mVolumeLayer.setBorderColor('#dddddd');
+		this.mVolumeLayer.showHGrid(1);
         this.mVolumeLayer.setShowSide(this.mVolumeLayer.SIDE_LEFT_V | this.mVolumeLayer.SIDE_RIGHT_V | this.mVolumeLayer.SIDE_BOTTOM_H);
         this.mVolumeLayer.setMaxCount(columnCount);
         this.mVolumeLayer.setColumnarWidth(columnWidth);
-        this.mVolumeLayer.setStrokeWidth(strokeWidth);
         this.mVolumeLayer.setOnDrawCallback(function(context, pos) {
 			var atom = that.kLineLayer.getValue(pos)
-        	var color = '#F24957'
-        	// var color = '#FF0000'
+        	var color = '#e64340'
 
         	var zdFlag = 0
         	if (atom.mClose > atom.mOpen) {
@@ -163,8 +164,7 @@ KLineCanvas.prototype.initLayers = function() {
         	}
 
         	if (zdFlag < 0) {
-        		color = '#1DBF60'
-        		// color = '#00FF00'
+        		color = '#09bb07'
         	}
 
         	context.setStrokeStyle(color)
@@ -173,7 +173,6 @@ KLineCanvas.prototype.initLayers = function() {
 
 		this.volumnGroupLayer = new GroupLayer()
 		this.volumnGroupLayer.setCenterLayer(this.mVolumeLayer);
-		this.volumnGroupLayer.showHGrid(1);
 		this.volumnGroupLayer.setHeightPercent(0.28);
 
 		this.mXAxisLayer = new XAxisLayer()
@@ -183,8 +182,8 @@ KLineCanvas.prototype.initLayers = function() {
 		var height = draw.getLengthByRpx(this.canvasHeight)
 		this.chartView = new ChartView(0, 0, width * 1.0, height * 1.0)
 
-		console.log('width: ' + width + ', height: ' + height + ', perWidth: ' + widthPerRpx + ', strokeWidth: ' 
-			+ strokeWidth + ', columnWidth: ' + columnWidth + ', baseWidth: ' + baseWidth)
+		// console.log('width: ' + width + ', height: ' + height + ', perWidth: ' + widthPerRpx + ', strokeWidth: ' 
+		// 	+ strokeWidth + ', columnWidth: ' + columnWidth + ', baseWidth: ' + baseWidth)
 
 		this.chartView.addLayer(this.kLineGroupLayer)
 		this.chartView.addLayer(this.volumnGroupLayer)
@@ -273,9 +272,30 @@ KLineCanvas.prototype.calculate = function() {
         dateFirst = atomFirst.mTag;
         dateLast = atomLast.mTag;
     }
+	
+    
+    var strDateFirst = '';
+    var strDateLast = '';
+
+    if (this.mPeriod == 60 || this.mPeriod == 30 || this.mPeriod == 15) {
+        var tDate = util.formatDateY_M_D_HHmm(dateFirst + '', '/');
+        var aryDate = tDate.split('/');
+        if (aryDate != null && aryDate.length == 4) {
+            strDateFirst = aryDate[1] + "-" + aryDate[2] + " " + aryDate[3];
+        }
+        tDate = util.formatDateY_M_D_HHmm(dateLast + '', '/');
+        aryDate = tDate.split('/');
+        if (aryDate != null && aryDate.length == 4) {
+            strDateLast = aryDate[1] + "-" + aryDate[2] + " " + aryDate[3];
+        }
+    } else {
+        strDateFirst = util.formatDateYYYYmmdd(dateFirst, '-');
+        strDateLast = util.formatDateYYYYmmdd(dateLast, '-');
+    }
+    
+	console.log('kline canvas get datatime ', atomLast, dateLast, strDateLast)
+    
     this.mXAxisLayer.clearValue();
-    var strDateFirst = util.formatDateYYYYmmdd(dateFirst, '-');
-    var strDateLast = util.formatDateYYYYmmdd(dateLast, '-');
     this.mXAxisLayer.addValue(strDateFirst);
     this.mXAxisLayer.addValue(strDateLast);
 }

@@ -11,12 +11,13 @@ var Quotation = require('../../models/Quotation.js')
 var RelativeItem = require('../../pages/bk/RelativeItem.js')
 var BkQuotation = require('../../pages/bk/BkQuotation.js')
 
+
 // 解析搜索数据
 function parseSearchData(array) {
     var results = []
 
     for (var i = 0; i < array.length; i++) {
-        var item = new SearchItem(array[i].n, array[i].c)
+        var item = new SearchItem(array[i].secuName, array[i].secuId)
         results.push(item)
     }
 
@@ -27,7 +28,7 @@ function parseSearchData(array) {
 function parseMinutesData(data) {
     var array = data.trend_line
     var minutes = []
-    
+
     if (array != null && array.length > 0) {
         for (var i = 0; i < array.length; i++) {
             var item = new MinuteData(array[i].time, array[i].price, array[i].ave, array[i].volume, array[i].amount)
@@ -67,9 +68,16 @@ function parseNewsData(data) {
     }
 
     var result = {}
-    result.cls = data.cls
+    var cls = data.cls
+    result.cls = cls
     result.stock = data.stock
-    result.news = array
+    if (cls == '0') {
+        result.news = array
+    } else if (cls == '1') {
+        result.notices = array
+    } else if (cls == '2') {
+        result.research = array
+    }
 
     return result
 }
@@ -174,7 +182,7 @@ function parseRelativeItem(data) {
 
             var goodsId = data.quota_value[i].goods_Id
             var goodsName = PbUtil.getPbValue(fields, values, GoodsParams.GOODS_NAME)
-            var goodsCode = PbUtil.getPbValue(fields, values, GoodsParams.GOODS_CODE)
+            var goodsCode = Util.formatCode(goodsId)
             var price = Util.formatPrice(PbUtil.getPbValue(fields, values, GoodsParams.ZXJ))
             var zdf = Util.formatZdf(PbUtil.getPbValue(fields, values, GoodsParams.ZDF))
             var zdfColor = Util.getColorByZd(PbUtil.getPbValue(fields, values, GoodsParams.ZHANGDIE))
@@ -191,6 +199,52 @@ function parseRelativeItem(data) {
     };
 }
 
+//解析自选股详情
+function parseCustomDetail(data) {
+    var quotas = [];
+
+    var size = data.total_size;
+    if (size > 0) {
+        for (var i = 0; i < size; i++) {
+            var fields = data.rep_fields;
+            var values = data.quota_value[i].rep_field_value;
+
+            var tGoodsId = data.quota_value[i].goods_Id;
+            var tCode = Util.formatCode(tGoodsId);
+            var tName = PbUtil.getPbValue(fields, values, GoodsParams.GOODS_NAME);
+            var tZxj = Util.formatPrice(PbUtil.getPbValue(fields, values, GoodsParams.ZXJ));
+            var tZdf =  Util.formatZdf(PbUtil.getPbValue(fields, values, GoodsParams.ZDF));
+            var tZd_original = PbUtil.getPbValue(fields, values, GoodsParams.ZHANGDIE);
+            var tIntZd = parseInt(tZd_original);
+            var tZd = Util.formatPrice(tZd_original);
+            var tsuspension=PbUtil.getPbValue(fields, values, GoodsParams.SUSPENSION);
+            if(tsuspension==1){
+                tZd=0;
+            }
+
+            var tGoods = {
+                goodsid: tGoodsId,
+                name: tName,
+                code: tCode,
+                zxj: tZxj,
+                zdf: tZdf,
+                zd: tZd,
+                intZd: tIntZd,
+                suspension:tsuspension
+            }
+
+
+            quotas.push(tGoods);
+        }
+    }
+
+    return {
+        // date: data.cur_update_market_date,
+        // time: data.cur_update_market_time,
+        customDetail: quotas
+    };
+}
+
 module.exports = {
     parseSearchData: parseSearchData,
     parseMinutesData: parseMinutesData,
@@ -198,5 +252,6 @@ module.exports = {
     parseNewsData: parseNewsData,
     parseStockQuotationValue: parseStockQuotationValue,
     parseBkQuotationValue: parseBkQuotationValue,
-    parseRelativeItem: parseRelativeItem
+    parseRelativeItem: parseRelativeItem,
+    parseCustomDetail: parseCustomDetail
 }

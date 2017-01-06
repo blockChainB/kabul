@@ -15,5 +15,12 @@ Page({
   },
   onUnload:function(){
     // 页面关闭
-  }
+  },
+  onShareAppMessage: function () {
+    return {
+      title: '自稳定',
+      desc: `${getApp().globalData.shareDesc}`,
+      path: `/pages/fund/fund`
+    }
+  },
 })

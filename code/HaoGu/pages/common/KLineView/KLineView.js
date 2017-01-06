@@ -45,8 +45,8 @@ function KLineView() {
         this.setCanvasDrawn(canvasId)
     }
 
-    this.drawKLineCanvas = function(array, canvasId) {
-        var canvas = new KLineCanvas()
+    this.drawKLineCanvas = function(array, canvasId, period) {
+        var canvas = new KLineCanvas(period)
         canvas.addValues(array)
         canvas.invalidate('' + canvasId)
 

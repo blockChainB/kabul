@@ -1,5 +1,7 @@
 // pages/haogu/haogu.js
 var Api = require('../../api/api.js');
+var Util = require('../../utils/util.js')
+
 Page({
   data: {
     array: []
@@ -30,6 +32,14 @@ Page({
     this.getData()
   },
 
+  onShareAppMessage: function () {
+    return {
+      title: '好股',
+      desc: `${getApp().globalData.shareDesc}`,
+      path: `/pages/haogu/haogu`
+    }
+  },
+
   getData: function () {
     var that = this
     Api.haogu.getHaoguList({
@@ -44,13 +54,11 @@ Page({
   },
 
   onStockDetailEvent: function (e) {
-    var code = e.currentTarget.id.replace(">", "")
-    wx.navigateTo({
-      url: '../stock/stock?code=' + code,
-    })
+    var stock = e.currentTarget.dataset.stock
+    Util.gotoQuote(stock.goodsId, stock.name, stock.code)
   },
 
-  onStockSearchEvent:function(e) {
+  onStockSearchEvent: function (e) {
     wx.navigateTo({
       url: '../search/search'
     })

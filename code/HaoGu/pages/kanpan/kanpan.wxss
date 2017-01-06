@@ -2,12 +2,12 @@
 @import "/pages/common/StockCell/StockCell.wxss";
 
 .bk_tip_container {
-  position: relative;
   width: 100%;
   height: 70rpx;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: flex-start;
+  border-bottom: 1rpx solid #e4e4e4;
 }
 
 .bk_container {
@@ -30,7 +30,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-    background-color: white;
+  background-color: white;
 }
 
 .tab_container {
@@ -39,16 +39,12 @@
   height: 100rpx;
   display: flex;
   align-items: center;
+  border-bottom: 1rpx solid #e4e4e4;
 }
 
-.tab_item_container {
-  width: 20%;
-  height: 100%;
-}
-
-.tab_item_container text {
+.tab_item_text {
   display: inline-block;
-  width: 100%;
+  width: 20%;
   height: 100%;
   line-height: 100rpx;
   text-align: center;
@@ -62,3 +58,17 @@
   background-color: C1-font;
 }
 
+/* 头部 */
+#section_header {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: white;
+  z-index: 100;
+}
+
+#section_list {
+  position: absolute;
+  width: 100%;
+}

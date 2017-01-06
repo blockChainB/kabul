@@ -20,17 +20,21 @@
 
 .list_item .item_type {
   position: relative;
+  width: 50rpx;
+  /*height: 30rpx;*/
   margin-left: 20rpx;
   border-style: solid;
   border-radius: 6rpx;
-  border-width: 1px;
+  border-width: 1rpx;
   padding: 6rpx;
+  text-align: center;
+  /*line-height: 30rpx;*/
 }
 
 .list_item .item_name {
   position: relative;
   margin-left: 20rpx;
-  width: 130rpx;
+  width: 140rpx;
 }
 
 .list_item .item_code {
@@ -39,9 +43,9 @@
   width: 160rpx;
 }
 
-.list_item image{
+.list_item image {
   position: absolute;
   width: 44rpx;
-  height: 44rpx;
+  height: 100%;
   right: 50rpx;
 }

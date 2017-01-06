@@ -1,12 +1,13 @@
 {
   "pages": [
-    "pages/stock/stock",
-    "pages/kanpan/kanpan",
     "pages/optional/optional",
+    "pages/kanpan/kanpan",
+    
     "pages/haogu/haogu",
     "pages/search/search",
-    
+    "pages/stock/stock",
     "pages/newsdetail/newsdetail",
+    "pages/index/index",
     "pages/bk/bk",
     "pages/fund/fund"
   ],

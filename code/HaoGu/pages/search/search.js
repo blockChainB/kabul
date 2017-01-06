@@ -2,6 +2,9 @@ var Api = require('../../api/api.js');
 var SearchBar = require('../common/SearchBar/SearchBar.js')
 
 var optionalUtil = require('../../utils/optionalUtil.js')
+var Util = require('../../utils/util.js')
+
+let viewmodel = require('viewmodel.js')
 
 Page({
     data: {
@@ -11,14 +14,29 @@ Page({
     onReady: function () {
         var that = this
         SearchBar.init("代码/名称/简拼", that)
+
+        that.setData({
+            stockArray: viewmodel.getDefaultData()
+        })
+    },
+
+    onShareAppMessage: function () {
+        return {
+            title: '搜索',
+            desc: `${getApp().globalData.shareDesc}`,
+            // path: `/pages/search/search`
+            path: `/pages/kanpan/kanpan?page=search`
+        }
     },
 
     onSearchBarClearEvent: function (e) {
         var that = this
         SearchBar.onSearchBarClearEvent(e, that)
 
+        that.data.stockArray = []
+        that.setData(that.data)
         that.setData({
-            stockArray: []
+            stockArray: viewmodel.getDefaultData()
         })
     },
 
@@ -41,6 +59,9 @@ Page({
         } else {
             that.data.stockArray = []
             that.setData(that.data)
+            that.setData({
+                stockArray: viewmodel.getDefaultData()
+            })
         }
     },
 
@@ -61,30 +82,20 @@ Page({
         that.setData(that.data)
 
         Api.stock.commitOptionals({
-            goodsId:stock.code
+            goodsId: stock.goodsId
         }).then(function (res) {
             console.log("添加自选股", res)
         }, function (res) {
             console.log("添加自选股", res)
         })
-
-        // Api.stock.requestOptionals({
-            
-        // }).then(function (res) {
-        //     console.log("添加自选股", res)
-        // }, function (res) {
-        //     console.log("添加自选股", res)
-        // })
     },
 
     onShowStockDetail: function (e) {
         console.log("onShowStockDetail", e)
 
         if (e.detail.x < 315) {
-            var code = e.currentTarget.id.replace(">", "")
-            wx.navigateTo({
-                url: '../stock/stock?code=' + code,
-            })
+            var stock = e.currentTarget.dataset.stock
+            Util.gotoQuote(stock.goodsId, stock.name, stock.code)
         }
     }
 })

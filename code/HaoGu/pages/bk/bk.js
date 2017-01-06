@@ -1,6 +1,8 @@
 var Quotation = require('../../models/Quotation.js')
 var Api = require("../../api/api.js")
 var KLineView = require('../common/KLineView/KLineView.js')
+var util = require('../../utils/util.js')
+var optionalUtil = require('../../utils/optionalUtil.js')
 
 Page({
 
@@ -8,56 +10,86 @@ Page({
     quotation: {},
     relatives: [],
     goodsId: 2002004,
-    goodsName: '煤炭',
-    goodsCode: 'BK2004',
+    goodsName: '',
+    goodsCode: '',
     cls: '0',
     currentPeriodIndex: 0,
     quotePeriod: 1,
     quoteData: {
       canvasIndex: 0
     },
-    isSortOrderDown: true
+    isSortOrderDown: true,
+    isAddToZxg: false    // 是否已添加到自选股
   },
 
   onLoad: function (option) {
-        if (option.hasOwnProperty('id') && option.hasOwnProperty('name') && option.hasOwnProperty('code')) {
-            this.setData({
-                goodsId: parseInt(option.id),
-                goodsName: option.name,
-                goodsCode: option.code
-            })
-        }
+    if (option.hasOwnProperty('id') && option.hasOwnProperty('name') && option.hasOwnProperty('code')) {
+      this.setData({
+        goodsId: parseInt(option.id),
+        goodsName: option.name,
+        goodsCode: option.code
+      })
+    }
 
-        wx.setNavigationBarTitle({
-            title: `${this.data.goodsName} (${this.data.goodsCode})`
-        })
+    wx.setNavigationBarTitle({
+      title: `${this.data.goodsName} (${this.data.goodsCode})`
+    })
 
-        initData(this)
-        this.kLineView = new KLineView()
-    },
+    initData(this)
+    this.kLineView = new KLineView()
 
-  onShow: function () {
-    this.getQuotationValue(function () {
-      wx.hideNavigationBarLoading()
-    })
-    this.getQuotationTrend(function () {
-      wx.hideNavigationBarLoading()
-    })
-    this.getRelatives(function () {
-      wx.hideNavigationBarLoading()
-    })
+    this.getData()
   },
 
-  onReady: function () {
+  onShow: function () {
+    this.startAutoRequest()
+    this.isCurrentGoodsInZxgList()
   },
 
   onHide: function () {
+    this.stopAutoRequest()
   },
 
   onUnload: function () {
+    // 页面退出时，不会调用onHide
+    this.stopAutoRequest()
   },
 
   onPullDownRefresh: function (event) {
+    this.getData()
+  },
+
+  onShareAppMessage: function () {
+    var that = this
+    var id = that.data.goodsId
+    var name = that.data.goodsName
+    var code = that.data.goodsCode
+
+    return {
+      title: `${name} (${code})`,
+      desc: `${getApp().globalData.shareDesc}`,
+      // path: `/pages/bk/bk?id=${id}&name=${name}&code=${code}`
+      path: `/pages/kanpan/kanpan?id=${id}&name=${name}&code=${code}&page=bk`
+    }
+  },
+
+  // 开启循环请求
+  startAutoRequest: function () {
+    var that = this;
+    var data = getApp().globalData
+    var interval = data.netWorkType == 'wifi' ? data.WIFI_REFRESH_INTERVAL : data.MOBILE_REFRESH_INTERVAL;
+    this.timerId = setInterval(function () {
+      that.getData();
+    }, interval);
+  },
+
+  // 停止循环请求
+  stopAutoRequest: function () {
+    clearInterval(this.timerId)
+  },
+
+  // 循环请求数据
+  getData: function () {
     this.getQuotationValue(function () {
       wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
@@ -115,7 +147,7 @@ Page({
     })
   },
 
-  onSortClick: function(event) {
+  onSortClick: function (event) {
     var order = !this.data.isSortOrderDown
     this.setData({
       isSortOrderDown: order
@@ -126,10 +158,25 @@ Page({
     })
   },
 
-  openStock: function(e) {
+  openStock: function (e) {
     var data = e.currentTarget.dataset
-    wx.navigateTo({
-      url: `../stock/stock?id=${data.goodsId}&name=${data.goodsName}&code=${data.goodsCode}`
+    util.gotoQuote(data.goodsId, data.goodsName, data.goodsCode)
+  },
+
+  // 添加删除自选股
+  onZxgTap: function (e) {
+    console.log("page stock onZxgTap", e)
+    var that = this
+
+    Api.stock.commitOptionals({
+      goodsId: that.data.goodsId
+    }).then(function (res) {
+      console.log("添加自选股", res)
+      if (res == 0 || res == '0') {
+        that.isCurrentGoodsInZxgList()
+      }
+    }, function (res) {
+      console.log("添加自选股", res)
     })
   },
 
@@ -205,7 +252,7 @@ Page({
         callback()
       }
       // console.log('stock kline result ', results)
-      that.kLineView.drawKLineCanvas(results, getCanvasId(that.data.quotePeriod))
+      that.kLineView.drawKLineCanvas(results, getCanvasId(that.data.quotePeriod), that.data.quotePeriod)
     }, function (res) {
       console.log("------fail----", res)
       wx.hideNavigationBarLoading()
@@ -219,12 +266,13 @@ Page({
 
     Api.stock.getRelatives({
       id: that.data.goodsId,
+      classType: util.getCurrentGoodsClassType(that.data.goodsId),
       order: that.data.isSortOrderDown
     }).then(function (results) {
       if (callback != null && typeof (callback) == 'function') {
         callback()
       }
-      console.log('stock relative value result ', results)
+      // console.log('stock relative value result ', results)
       if (results != null) {
         that.setData({ relatives: results.relatives })
       }
@@ -235,6 +283,14 @@ Page({
       }
     })
   },
+
+  // 查询股票是否在自选股中中
+  isCurrentGoodsInZxgList: function () {
+    var isIn = optionalUtil.isOptional(this.data.goodsId)
+    this.setData({
+      isAddToZxg: isIn
+    })
+  }
 
 })
 
@@ -248,23 +304,23 @@ function initData(that) {
 }
 
 function getCanvasId(period) {
-    switch (period) {
-        case 1:
-            return 1;
-            break;
-        case 100:
-            return 2;
-            break;
-        case 101:
-            return 3;
-            break;
-        case 102:
-            return 4;
-            break;
-        case 60:
-            return 5;
-            break;
-    }
+  switch (period) {
+    case 1:
+      return 1;
+      break;
+    case 100:
+      return 2;
+      break;
+    case 101:
+      return 3;
+      break;
+    case 102:
+      return 4;
+      break;
+    case 60:
+      return 5;
+      break;
+  }
 
-    return 1;
+  return 1;
 }

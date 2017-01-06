@@ -70,61 +70,45 @@
   <text style="background-color:{{currentInfoIndex == 3 ? '#eb333b' : '#f8f8f8'}}; color:{{currentInfoIndex == 3 ? '#ffffff' : '#353535'}}; border:{{currentInfoIndex == 3 ? '1rpx solid rgba(255, 255, 255, 0)' : '1rpx solid #dadada'}}; border-left: none;"
   bindtap="onInfoSelectorClick" data-index="3">研报</text>
 </view>
-<swiper current="{{currentInfoIndex}}" duration="0" bindchange="onInfoSwiperChange" style="height: {{infoSwiperHeight}}rpx;">
+
+<view id="section_infos">
 
   <!-- 新闻 -->
-  <swiper-item>
-    <block wx:key="id" wx:for="{{news}}" wx:for-item="item" wx:for-index="index">
-      <view class="news_item" id="{{index}}" bindtap="onNewsDetailEvent">
-        <text class="time"> {{item.time}} </text>
-        <text class="title"> {{item.title}} </text>
-      </view>
-    </block>
-
-    <!--<view class="news_item" wx:key="id" wx:for="{{news}}">
+  <view hidden="{{currentInfoIndex != 0}}">
+    <view class="news_item" hover="true" hover-class="item_select" wx:key="id" wx:for="{{news}}" bindtap="onNewsDetailEvent" data-news-item="{{item}}" data-news-type="0">
       <text class="time"> {{item.time}} </text>
       <text class="title"> {{item.title}} </text>
-    </view>-->
-  </swiper-item>
+    </view>
+    <view class="showOnInfoEmpty" bindtap="onInfoEmptyClick" hidden="{{news.length != 0}}">暂无数据，请点击重试</view>
+  </view>
 
   <!-- 资金 -->
-  <swiper-item>
+  <view hidden="{{currentInfoIndex != 1}}">
     <template is="fundview" data="{{...fundViewData}}" />
-  </swiper-item>
+  </view>
 
   <!-- 公告 -->
-  <swiper-item>
-    <block wx:key="id" wx:for="{{news}}" wx:for-item="item" wx:for-index="index">
-      <view class="news_item" id="{{index}}" bindtap="onNewsDetailEvent">
-        <text class="time"> {{item.time}} </text>
-        <text class="title"> {{item.title}} </text>
-      </view>
-    </block>
-
-    <!--<view class="news_item" wx:key="id" wx:for="{{news}}">
+  <view hidden="{{currentInfoIndex != 2}}">
+    <view class="news_item" hover="true" hover-class="item_select" wx:key="id" wx:for="{{notices}}" bindtap="onNewsDetailEvent" data-news-item="{{item}}" data-news-type="1">
       <text class="time"> {{item.time}} </text>
       <text class="title"> {{item.title}} </text>
-    </view>-->
-  </swiper-item>
+    </view>
+    <view class="showOnInfoEmpty" bindtap="onInfoEmptyClick" hidden="{{notices.length != 0}}">暂无数据，请点击重试</view>
+  </view>
 
   <!-- 研报 -->
-  <swiper-item>
-    <block wx:key="id" wx:for="{{news}}" wx:for-item="item" wx:for-index="index">
-      <view class="news_item" id="{{index}}" bindtap="onNewsDetailEvent">
-        <text class="time"> {{item.time}} </text>
-        <text class="title"> {{item.title}} </text>
-      </view>
-    </block>
-
-    <!--<view class="news_item" wx:key="id" wx:for="{{news}}">
+  <view hidden="{{currentInfoIndex != 3}}">
+    <view class="news_item" hover="true" hover-class="item_select" wx:key="id" wx:for="{{research}}" bindtap="onNewsDetailEvent" data-news-item="{{item}}" data-news-type="2">
       <text class="time"> {{item.time}} </text>
       <text class="title"> {{item.title}} </text>
-    </view>-->
-  </swiper-item>
-</swiper>
+    </view>
+    <view class="showOnInfoEmpty" bindtap="onInfoEmptyClick" hidden="{{research.length != 0}}">暂无数据，请点击重试</view>
+  </view>
+
+</view>
 
 <!-- 添加自选 -->
-<view id="section_add_zxg">
-  <image src="../../images/add_zxg.png"></image>
-  <text>添加自选</text>
+<view id="section_add_zxg" bindtap="onZxgTap">
+  <image src="{{isAddToZxg ? '/images/remove_zxg.png' : '/images/add_zxg.png'}}"></image>
+  <text>{{isAddToZxg ? '删除自选' : '添加自选'}}</text>
 </view>

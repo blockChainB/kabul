@@ -32,28 +32,40 @@ var fundData = {
 
 function init(that) {
     updateDatabinding(that);
-
 }
 
 /**
  * dayinflow 净流 格式化后的值
  * unit 单位 万元/亿元 等
  */
-function setJLValue(that, dayinflow, unit) {
+function setJLValue(that) {
+    var value = that.data.quotation.jl
+    var dayinflow = '--'
+    var unit = '--'
+    if (value != null && value.length > 1) {
+        var end = value.substr(value.length - 1, 1)
+        if (end == '万' || end == '亿') {
+            dayinflow = value.substr(0, value.length - 1)
+            unit = end + '元'
+        } else {
+            dayinflow = value
+            unit = '元'
+        }
+    }
     if (dayinflow && unit) {
         fundData.dayinflow = dayinflow;
         fundData.dayinflowUnit = unit;
         updateDatabinding(that);
     }
-
-
-
-
 }
 
 function show(that) {
+    console.log('FundView show', mRequestSuccess)
     if (!mRequestSuccess) {
-        requestFundData()
+        // 如果数据已请求完成，不再请求
+        if (that.getIsInfoLoad()) return
+
+        requestFundData(that)
             .then(
             function (res) {
                 if (res == 0) {
@@ -61,6 +73,8 @@ function show(that) {
                     drawTenDayTrend(that);
 
                     updateDatabinding(that);
+                    // 记录资金已请求完成，以后不再请求
+                    that.setIsInfoLoad('1')
                 }
 
             },
@@ -73,9 +87,6 @@ function show(that) {
         drawOneDayPie(that);
         drawTenDayTrend(that);
     }
-
-
-
 }
 
 function updateDatabinding(that) {
@@ -84,10 +95,12 @@ function updateDatabinding(that) {
     });
 }
 
-function requestFundData() {
+function requestFundData(that) {
+    var goodsId = that.data.goodsId
+    console.log('fund reqest id ', goodsId)
 
     return stockreq.requestFundData({
-        goods_id: 600600
+        goods_id: goodsId
     })
         .then(
         function (res) {

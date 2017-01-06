@@ -39,14 +39,14 @@ MinuteCanvas.prototype.initLayers = function () {
 
 		this.lineLayer = new LineLayer()
 		this.lineLayer.setMaxCount(240)
-		this.lineLayer.setStrokeWidth(0.5)
-		this.lineLayer.setColor('#379be9')
+		this.lineLayer.setStrokeWidth(widthPerRpx)    // 分时线宽度
+		this.lineLayer.setColor('#379be9')            // 分时线颜色
 		this.lineLayer.setShowShadow(true)
-		this.lineLayer.setShadowColor('rgba(70, 144, 239, 0.13)')
+		this.lineLayer.setShadowColor('rgba(231, 241, 253, 0.5)')
 
 		this.avgLayer = new LineLayer()
 		this.avgLayer.setMaxCount(240)
-		this.avgLayer.setStrokeWidth(1)
+		this.avgLayer.setStrokeWidth(widthPerRpx)               // 均线宽度
 		this.avgLayer.setColor('#fbb040')
 
 		this.priceLayer = new YAxisLayer()
@@ -71,8 +71,8 @@ MinuteCanvas.prototype.initLayers = function () {
 		this.stackLayer = new StackLayer()
 		this.stackLayer.addLayer(this.lineLayer)
 		this.stackLayer.addLayer(this.avgLayer)
-		this.stackLayer.setBorderWidth(0.5)
-		this.stackLayer.setBorderColor('#676872')
+		this.stackLayer.setBorderWidth(widthPerRpx)    // 分隔线宽度
+		this.stackLayer.setBorderColor('#dddddd')      // 分隔线颜色
 		this.stackLayer.showHGrid(3)
 		// this.stackLayer.showVGrid(3)
 		this.stackLayer.setIsMiddleHLineSolid(true)
@@ -89,14 +89,13 @@ MinuteCanvas.prototype.initLayers = function () {
 		this.columnarLayer.setMaxCount(240)
 		this.columnarLayer.setOnDrawCallback(function (context, pos) {
 			// console.log('pos: ' + pos)
-			var color = '#F24957'
+			var color = '#e64340'
 			var currentPrice = that.lineLayer.getValue(pos)
 			var prePrice = that.lineLayer.getValue(pos > 0 ? pos - 1 : 0)
 			if (currentPrice >= prePrice) {
-				color = '#F24957'
+				color = '#e64340'
 			} else {
-				// color = '#1DBF60'
-				color = '#1DBF60'
+				color = '#09bb07'
 			}
 			context.setStrokeStyle(color)
 			context.setFillStyle(color)

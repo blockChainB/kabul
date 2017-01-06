@@ -63,7 +63,7 @@
   <text class="zdf" bindtap="onSortClick">涨跌幅{{isSortOrderDown ? '↓' : '↑'}}</text>
 </view>
 <view id="section_relatives">
-  <view id="section_relative_item" wx:for="{{relatives}}" bindtap="openStock" data-goods-id="{{item.goodsId}}" data-goods-name="{{item.name}}" data-goods-code="{{item.code}}">
+  <view id="section_relative_item" hover="true" hover-class="item_select" wx:for="{{relatives}}" bindtap="openStock" data-goods-id="{{item.goodsId}}" data-goods-name="{{item.name}}" data-goods-code="{{item.code}}">
     <text class="name">{{item.name}}</text>
     <text class="code">{{item.code}}</text>
     <text class="zxj">{{item.price}}</text>
@@ -72,7 +72,7 @@
 </view>
 
 <!-- 添加自选 -->
-<view id="section_add_zxg">
-  <image src="../../images/add_zxg.png"></image>
-  <text>添加自选</text>
+<view id="section_add_zxg" bindtap="onZxgTap">
+  <image src="{{isAddToZxg ? '/images/remove_zxg.png' : '/images/add_zxg.png'}}"></image>
+  <text>{{isAddToZxg ? '删除自选' : '添加自选'}}</text>
 </view>

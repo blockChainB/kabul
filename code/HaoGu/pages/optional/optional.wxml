@@ -1,22 +1,56 @@
+<import src="../common/line.wxml" />
 
-<!--pages/optional/optional.wxml-->
+<!--指数cell模板-->
 <template name="indexCell">
-  <view class="container_h-optionalcell">
-    <text class="S4 T3">上证指数</text>
-    <view class="container_h-zd">
-      <text class="S2" style="color:{{'#ff0000'}}">+10.53</text>
+  <view class="{{itsclass}}" bindtap="onIndexTap" data-id="{{goodsid}}" data-name="{{name}}">
+    <text class="S4 T3 indexcell-name">{{name}}</text>
+    <view class="container_h-indexcell-zd">
+      <text class="S2 {{intZd == 0 ? 'T2' :(intZd > 0? 'C1-font': 'C2-font')}}">{{intZd > 0? '+' + zd : zd}}</text>
       <view style="width:15rpx"></view>
-      <text class="S2" style="color:{{'#00ff00'}}">+0.82%</text>
+      <text class="S2 {{intZd == 0? 'T2' :(intZd > 0? 'C1-font': 'C2-font')}}">{{zdf}}</text>
     </view>
   </view>
 </template>
-<view class="container_h-justify-optional">
-  <template is="indexCell"></template>
-  <view class="optional-cell-divideline"></view>
-  <template is="indexCell"></template>
-  <view class="optional-cell-divideline"></view>
-  <template is="indexCell"></template>
+
+<!--个股item模板-->
+<template name="optionalItem">
+  <view class="container-tooltip" data-tap-index="{{index}}" catchtap="onTapOptionalItem" catchlongtap="onLongTapOptionalItem">
+    <view class="container_h-item">
+      <view class="container_v-item-goodname">
+        <text class="S5 T3">{{good.name}}</text>
+        <text class="S1 T2" style="margin-top:10rpx">{{good.code}}</text>
+      </view>
+      <text class="S7 T3 optional-item-zxj">{{good.suspension==1?'--': good.zxj}}</text>
+      <text class="S7 T4 optional-item-zdf {{good.intZd == 0? 'B5': (good.intZd > 0?'C1-bg': 'C2-bg')}}">{{good.suspension==1?'停牌': good.zdf}}</text>
+    </view>
+    <text class="S4 T3 tooltiptext" hidden="{{index != del}}" data-del-index="{{index}}" catchtap="onDelOtpional">删除</text>
+  </view>
+</template>
+<view class="container-frame" catchtap="onscreenTap">
+
+  <!--指数头部-->
+  <view class="container_h-justify-index">
+    <template is="indexCell" data="{{itsclass:'container_v-indexcell-left',...aryIndexs[0]}}"></template>
+    <template is="indexCell" data="{{itsclass:'container_v-indexcell-center',...aryIndexs[1]}}"></template>
+    <template is="indexCell" data="{{itsclass:'container_v-indexcell-right',...aryIndexs[2]}}"></template>
+  </view>
+
+  <!--排序头-->
+  <view class="container_h-header B1">
+    <text class="S2 T2 optional-header-sortlable_left">名称</text>
+    <text class="S2 T2 optional-header-sortlable_center">最新价</text>
+    <text class="S2 C1-font optional-header-sortlable_right" catchtap="doChangeSort_zdf">{{sortType == 1?'涨跌幅↓':'涨跌幅↑'}}</text>
+  </view>
+
+  <!--列表-->
+  <view wx:key="em" wx:for="{{aryGoods}}" wx:for-index="idx" wx:for-item="itemdata">
+    <template is="optionalItem" data="{{del:displayDelIndex,index:idx,good:itemdata}}"></template>
+  </view>
+  <image class="search-icon" mode="scaleToFill" src="../../images/optional_add.png" hidden="{{aryGoods.length != 0}}" bindtap="onAddBtnTap"></image>
 </view>
 
 <!--搜索按钮-->
-<image class="icon_search" src="../../images/icon_optional_search.png" bindtap="onStockSearchEvent"></image>
+<view class="icon_search" bindtap="onStockSearchEvent">
+    <icon type="search" size="23"/>
+    <text style="color: #dddddd; font-size: 26rpx;">搜索</text>
+</view>

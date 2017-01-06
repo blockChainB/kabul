@@ -4,6 +4,7 @@ var NewsItem = require('NewsItem.js')
 var fundview = require('../common/FundView/FundView.js');
 var Quotation = require('../../models/Quotation.js')
 
+var optionalUtil = require('../../utils/optionalUtil.js')
 var Util = require('../../utils/util.js')
 
 Page({
@@ -26,7 +27,14 @@ Page({
         research: [],           // 研报列表数据
         infoSwiperHeight: 0,    // 新闻列表、资金图高度
         infoCls: '0',
-        fundViewData: {}
+        fundViewData: {},
+        isInforLoad: {    // 个股新闻等是否已加载
+            news: false,
+            fund: false,
+            notice: false,
+            research: false
+        },
+        isAddToZxg: false    // 是否已添加到自选股
     },
 
     onLoad: function (option) {
@@ -43,43 +51,80 @@ Page({
         })
 
         initData(this)
+        this.kLineView = new KLineView()
+        this.timerId = -1             // 循环请求id
+
+        console.log('stock page onLoad ', this.data.goodsId)
+        fundview.init(this);
+        fundview.show(this);
+        fundview.setJLValue(this);
+
+        this.getData()
     },
 
     onShow: function () {
-        this.kLineView = new KLineView()
-        this.getQuotationTrend(function () {
-            wx.hideNavigationBarLoading()
-        })
-        this.getQuotationValue(function () {
-            wx.hideNavigationBarLoading()
-        })
-        this.getNews('600600', '0', function () {
-            wx.hideNavigationBarLoading()
-        })
-
-
-        fundview.init(this);
-        fundview.show(this);
-        fundview.setJLValue(this, '1.52', '亿元');
+        this.startAutoRequest()
+        this.isCurrentGoodsInZxgList()
     },
 
-    onReady: function () {
+    onHide: function () {
+        this.stopAutoRequest()
+    },
 
+    onUnload: function () {
+        // 页面退出时，不会调用onHide
+        this.stopAutoRequest()
+    },
+
+    onShareAppMessage: function () {
+        var that = this
+        var id = that.data.goodsId
+        var name = that.data.goodsName
+        var code = that.data.goodsCode
+
+        return {
+            title: `${name} (${code})`,
+            desc: `${getApp().globalData.shareDesc}`,
+            // path: `/pages/stock/stock?id=${id}&name=${name}&code=${code}`
+            path: `/pages/kanpan/kanpan?id=${id}&name=${name}&code=${code}&page=stock`
+        }
     },
 
     onPullDownRefresh: function (event) {
-        this.getQuotationTrend(function () {
-            wx.hideNavigationBarLoading()
-            wx.stopPullDownRefresh()
-        })
+        this.getData()
+    },
+
+    // 开启循环请求
+    startAutoRequest: function () {
+        var that = this;
+        var data = getApp().globalData
+        var interval = data.netWorkType == 'wifi' ? data.WIFI_REFRESH_INTERVAL : data.MOBILE_REFRESH_INTERVAL;
+        this.timerId = setInterval(function () {
+            that.getData();
+        }, interval);
+    },
+
+    // 停止循环请求
+    stopAutoRequest: function () {
+        clearInterval(this.timerId)
+    },
+
+    // 循环请求
+    getData: function () {
+        // 请求行情
         this.getQuotationValue(function () {
             wx.hideNavigationBarLoading()
             wx.stopPullDownRefresh()
         })
-
-        // this.getNews(this.data.goodsId + '', this.data.infoCls, function() {
-        //     wx.hideNavigationBarLoading()
-        // })
+        // 请求走势，请求哪个走势，在getQuotationTrend中判断
+        this.getQuotationTrend(function () {
+            wx.hideNavigationBarLoading()
+            wx.stopPullDownRefresh()
+        })
+        // 请求个股资讯，具体是否请求，在getNews中判断
+        this.getNews(function () {
+            wx.hideNavigationBarLoading()
+        })
     },
 
     // 获取行情数据
@@ -96,6 +141,7 @@ Page({
             // console.log('stock quotation value result ', results)
             if (results != null) {
                 that.setData({ quotation: results })
+                fundview.setJLValue(that);
             }
         }, function (res) {
             console.log("------fail----", res)
@@ -143,7 +189,7 @@ Page({
                 callback()
             }
             // console.log('stock kline result ', results)
-            that.kLineView.drawKLineCanvas(results, getCanvasId(that.data.quotePeriod))
+            that.kLineView.drawKLineCanvas(results, getCanvasId(that.data.quotePeriod), that.data.quotePeriod)
         }, function (res) {
             console.log("------fail----", res)
             wx.hideNavigationBarLoading()
@@ -161,13 +207,16 @@ Page({
         }
     },
 
-    getNews: function (goodsId, cls, callback) {
+    getNews: function (callback) {
+        // 如果数据已请求完成，不再请求
+        if (this.getIsInfoLoad()) return
+
         wx.showNavigationBarLoading()
         var that = this
 
         Api.stock.getNews({
-            id: goodsId,
-            cls: cls
+            id: that.data.goodsId + '',
+            cls: that.data.infoCls
         }).then(function (results) {
             // console.log('stock news result ', results)
 
@@ -175,11 +224,22 @@ Page({
                 callback()
             }
 
-            that.setData({
-                news: results.news
-            })
-            getInfoHeight(that)
-            console.log('news: ', that.data.news)
+            if (results.hasOwnProperty('news')) {
+                that.setIsInfoLoad('0')
+                that.setData({
+                    news: results.news
+                })
+            } else if (results.hasOwnProperty('notices')) {
+                that.setIsInfoLoad('2')
+                that.setData({
+                    notices: results.notices
+                })
+            } else if (results.hasOwnProperty('research')) {
+                that.setIsInfoLoad('3')
+                that.setData({
+                    research: results.research
+                })
+            }
         }, function (res) {
             console.log("------fail----", res)
             wx.hideNavigationBarLoading()
@@ -233,26 +293,15 @@ Page({
         let index = e.currentTarget.dataset.index
         let cls = '0'
 
-        switch (index) {
-            case "0":
+        switch(index) {
+            case '0':
                 cls = '0';
-                this.getNews(this.data.goodsId + '', cls, function () {
-                    wx.hideNavigationBarLoading()
-                })
                 break;
-            case "1":
-                break;
-            case "2":
+            case '2':
                 cls = '1';
-                this.getNews(this.data.goodsId + '', cls, function () {
-                    wx.hideNavigationBarLoading()
-                })
                 break;
-            case "3":
+            case '3':
                 cls = '2';
-                this.getNews(this.data.goodsId + '', cls, function () {
-                    wx.hideNavigationBarLoading()
-                })
                 break;
         }
 
@@ -261,18 +310,98 @@ Page({
             infoCls: cls
         })
 
-        getInfoHeight(this)
+        if (index != '1') {
+            this.getNews(function () {
+                wx.hideNavigationBarLoading()
+            })
+        }
     },
 
-    onInfoSwiperChange: function (e) {
-        var index = e.detail.current
-        this.setData({ currentInfoIndex: index })
+    onInfoEmptyClick: function (e) {
+        // 请求股票资讯
+        this.getNews(function () {
+            wx.hideNavigationBarLoading()
+        })
     },
 
     onNewsDetailEvent: function (e) {
-        var item = this.data.news[parseInt(e.currentTarget.id)]
+        var newsItem = e.currentTarget.dataset.newsItem
+        var newsType = e.currentTarget.dataset.newsType
+
+        var data = e.currentTarget.dataset
+        var url = Util.urlNavigateEncode(newsItem.url)
         wx.navigateTo({
-            url: '../newsdetail/newsdetail?time=' + item.time + '&url=' + Util.urlNavigateEncode(item.url)
+            url: `../newsdetail/newsdetail?time=${newsItem.time}&id=${newsItem.newsId}&url=${url}&type=${newsType}`
+        })
+    },
+
+    // 添加删除自选股
+    onZxgTap: function(e) {
+        console.log("page stock onZxgTap", e)
+        var that = this
+
+        Api.stock.commitOptionals({
+            goodsId: that.data.goodsId
+        }).then(function (res) {
+            console.log("添加自选股", res)
+            if (res == 0 || res == '0') {
+                that.isCurrentGoodsInZxgList()
+            }
+        }, function (res) {
+            console.log("添加自选股", res)
+        })
+    },
+
+    getIsInfoLoad: function () {
+        var index = this.data.currentInfoIndex
+        var data = this.data.isInforLoad
+
+        switch (index) {
+            case '0':
+                return data.news
+                break;
+            case '1':
+                return data.fund
+                break;
+            case '2':
+                return data.notice
+                break;
+            case '3':
+                return data.research
+                break;
+        }
+
+        return false
+    },
+
+    setIsInfoLoad: function (index) {
+        var data = this.data.isInforLoad
+
+        switch (index) {
+            case '0':
+                data.news = true
+                break;
+            case '1':
+                data.fund = true
+                break;
+            case '2':
+                data.notice = true
+                break;
+            case '3':
+                data.research = true
+                break;
+        }
+
+        this.setData({
+            isInforLoad: data
+        })
+    },
+
+    // 查询股票是否在自选股中中
+    isCurrentGoodsInZxgList: function() {
+        var isIn = optionalUtil.isOptional(this.data.goodsId)
+        this.setData({
+            isAddToZxg: isIn
         })
     }
 })
@@ -297,36 +426,6 @@ function getCanvasId(period) {
     }
 
     return 1;
-}
-
-// 单位: rpx
-function getInfoHeight(that) {
-    var height = 0
-    var index = parseInt(that.data.currentInfoIndex)
-
-    switch (index) {
-        case 0:    // 新闻
-            height = 80 * that.data.news.length
-            break;
-        case 1:    // 资金
-            height = 900
-            break;
-        case 2:    // 公告
-            height = 80 * that.data.notices.length
-            break;
-        case 3:    // 研报
-            height = 80 * that.data.research.length
-            break;
-    }
-
-    // 添加自选Bottom的高度
-    height += 98
-
-    console.log('height', height, index)
-
-    that.setData({
-        infoSwiperHeight: height
-    })
 }
 
 function initData(that) {

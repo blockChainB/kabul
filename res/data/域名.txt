@@ -1,0 +1,11 @@
+好股
+https://wxapp.emoney.cn/haogu365/biz
+
+自选股 set/get
+https://wxapp.emoney.cn/haogu365/user
+
+个股新闻
+https://wxapp.emoney.cn/haogu365/info
+
+股票行情
+https://wxapp.emoney.cn/haogu365/quota

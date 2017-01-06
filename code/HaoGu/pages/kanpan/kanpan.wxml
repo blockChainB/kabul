@@ -1,79 +1,59 @@
 <import src="../common/line.wxml" />
 <import src="../common/StockCell/StockCell.wxml" />
-<view>
+<view id="section_header" style="height:{{bkArr.length>0?'410rpx':'170rpx'}}">
   <block wx:if="{{bkArr.length>0}}">
 
     <!--板块-->
     <view class="bk_tip_container B1">
       <text class="S2 T2" style="margin-left:30rpx;">热门板块</text>
     </view>
-    <template is="lineView" />
+
+    <!--板块内容-->
     <view class="bk_container">
       <block wx:for="{{bkArr}}" wx:key="Id">
         <view class="bk_item_container" hover="true" hover-class="navigator-hover">
-          <view class="bk_item_data_container" data-item="{{item.goods_id}}" bindtap="onBKItemClickEvent">
-            <text class="S4 T3">{{item.rep_field_value[0]}}</text>
-            <view style="width:120rpx;margin-top:12rpx;">
-              <template is="lineView" />
-            </view>
-            <text class="S1_1 T2" style="margin-top:12rpx;">{{item.rep_field_value[3]}}</text>
-            <text class="S1_1 {{item.rep_field_value[1]>0?'C1-font':(item.rep_field_value[1]<0?'C2-font':'T1')}}" style="margin-top:5rpx;">{{bkzdf}}%</text>
+          <view class="bk_item_data_container" data-item="{{item}}" bindtap="onBKItemClickEvent">
+            <text class="S4 T3">{{item.bkName}}</text>
+            <view style="width:120rpx;margin-top:8rpx; border-bottom: 1rpx solid #e4e4e4;" />
+            <text class="S2 T2" style="margin-top:8rpx;">{{item.goodsName}}</text>
+            <text class="S2 {{item.zdf>0?'C1-font':(item.zdf<0?'C2-font':'T1')}}">{{item.zdf>0?'+':''}}{{item.zdfDisplay}}</text>
           </view>
-          <view wx:if="{{index<2}}" class="Line_BG" style="width:1px; height:120rpx;" />
+          <view wx:if="{{index<2}}" style="height:120rpx;border-left: 1rpx solid #e4e4e4;" />
         </view>
       </block>
       <text wx:if="{{bkArr.length<=2}}" class="S1_1 T2 bk_item_data_container" style="width:{{bkArr.length==1?'500rpx':'250rpx'}};">今日热点太少</text>
     </view>
 
     <!--分隔线-->
-    <template is="lineView" />
-    <view class="B1" style="width: 100%;height: 10rpx;" />
-    <template is="lineView" />
+    <view class="B1" style="border-bottom: 1rpx solid #e4e4e4; border-top: 1rpx solid #e4e4e4; width: 100%;height: 10rpx;" />
   </block>
 
   <!--tab-->
   <view class="tab_container">
     <block wx:for="{{tabArr}}" wx:key="Id">
-      <view class="tab_item_container" data-index="{{index}}" bindtap="onTabItemClickEvent">
-        <text class="S4 {{currIndex==index?'C1-font':'T3'}}" style="font-weight:{{currIndex==index?'bold':'normal'}};">{{item}}</text>
-      </view>
+      <text class="S4  tab_item_text {{currIndex==index?'C1-font':'T3'}}" data-index="{{index}}" bindtap="onTabItemClickEvent" style="font-weight:{{currIndex==index?'bold':'normal'}};">{{item}}</text>
     </block>
     <view class="C1-bg tab_item_sel_line_container" style="left:{{currIndex*20}}%;" />
   </view>
-  <template is="lineView" />
 
   <!--列表头-->
   <view class="lisetview_data_container B1" style="height: 70rpx">
-
-    <!--left-->
-    <view class="lisetview_item_left_container">
-      <text class="S2 T2">名称</text>
-    </view>
-
-    <!--middle-->
-    <view class="lisetview_item_middle_container">
-      <text class="S2 T2">最新价</text>
-    </view>
-
-    <!--middle-->
-    <view class="lisetview_item_zdf_container" bindtap="onZDFSort">
-      <text class="S2 C1-font">{{isDownSort?'涨跌幅↑':'涨跌幅↓'}}</text>
-    </view>
-
-    <!--right-->
-    <view class="lisetview_item_right_container">
-      <text class="S2 T2">终选时间</text>
-    </view>
-  </view>
-  <template is="lineView" />
-
-  <!--列表-->
-  <view>
-    <block wx:for="{{goodsArr}}" wx:key="Id">
-      <template is="StockCell" data="{{data:item}}" />
-    </block>
+    <text class="S2 T2 lisetview_item_left_container">名称</text>
+    <text class="S2 T2 lisetview_item_middle_container">最新价</text>
+    <text class="S2 C1-font lisetview_item_zdf_container" bindtap="onZDFSort">{{sortState==1?'涨跌幅↑':'涨跌幅↓'}}</text>
+    <text class="S2 T2 lisetview_item_right_container">终选时间</text>
   </view>
 </view>
 
+<!--列表-->
+<view id="section_list" style="top:{{bkArr.length>0?'415rpx':'175rpx'}}">
+  <block wx:for="{{goodsArr}}" wx:key="Id">
+    <template is="StockCell" data="{{data:item}}" />
+  </block>
+</view>
+
 <!--搜索按钮-->
-<image class="icon_search" src="../../images/icon_optional_search.png" bindtap="onStockSearchEvent"></image>
+<view class="icon_search" bindtap="onStockSearchEvent">
+    <icon type="search" size="23"/>
+    <text style="color: #dddddd; font-size: 26rpx;">搜索</text>
+</view>

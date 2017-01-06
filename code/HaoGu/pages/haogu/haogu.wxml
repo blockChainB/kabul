@@ -1,19 +1,20 @@
 <import src="../common/line.wxml" />
-<view class="B4">
+<view class="B1" style="padding-top:22rpx;padding-bottom:0rpx;">
   <block wx:key="haogu" wx:for="{{array}}" wx:for-item="item" wx:for-index="index">
     <view class="list_item">
 
       <!--标题-->
-      <view class="item_title C3-bg">
-        <image src="../../images/icon_haogu_title.png"></image>
-        <text class="item_title_name T4 S7">{{item.name}}</text>
+      <view class="item_title">
+        <view class="item_title_icon C3-bg"></view>
+        <text class="item_title_name T3 S5">{{item.name}}</text>
+        <text class="item_title_desp T2 S1">{{item.desp}}</text>
       </view>
+      <template is="lineView"></template>
       <block wx:key="selectGroup" wx:for="{{item.items}}" wx:for-item="selectItem" wx:for-index="selectIndex">
 
         <!--描述-->
-        <view class="item_desp B1">
-          <text class="S3 T2">{{selectItem.desp}}</text>
-          <text class="T2 S1">{{selectItem.time}}</text>
+        <view class="item_desp">
+          <text class="T4 S1">{{selectItem.desp + "　" + selectItem.time}}</text>
         </view>
 
         <!--个股-->
@@ -21,23 +22,23 @@
           <block wx:key="stockGroup" wx:for="{{selectItem.stocks}}" wx:for-item="stockGroupItem" wx:for-index="stockGroupIndex">
             <view class="item_group">
               <block wx:key="stock" wx:for="{{stockGroupItem}}" wx:for-item="stockItem" wx:for-index="stockIndex">
-                <view class="item_stock" id=">{{stockItem.code}}" bindtap="onStockDetailEvent">
+                <view class="item_stock" bindtap="onStockDetailEvent" data-stock="{{stockItem}}" hover="true" hover-class="item_select">
                   <text class="C3-font S3">{{stockItem.name}}</text>
                   <text class="S1 T1">{{stockItem.code}}</text>
                 </view>
               </block>
-            </view>
 
-            <!--分割线-->
-            <block wx:if="{{stockGroupItem.length > 3}}">
-              <view class="item_group_line B4" style="left:75%;"></view>
-            </block>
-            <block wx:if="{{stockGroupItem.length > 2}}">
-              <view class="item_group_line B4" style="left:50%;"></view>
-            </block>
-            <block wx:if="{{stockGroupItem.length > 1}}">
-              <view class="item_group_line B4" style="left:25%;"></view>
-            </block>
+              <!--分割线-->
+              <block wx:if="{{stockGroupItem.length > 3}}">
+                <view class="item_group_line B4" style="left:75%;"></view>
+              </block>
+              <block wx:if="{{stockGroupItem.length > 2}}">
+                <view class="item_group_line B4" style="left:50%;"></view>
+              </block>
+              <block wx:if="{{stockGroupItem.length > 1}}">
+                <view class="item_group_line B4" style="left:25%;"></view>
+              </block>
+            </view>
           </block>
         </view>
       </block>

@@ -198,7 +198,6 @@
 #section_relative_item {
     width: 100%;
     height: 100rpx;
-    background-color: white;
     box-sizing: border-box;
     border-bottom: 1rpx solid #e4e4e4;
     position: relative;

@@ -1,5 +1,5 @@
 <template name="lineView">
-    <view class="Line_BG" style="width:100%; height:1px;"></view>    
+    <view class="B4" style="width:100%; height:1px;"></view>    
 </template>
 
 

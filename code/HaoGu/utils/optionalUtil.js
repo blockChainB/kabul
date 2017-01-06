@@ -1,6 +1,6 @@
 // 判断是不是自选股
-function isOptional(code) {
-    if (getApp().globalData.optionals.indexOf(code) > -1) {
+function isOptional(goodsId) {
+    if (getApp().globalData.optionals.indexOf(goodsId) > -1) {
         return true;
     } else {
         return false;
@@ -10,16 +10,34 @@ function isOptional(code) {
 // 更新自选股
 function updateOptional(goodsId) {
     if (isOptional(goodsId)) {
-        var index = getApp().globalData.optionals.indexOf(goodsId);
-        if (index > -1) {
-            getApp().globalData.optionals.splice(index, 1);
-        }
+        getApp().globalData.optionals.removeObject(goodsId)
     } else {
         getApp().globalData.optionals.unshift(goodsId)
     }
 }
 
+// 
+function tempOptionals(goodsId) {
+    var optionals = []
+    for (let i = 0; i < getApp().globalData.optionals.length; i++) {
+        optionals.push(getApp().globalData.optionals[i])
+    }
+
+    if (goodsId < 0) {
+        return optionals
+    }
+
+    if (isOptional(goodsId)) {
+        optionals.removeObject(goodsId)
+    } else {
+        optionals.unshift(goodsId)
+    }
+
+    return optionals
+}
+
 module.exports = {
     isOptional: isOptional,
     updateOptional: updateOptional,
+    tempOptionals: tempOptionals
 }

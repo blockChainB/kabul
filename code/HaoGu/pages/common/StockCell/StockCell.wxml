@@ -1,33 +1,15 @@
 <template name="StockCell">
-  <import src="../line.wxml" />
-  <view class="lisetview_item_container" hover="true" hover-class="navigator-hover" bindtap="onItemClickEvent">
-    <view class="lisetview_data_container">
-
-      <!--left-->
-      <view class="lisetview_item_left_container">
-        <text class="S4 T3">永和智控</text>
-        <text class="S1 T2" style="margin-top:12rpx">002795</text>
-      </view>
-
-      <!--middle-->
-      <view class="lisetview_item_middle_container">
-        <text class="S7 T3">35.80</text>
-      </view>
-
-      <!--middle-->
-      <view class="lisetview_item_zdf_container">
-        <view class="listview_item_zdf_bg {{data>0?'C1-bg':(data<0?'C2-bg':'B5')}}">
-          <text class="S4 T4 listview_item_zdf">{{data}}%</text>
-        </view>
-      </view>
-
-      <!--right-->
-      <view class="lisetview_item_right_container">
-          <text class="S6 T2">10:31</text>
+  <view class="lisetview_data_container" hover="true" hover-class="navigator-hover" data-item="{{data}}" bindtap="onItemClickEvent">
+    <view class="lisetview_item_left_container">
+      <text class="S5 T3">{{data.name}}</text>
+      <text class="S1 T2">{{data.code}}</text>
+    </view>
+    <text class="S7 T3 lisetview_item_middle_container">{{data.suspension==1?'--':data.price}}</text>
+    <view class="lisetview_item_zdf_container">
+      <view class="listview_item_zdf_bg {{data.zdf>0?'C1-bg':(data.zdf<0?'C2-bg':'B5')}}">
+        <text class="S7 T4 listview_item_zdf">{{data.suspension==1?'停牌':data.zdfDisplay}}</text>
       </view>
     </view>
-
-    <!--分隔线-->
-    <template is="lineView" />
+    <text class="S6 T2 lisetview_item_right_container">{{data.time}}</text>
   </view>
 </template>

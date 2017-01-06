@@ -3,9 +3,9 @@
     <icon type="search" size="15"></icon>
 
     <!--placeholder-class 使用这个input只能获取一次焦点 maxlength="6" -->
-    <input class="T1 S1" bindinput="onSearchBarChangedEvent" placeholder="{{searchData.placeholder}}" auto-focus="true" value="{{searchData.searchContent}}" />
+    <input class="T1 S4" bindinput="onSearchBarChangedEvent" placeholder="{{searchData.placeholder}}" auto-focus="true" value="{{searchData.searchContent}}" />
     <block wx:if="{{searchData.showClearButton == true}}">
-      <image src="../common/SearchBar/icon_clear.png" bindtap="onSearchBarClearEvent"></image>
+      <image src="../common/SearchBar/icon_clear.png" mode="aspectFit" bindtap="onSearchBarClearEvent"></image>
     </block>
   </view>
 </template>

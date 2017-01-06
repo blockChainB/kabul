@@ -1,8 +1,12 @@
 var Service = require('./service.js')
+var Promise = Service.Promise
+var StaticStrings = Service.StaticStrings
 var parser = require('./parsers/stock-parser.js')
 var Util = require('../utils/util.js')
 var GoodsParams = require('../models/GoodsParams.js')
 var optionalUtil = require('../utils/optionalUtil.js')
+
+var mainStockIndex = [1, 1399001, 300, 1399005, 1399006, 1399106, 2, 3, 1399003, 9, 10, 16, 1399004]
 
 // 搜索股票
 function search({key = ""} = {}) {
@@ -14,16 +18,20 @@ function search({key = ""} = {}) {
         data: {
             key: key,
         },
-        url: 'http://m.emoney.cn/getinfo/search.aspx',
+        url: `${Service.BaseUrl}web/stock/search`,
     }).then(function (res) {
         if (res.statusCode == 200) {
-            var results = parser.parseSearchData(res.data.data)
-            return results
+            if (res.data.result.code == 0) {
+                var results = parser.parseSearchData(res.data.detail)
+                return results
+            } else {
+                return Promise.reject(StaticStrings.kGetDataErrorInfo)
+            }
         } else {
-            return []
+            return Promise.reject(StaticStrings.kGetDataErrorInfo)
         }
     }, function (res) {
-        return res
+        return Promise.reject(StaticStrings.kGetDataErrorInfo)
     });
 
     return promise;
@@ -45,18 +53,17 @@ function getMinutes({id, date, time, mmp = false} = {}) {
             last_recv_time: time,
             request_mmp: mmp
         },
-        // url: `${Service.BaseUrl}20300`,
-        url: 'http://60.205.138.219:1121/?X-Protocol-Id=20300'
+        url: `${Service.BaseQuotaUrl}20300`,
     }).then(function (res) {
         if (res.statusCode == 200) {
-            console.log('get minute result data ' , res.data)
+            // console.log('get minute result data ', res.data)
             var result = parser.parseMinutesData(res.data)
             return result
         } else {
-            return []
+            return Promise.reject(StaticStrings.kGetDataErrorInfo)
         }
     }, function (res) {
-        return res
+        return Promise.reject(StaticStrings.kGetDataErrorInfo)
     });
     return promise;
 }
@@ -81,61 +88,17 @@ function getKLines({id, begin, size, period, time = 0, ma = 7} = {}) {
             last_update_market_time: time,
             req_ma: ma
         },
-        // url: `${Service.BaseUrl}20400`,
-        url: 'http://60.205.138.219:1121/?X-Protocol-Id=20400'
+        url: `${Service.BaseQuotaUrl}20400`,
     }).then(function (res) {
         if (res.statusCode == 200) {
             // console.log('get kline result data ' , res.data)
             var results = parser.parseKLinesData(res.data.k_lines)
             return results
         } else {
-            return []
+            return Promise.reject(StaticStrings.kGetDataErrorInfo)
         }
     }, function (res) {
-        return res
-    });
-    return promise;
-}
-
-/**
- * class_type:0 概念,1 行业,2地区,3 系统板块类（沪深A等）,4 自定义上传股票ID
- * group_type:class_type==4, 为0; 
- *            0 =< class_type <= 2,板块代码，如不发或者为0，class类别下的所有板块；
- *            class_type==3时候，该字段为 如//@@@@@@@@@@@定义 的 值按位或的结果
- * goods_id：当class_type 为 4 时 ,为上传的股票ID列表
- * req_fields：字段列表 定义如//$$$$$$$$$$$$$$$$$$：
- * sort_field：排序字段 -9999为无排序字段，按上传股票ID顺序，无上传ID则按名字顺序
- * sort_order：升序或降序，true为降序，false为升序
- * req_begin：请求起始位置，初始填0（排序后）
- * req_size：请求个数，按客户端显示分页大小
- * last_update_market_time：上次更新时间，初始填0
- * last_update_market_date：上次更新日期，初始填0
- */
-function requestDynaValueData({clazz, group = 0, codes, req_fields, sort_field = -9999, sort_order = true, begin = 0, size, date = 0, time = 0} = {}) {
-    var promise = Service.request({
-        showLoading: false,
-        showFailMsg: false,
-        data: {
-            class_type: clazz,
-            group_type: group,
-            goods_id: codes,
-            req_fields: req_fields,
-            sort_field: sort_field,
-            sort_order: sort_order,
-            req_begin: 0,
-            req_size: size,
-            last_update_market_time: time,
-            sort_orlast_update_market_dateder: date
-        },
-        url: `${Service.BaseUrl}20200`,
-    }).then(function (res) {
-        if (res.statusCode == 200) {
-            return res.data
-        } else {
-            return []
-        }
-    }, function (res) {
-        return res
+        return Promise.reject(StaticStrings.kGetDataErrorInfo)
     });
     return promise;
 }
@@ -148,100 +111,72 @@ function requestFundData({goods_id} = {}) {
         data: {
             goods_id: goods_id
         },
-        url: `${Service.BaseUrl}20700`,
+        url: `${Service.BaseQuotaUrl}20700`,
     }).then(function (res) {
         if (res.statusCode == 200) {
             return res.data
         } else {
-            return {}
+            return Promise.reject(StaticStrings.kGetDataErrorInfo)
         }
     }, function (res) {
-        return res
+        return Promise.reject(StaticStrings.kGetDataErrorInfo)
     });
     return promise;
 }
 
 // 获取自选股
 function requestOptionals() {
+    console.log("sky uid:", getApp().globalData.uid);
     var promise = Service.request({
         showLoading: false,
         showFailMsg: false,
         data: {
-            OpenId: getApp().globalData.openId
+            uid: getApp().globalData.uid
         },
         url: `${Service.BaseOptionalUrl}28100`,
     }).then(function (res) {
         if (res.statusCode == 200) {
             if (res.data.result.code == 0) {
-                getApp().globalData.optionals = res.data.detail.GoodsId
+                return res.data.detail;
+            } else {
+                return Promise.reject(StaticStrings.kGetDataErrorInfo)
             }
-            return res.data
         } else {
-            return res
+            return Promise.reject(StaticStrings.kGetDataErrorInfo)
         }
     }, function (res) {
-        return res
+        return Promise.reject(StaticStrings.kGetDataErrorInfo)
     });
     return promise;
 }
 
 // 更新自选股
-function commitOptionals({goodsId = []} = {}) {
-    optionalUtil.updateOptional(goodsId)
+function commitOptionals({goodsId} = {}) {
+    if (goodsId <= 0) {
+        return Promise.reject("goodid invaliate");
+    }
+
+    var tOptionals = optionalUtil.tempOptionals(goodsId);
     var promise = Service.request({
         showLoading: false,
         showFailMsg: false,
         data: {
-            OpenId: getApp().globalData.openId,
-            GoodsId: getApp().globalData.optionals
+            uid: getApp().globalData.uid,
+            GoodsId: tOptionals
         },
         url: `${Service.BaseOptionalUrl}28000`,
     }).then(function (res) {
         if (res.statusCode == 200) {
-            return res.data
+            console.log('commitOptionals get raw result', res)
+            optionalUtil.updateOptional(goodsId)
+            return res.data.result.code
         } else {
-            return {}
+            return Promise.reject(StaticStrings.kGetDataErrorInfo)
         }
     }, function (res) {
-        return res
+        return Promise.reject(StaticStrings.kGetDataErrorInfo)
     });
-    return promise;
-}
-
-// 动态行情req_fields的可能值
-let DynamicValueRequireField = {
-    None: -9999,	  //不排序
-    CLOSE: 0,		  //昨收
-    OPEN: 1,		  //开盘
-    HIGH: 2,		  //最高
-    LOW: 3,		      //最低
-    PRICE: 4,		  //成交
-    NAME: -1,		  //名称
-    CODE: -2,	      //股票代码
-    ZDF: -140,        //涨跌幅
-    SYL: -161,        //市盈率 **
-    BIGAMT: -165,     //主力净流 **
-    ZDF5: -142,       //5日涨跌
-    CPXDAY: -153,	  //操盘线-日线
-    CPXMIN60: -156,	  //操盘线-60分钟线
-    ZHANGDIE: -120,	  //涨跌
-    HSL: -162,        //换手率
-    RISE: -201,	      //涨家
-    FALL: -202,	      //跌家
-    EQUAL: -203,	  //平家
-    GROUPHY: -704,	  //行业板块
-    ZGB: 504,		  //总股本
-    LTG: 505,		  //流通股
-    SJL: -164,	      //市净率 **
-    ZSZ: -601,        // 总市值 **
-    VOLUME: 500,	  //成交量
-    AMOUNT: 501,	  //成交额
-    RiseHeadGoodsID: 678,	   // 当日强势股
-    FallHeadGoodsID: 680,	   // 当日弱势股
-    RiseHeadGoodsZDF: -20001,  // 板块领涨股涨跌幅
-    FallHeadGoodsZDF: -20002,  // 板块领跌股涨跌幅
-    RiseHeadGoodsName: -20003, // 板块领涨股名称
-    FallHeadGoodsName: -20004, // 板块领跌股名称
+    return promise
 }
 
 /** 
@@ -253,21 +188,21 @@ function getNews({id, cls} = {}) {
         showLoading: false,
         showFailMsg: false,
         data: {
-            stock: id,
-            cls: cls
+            stock: id + '',
+            cls: cls + ''
         },
-        // url: `${Service.BaseUrl}6300`,
-        url: 'http://192.168.8.189:2368/?X-Protocol-Id=6301'
+        url: `${Service.BaseInfoUrl}6301`,
     }).then(function (res) {
         if (res.statusCode == 200) {
-            console.log('stock news: ',res.data)
+            // console.log('stock news raw: ', res.data)
+
             var result = parser.parseNewsData(res.data)
             return result
         } else {
-            return []
+            return Promise.reject(StaticStrings.kGetDataErrorInfo)
         }
     }, function (res) {
-        return res
+        return Promise.reject(StaticStrings.kGetDataErrorInfo)
     });
     return promise;
 }
@@ -317,17 +252,17 @@ function getQuotation({id} = {}) {
             last_update_market_time: 0,
             last_update_market_date: 0
         },
-        url: 'http://60.205.138.219:1121/?X-Protocol-Id=20200'
+        url: `${Service.BaseQuotaUrl}20200`,
     }).then(function (res) {
         if (res.statusCode == 200) {
             // console.log('stock quotation raw : ',res.data)
             var result = parser.parseStockQuotationValue(res.data)
             return result
         } else {
-            return []
+            return Promise.reject(StaticStrings.kGetDataErrorInfo)
         }
     }, function (res) {
-        return res
+        return Promise.reject(StaticStrings.kGetDataErrorInfo)
     });
     return promise;
 }
@@ -377,17 +312,17 @@ function getBkQuotation({id} = {}) {
             last_update_market_time: 0,
             last_update_market_date: 0
         },
-        url: 'http://60.205.138.219:1121/?X-Protocol-Id=20200'
+        url: `${Service.BaseQuotaUrl}20200`,
     }).then(function (res) {
         if (res.statusCode == 200) {
             // console.log('bk quotation raw : ',res.data)
             var result = parser.parseBkQuotationValue(res.data)
             return result
         } else {
-            return []
+            return Promise.reject(StaticStrings.kGetDataErrorInfo)
         }
     }, function (res) {
-        return res
+        return Promise.reject(StaticStrings.kGetDataErrorInfo)
     });
     return promise;
 }
@@ -395,10 +330,9 @@ function getBkQuotation({id} = {}) {
 /**
  * 获取关联个股、版块
  */
-function getRelatives({id, type=0, order=false} = {}) {
+function getRelatives({id, classType = 0, order = false} = {}) {
     var reqFileds = []
     reqFileds.push(GoodsParams.GOODS_NAME);   // 股票名称
-    reqFileds.push(GoodsParams.GOODS_CODE);   // 股票代码
     reqFileds.push(GoodsParams.ZXJ);          // 最新价
     reqFileds.push(GoodsParams.ZDF);          // 涨跌幅
     reqFileds.push(GoodsParams.ZHANGDIE);     // 涨跌
@@ -406,47 +340,100 @@ function getRelatives({id, type=0, order=false} = {}) {
     var reqIds = []
     reqIds.push(id)
 
+    var reqData = {
+        sort_field: GoodsParams.ZDF,
+        sort_order: order,
+        req_begin: 0,
+        req_size: 20,
+        last_update_market_time: 0,
+        last_update_market_date: 0,
+        req_fields: reqFileds
+    }
+
+    if (classType == 3) {
+        reqData.class_type = 4
+        reqData.group_type = 0
+        reqData.goods_id = mainStockIndex
+    } else {
+        reqData.class_type = classType
+        reqData.group_type = id
+    }
+
+    var req = {
+        showLoading: false,
+        showFailMsg: false,
+        data: reqData,
+        url: `${Service.BaseQuotaUrl}20200`,
+    }
+    // console.log('getRelative req', req, id, classType, order)
+
+    var promise = Service.request(req).then(function (res) {
+        if (res.statusCode == 200) {
+            console.log('stock relatives raw : ', res.data)
+            var result = parser.parseRelativeItem(res.data)
+            return result
+        } else {
+            return Promise.reject(StaticStrings.kGetDataErrorInfo)
+        }
+    }, function (res) {
+        return Promise.reject(StaticStrings.kGetDataErrorInfo)
+    });
+    return promise;
+}
+
+function getCustomDetail(aryGoodsId = []) {
+    if (!aryGoodsId)
+        return
+    console.log("sky custom 2:", aryGoodsId, "length:", aryGoodsId.length);
+    var reqFileds = []
+    reqFileds.push(GoodsParams.GOODS_NAME);   // 股票名称
+    reqFileds.push(GoodsParams.ZXJ);          // 最新价
+    reqFileds.push(GoodsParams.ZDF);          // 涨跌幅
+    reqFileds.push(GoodsParams.ZHANGDIE);          // 涨跌
+    reqFileds.push(GoodsParams.SUSPENSION);          // 停牌
+
+
     var promise = Service.request({
         showLoading: false,
         showFailMsg: false,
         data: {
-            class_type: type,
-            group_type: id,
-            goods_id: reqIds,
+            class_type: 4,
+            group_type: 0,
+            goods_id: aryGoodsId,
             req_fields: reqFileds,
-            sort_field: GoodsParams.ZDF,
-            sort_order: order,
+            sort_field: -9999,
+            sort_order: true,
             req_begin: 0,
-            req_size: 20,
+            req_size: aryGoodsId.length,
             last_update_market_time: 0,
             last_update_market_date: 0
         },
-        url: 'http://60.205.138.219:1121/?X-Protocol-Id=20200'
+        url: `${Service.BaseQuotaUrl}20200`,
     }).then(function (res) {
         if (res.statusCode == 200) {
-            console.log('stock relatives raw : ',res.data)
-            var result = parser.parseRelativeItem(res.data)
+            console.log('stock custom detail raw : ', res.data)
+            var result = parser.parseCustomDetail(res.data)
             return result
         } else {
-            return []
+            return Promise.reject(StaticStrings.kGetDataErrorInfo)
         }
-    }, function (res) {
-        return res
+    }, function (err) {
+        return Promise.reject(StaticStrings.kGetDataErrorInfo)
     });
     return promise;
 }
+
 
 module.exports = {
     search: search,
     getKLines: getKLines,
     getMinutes: getMinutes,
-    requestDynaValueData: requestDynaValueData,
-    DynamicValueRequireField: DynamicValueRequireField,
     getNews: getNews,
     requestFundData: requestFundData,
     getQuotation: getQuotation,
     getBkQuotation: getBkQuotation,
     requestOptionals: requestOptionals,
     commitOptionals: commitOptionals,
-    getRelatives: getRelatives
+    getRelatives: getRelatives,
+    getCustomDetail: getCustomDetail
 }
