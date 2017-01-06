@@ -453,11 +453,11 @@ function updateItemColor(that) {
         // 新闻
         array = updateItemValues(that.data.news)
         that.setData({ news: array })
-    } else if (inforIndex == '1') {
+    } else if (inforIndex == '2') {
         // 公告
         array = updateItemValues(that.data.notices)
         that.setData({ notices: array })
-    } else if (inforIndex == '2') {
+    } else if (inforIndex == '3') {
         // 研报
         array = updateItemValues(that.data.research)
         that.setData({ research: array })
