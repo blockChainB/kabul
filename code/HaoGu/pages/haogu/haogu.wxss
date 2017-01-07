@@ -1,5 +1,9 @@
 /* pages/haogu/haogu.wxss */
 
+page {
+  background-color: #EFEFF4;
+}
+
 .list_item {
   display: flex;
   flex-direction: column;

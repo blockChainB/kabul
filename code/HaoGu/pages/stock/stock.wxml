@@ -71,7 +71,7 @@
   bindtap="onInfoSelectorClick" data-index="3">研报</text>
 </view>
 
-<view id="section_infos">
+<view>
 
   <!-- 新闻 -->
   <view hidden="{{currentInfoIndex != 0}}">
@@ -108,7 +108,7 @@
 </view>
 
 <!-- 添加自选 -->
-<view id="section_add_zxg" bindtap="onZxgTap">
+<view class="icon_search" bindtap="onZxgTap">
   <image src="{{isAddToZxg ? '/images/remove_zxg.png' : '/images/add_zxg.png'}}"></image>
-  <text>{{isAddToZxg ? '删除自选' : '添加自选'}}</text>
+  <text style="color: {{isAddToZxg ? '#f5cbb7' : '#b7cbf5'}};">自选</text>
 </view>

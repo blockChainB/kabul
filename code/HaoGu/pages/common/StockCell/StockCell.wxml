@@ -10,6 +10,6 @@
         <text class="S7 T4 listview_item_zdf">{{data.suspension==1?'停牌':data.zdfDisplay}}</text>
       </view>
     </view>
-    <text class="S6 T2 lisetview_item_right_container">{{data.time}}</text>
+    <text class="S6 T2 lisetview_item_right_container">{{data.timeDisplay}}</text>
   </view>
 </template>

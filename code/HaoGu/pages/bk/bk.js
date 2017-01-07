@@ -167,16 +167,33 @@ Page({
   onZxgTap: function (e) {
     console.log("page stock onZxgTap", e)
     var that = this
+    wx.showNavigationBarLoading()
 
     Api.stock.commitOptionals({
       goodsId: that.data.goodsId
     }).then(function (res) {
       console.log("添加自选股", res)
+      wx.hideNavigationBarLoading()
+
       if (res == 0 || res == '0') {
         that.isCurrentGoodsInZxgList()
+
+        // 弹出toast提示成功
+        var title = ''
+        if (that.data.isAddToZxg) {
+          title = '添加自选成功'
+        } else {
+          title = '删除自选成功'
+        }
+        wx.showToast({
+          title: title,
+          icon: 'none',
+          duration: 500
+        })
       }
     }, function (res) {
       console.log("添加自选股", res)
+      wx.hideNavigationBarLoading()
     })
   },
 

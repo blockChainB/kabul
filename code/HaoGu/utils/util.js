@@ -11,7 +11,8 @@ function formateTime(date, formate) {
     var result = formate
 
     result = result.replace("yyyy", date.getFullYear())
-    result = result.replace("yy", formateNumber(date.getYear(), 2))
+    var fullYear = ''+date.getFullYear()
+    result = result.replace("yy", fullYear.substr(fullYear.length-2,2))
     result = result.replace("MM", formateNumber(date.getMonth() + 1, 2))
     result = result.replace("dd", formateNumber(date.getDate(), 2))
     result = result.replace("HH", formateNumber(date.getHours(), 2))
@@ -171,24 +172,24 @@ function formatAmount(val) {
         val = -val
     }
 
-    if (val < 100000) {
+    if (val < 100000) {    // < 10万
         return flag + val.toFixed(0)
-    } else if (val >= 100000 && val < 1000000) {
+    } else if (val >= 100000 && val < 1000000) {    // 10万到100万
         val = val / 10000;
         return flag + val.toFixed(2) + '万';
-    } else if (val >= 1000000 && val < 10000000) {
+    } else if (val >= 1000000 && val < 10000000) {    // 100万到1000万
         val = val / 10000;
         return flag + val.toFixed(1) + '万';
-    } else if (val >= 10000000 && val < 100000000) {
+    } else if (val >= 10000000 && val < 100000000) {    // 1000万到1亿
         val = val / 10000;
         return flag + val.toFixed(1) + '万';
-    } else if (val >= 100000000 && val < 1000000000) {
+    } else if (val >= 100000000 && val < 1000000000) {    // 1亿到10亿
         val = val / 100000000;
         return flag + val.toFixed(2) + '亿';
-    } else if (val >= 1000000000 && val < 10000000000) {
+    } else if (val >= 1000000000 && val < 10000000000) {    // 10亿到100亿
         val = val / 100000000;
-        return flag + val.toFixed(1) + '亿';
-    } else {
+        return flag + val.toFixed(2) + '亿';
+    } else {    // 100亿以上
         val = val / 100000000;
         return flag + val.toFixed(1) + '亿';
     }
@@ -282,62 +283,55 @@ function formatBKGoodCode(bkGoodid) {
 // 版块
 function isBK(dwGoodsID) {
     dwGoodsID = parseInt(dwGoodsID)
-    var num = parseInt((dwGoodsID / 1000).toFixed(0))
+    var num = Math.floor(dwGoodsID / 1000)
     return (num >= 2001 && num <= 2003);
 }
 
 // 国内版块
 function isGNBK(goodsId) {
     goodsId = parseInt(goodsId)
-    return parseInt((goodsId / 1000).toFixed(0)) == 2001
+    return Math.floor(goodsId / 1000) == 2001
 }
 
 // 行业版块
 function isHYBK(goodsId) {
     goodsId = parseInt(goodsId)
-    return parseInt((goodsId / 1000).toFixed(0)) == 2002
+    return Math.floor(goodsId / 1000) == 2002
 }
 
 // 地区版块
 function isDQBK(goodsId) {
     goodsId = parseInt(goodsId)
-    return parseInt((goodsId / 1000).toFixed(0)) == 2003
+    return Math.floor(goodsId / 1000) == 2003
 }
 
 // 指数
 function isZS(goodsId) {
     goodsId = parseInt(goodsId)
-
-
     return ((goodsId > 0 && goodsId < 9000)
         || Math.floor(goodsId / 100000) == 8
         || Math.floor(goodsId / 10000) == 139
         || goodsId == 5500001);
-
-
-
 }
-
-
 
 // A股
 function isAG(goodsId) {
     goodsId = parseInt(goodsId)
     return ((goodsId >= 600000 && goodsId < 699999)
-        || (goodsId > 1000000 && goodsId < 1999999 && (parseInt((goodsId / 10000).toFixed(0)) == 100 || parseInt((goodsId / 10000).toFixed(0)) == 130)));
+        || (goodsId > 1000000 && goodsId < 1999999 && (Math.floor(goodsId / 10000) == 100 || Math.floor(goodsId / 10000) == 130)));
 }
 
 // 是否是基金
 function isJiJin(goodsId) {
     goodsId = parseInt(goodsId)
-    if (parseInt((goodsId / 1000000).toFixed(0)) == 0) {
+    if (Math.floor(goodsId / 1000000) == 0) {
         // 沪市基金
-        if (parseInt((goodsId / 100000).toFixed(0)) == 5 && parseInt((goodsId / 10000).toFixed(0)) == 58) {
+        if (Math.floor(goodsId / 100000) == 5 && Math.floor(goodsId / 10000) != 58) {
             return true
         }
-    } else if (parseInt((goodsId / 1000000).toFixed(0)) == 1) {
+    } else if (Math.floor(goodsId / 1000000) == 1) {
         // 深市基金
-        var num = parseInt((goodsId / 10000).toFixed(0))
+        var num = Math.floor(goodsId / 10000)
         if (num >= 115 && num < 118) {
             return true
         }
@@ -415,6 +409,7 @@ module.exports = {
     formatCode: formatCode,
     isBK: isBK,
     isZS: isZS,
+    isAG: isAG,
     isJiJin: isJiJin,
     gotoQuote: gotoQuote,
     //formatKanPanTime: formatKanPanTime,

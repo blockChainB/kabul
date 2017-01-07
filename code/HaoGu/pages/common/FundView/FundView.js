@@ -30,6 +30,34 @@ var fundData = {
     lastDate: "--"
 };
 
+function reset() {
+    mRequestSuccess = false;
+
+    mValue_per_ypx = 0;
+    mPer_item_w = 0;
+
+    //饼图
+    mBuyLarge = 0;
+    mSaleLarge = 0;
+    mBuySmall = 0;
+    mSaleSmall = 0;
+
+    //十日资金图
+    tenDayInFlow = "[]";
+
+    fundData = {
+        dayinflow: '--',
+        dayinflowUnit: '元',
+        bLarge_proportion: '--',
+        bSmall_proportion: '--',
+        sLarge_proportion: '--',
+        sSmall_proportion: '--',
+        firstDate: "--",
+        lastDate: "--"
+    };
+
+}
+
 function init(that) {
     updateDatabinding(that);
 }
@@ -374,16 +402,16 @@ function formatDateM_D(orgDate, separator) {
         t_separator = separator;
     }
 
-    var nlen = orgDate.length;
+   var nlen = orgDate.length;
     if (nlen >= 8) {
         var tMonth = orgDate.substring(4, 6);
-        if (tMonth.startsWith("0")) {
-            tMonth = tMonth.replace("0", "");
+        if (tMonth.substr(0, 1) == '0') {
+            tMonth = tMonth.substr(1, tMonth.length - 1);
         }
 
         var tDay = orgDate.substring(6, 8);
-        if (tDay.startsWith("0")) {
-            tDay = tDay.replace("0", "");
+        if (tDay.substr(0, 1) == '0') {
+            tDay = tDay.substr(1, tDay.length - 1);
         }
 
         fixDate = tMonth + t_separator + tDay;
@@ -395,5 +423,6 @@ function formatDateM_D(orgDate, separator) {
 module.exports = {
     init: init,
     show: show,
-    setJLValue: setJLValue
+    setJLValue: setJLValue,
+    reset:reset
 }

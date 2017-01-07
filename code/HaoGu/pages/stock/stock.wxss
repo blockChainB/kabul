@@ -27,6 +27,7 @@
     text-align: right;
     padding-right: 8rpx;
     box-sizing: border-box;
+    font-size: 26rpx;
 }
 
 .quota_zd {
@@ -39,6 +40,7 @@
     text-align: left;
     padding-left: 8rpx;
     box-sizing: border-box;
+    font-size: 26rpx;
 }
 
 #section_quotation .quota_arrow {
@@ -159,34 +161,31 @@
 }
 
 /* 添加自选 */
-#section_add_zxg {
+/*#section_add_zxg {
     position: fixed;
-    bottom: 0;
-    width: 750rpx;
-    height: 98rpx;
-    background-color: #f7f7fa;
-    border-top: 1rpx solid #b2b2b2;
+    bottom: 20rpx;
+    right: 20rpx;
+    width: 150rpx;
+    height: 90rpx;
+    background-color: rgba(0,0,0,0.7);
+    box-shadow:0 8px 16px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    border-radius: 12rpx;
     display: flex;
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
     z-index: 100;
+}*/
+
+.icon_search image {
+  width: 40rpx;
+  height: 40rpx;
+  margin-bottom: 8rpx;
 }
 
-#section_add_zxg image {
-    width: 48rpx;
-    height: 48rpx;
-    margin-right: 12rpx;
-}
-
-#section_add_zxg text {
-    color: #576b95;
-    font-size: 31rpx;
-}
-
-/* 新闻 */
-#section_infos {
-    padding-bottom: 98rpx;
+.icon_search text {
+  color: #576b95;
+  font-size: 26rpx;
 }
 
 .news_item {

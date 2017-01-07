@@ -1,5 +1,5 @@
 <import src="../common/line.wxml" />
-<view class="B1" style="padding-top:22rpx;padding-bottom:0rpx;">
+<view style="padding-top:22rpx;padding-bottom:0rpx;">
   <block wx:key="haogu" wx:for="{{array}}" wx:for-item="item" wx:for-index="index">
     <view class="list_item">
 

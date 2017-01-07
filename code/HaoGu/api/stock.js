@@ -382,9 +382,9 @@ function getRelatives({id, classType = 0, order = false} = {}) {
 }
 
 function getCustomDetail(aryGoodsId = []) {
-    if (!aryGoodsId)
+    if (!aryGoodsId) {
         return
-    console.log("sky custom 2:", aryGoodsId, "length:", aryGoodsId.length);
+    }
     var reqFileds = []
     reqFileds.push(GoodsParams.GOODS_NAME);   // 股票名称
     reqFileds.push(GoodsParams.ZXJ);          // 最新价
@@ -411,7 +411,6 @@ function getCustomDetail(aryGoodsId = []) {
         url: `${Service.BaseQuotaUrl}20200`,
     }).then(function (res) {
         if (res.statusCode == 200) {
-            console.log('stock custom detail raw : ', res.data)
             var result = parser.parseCustomDetail(res.data)
             return result
         } else {

@@ -1,26 +1,30 @@
-// pages/newsdetail/newsdetail.js
-
 var Api = require('../../api/api.js')
 var Util = require('../../utils/util.js')
 var newsUtil = require('../../utils/newsUtil.js')
 
 Page({
   data: {
+    id: '',
     title: "",
     time: "",
     content: "",
-    url: ''
+    url: '',
+    goodsName: '',
+    newsType: '',
+    type: ''
   },
   onLoad: function (options) {
+    console.log('newsdetail onLoad', options)
     // 更新标题
     var goodsName = '未知股票'
     var newsType = '新闻'
+    var type = ''
 
     if (options.hasOwnProperty('goodsName')) {
       goodsName = options.goodsName
     }
     if (options.hasOwnProperty('type')) {
-      var type = options.type
+      type = options.type
       if (type == '0') {
         newsType = '新闻'
       } else if (type == '1') {
@@ -37,8 +41,12 @@ Page({
     newsUtil.updateReadNews(options.id)
 
     this.setData({
-      time: options.time,
-      url: options.url
+      time: options.from + " " + options.time,
+      url: options.url,
+      goodsName: goodsName,
+      newsType: newsType,
+      id: options.id,
+      type: type
     })
     this.getData(options.id, options.type, Util.urlNavigateDecode(options.url))
   },
@@ -46,9 +54,9 @@ Page({
   onShareAppMessage: function () {
     var that = this
     return {
-      title: '自稳定',
+      title: `${that.data.goodsName} ${that.data.newsType}`,
       desc: `${getApp().globalData.shareDesc}`,
-      path: `/pages/newsdetail/newsdetail?time=${that.data.time}&url=${that.data.url}`
+      path: `/pages/newsdetail/newsdetail?time=${that.data.time}&id=${that.data.id}&url=${that.data.url}&type=${that.data.type}&goodsName=${that.data.goodsName}`
     }
   },
 

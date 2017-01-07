@@ -1,244 +1,248 @@
 @import "../common/KLineView/KLineView.wxss";
 
 #section_quotation {
-    width: 750rpx;
-    height: 213rpx;
-    margin-top: 21rpx;
-    position: relative;
+  width: 750rpx;
+  height: 213rpx;
+  margin-top: 21rpx;
+  position: relative;
 }
 
 .quota_price {
-    width: 280rpx;
-    height: 80rpx;
-    position: absolute;
-    font-size: 52rpx;
-    text-align: center;
-    line-height: 80rpx;
+  width: 280rpx;
+  height: 80rpx;
+  position: absolute;
+  font-size: 52rpx;
+  text-align: center;
+  line-height: 80rpx;
 }
 
 .quota_zdf {
-    width: 140rpx;
-    height: 47rpx;
-    position: absolute;
-    top: 70rpx;
-    left: 0;
-    line-height: 47rpx;
-    text-align: right;
-    padding-right: 8rpx;
-    box-sizing: border-box;
+  width: 140rpx;
+  height: 47rpx;
+  position: absolute;
+  top: 70rpx;
+  left: 0;
+  line-height: 47rpx;
+  text-align: right;
+  padding-right: 8rpx;
+  box-sizing: border-box;
+  font-size: 26rpx;
 }
 
 .quota_zd {
-    width: 140rpx;
-    height: 47rpx;
-    position: absolute;
-    top: 70rpx;
-    left: 140rpx;
-    line-height: 47rpx;
-    text-align: left;
-    padding-left: 8rpx;
-    box-sizing: border-box;
+  width: 140rpx;
+  height: 47rpx;
+  position: absolute;
+  top: 70rpx;
+  left: 140rpx;
+  line-height: 47rpx;
+  text-align: left;
+  padding-left: 8rpx;
+  box-sizing: border-box;
+  font-size: 26rpx;
 }
 
 #section_quotation .quota_arrow {
-    width: 2rpx;
-    height: 8rpx;
+  width: 2rpx;
+  height: 8rpx;
 }
 
 #section_quotation .quota_item {
-    font-size: 26rpx;
-    color: #888888;
+  font-size: 26rpx;
+  color: #888;
 }
 
 #section_quotation .quota_row1 {
-    position: absolute;
-    top: 10rpx;
+  position: absolute;
+  top: 10rpx;
 }
 
 #section_quotation .quota_row2 {
-    position: absolute;
-    top: 50rpx;
+  position: absolute;
+  top: 50rpx;
 }
 
 #section_quotation .quota_row3 {
-    position: absolute;
-    top: 90rpx;
+  position: absolute;
+  top: 90rpx;
 }
 
 #section_quotation .quota_row4 {
-    position: absolute;
-    top: 140rpx;
+  position: absolute;
+  top: 140rpx;
 }
 
 #section_quotation .quota_row5 {
-    position: absolute;
-    top: 181rpx;
+  position: absolute;
+  top: 181rpx;
 }
 
 #section_quotation .quota_colum1 {
-    position: absolute;
-    left: 30rpx;
+  position: absolute;
+  left: 30rpx;
 }
 
 #section_quotation .quota_colum2 {
-    position: absolute;
-    left: 135rpx;
+  position: absolute;
+  left: 135rpx;
 }
 
 #section_quotation .quota_colum3 {
-    position: absolute;
-    left: 293rpx;
+  position: absolute;
+  left: 293rpx;
 }
 
 #section_quotation .quota_colum4 {
-    position: absolute;
-    left: 372rpx;
+  position: absolute;
+  left: 372rpx;
 }
 
 #section_quotation .quota_colum5 {
-    position: absolute;
-    left: 554rpx;
+  position: absolute;
+  left: 554rpx;
 }
 
 #section_quotation .quota_colum6 {
-    position: absolute;
-    left: 632rpx;
+  position: absolute;
+  left: 632rpx;
 }
 
 #selector_time {
-    width: 710rpx;
-    height: 60rpx;
-    background-color: #f8f8f8;
-    margin: 16rpx auto 14rpx auto;
+  width: 710rpx;
+  height: 60rpx;
+  background-color: #f8f8f8;
+  margin: 16rpx auto 14rpx auto;
 }
 
 #selector_time text {
-    display: inline-block;
-    width: 20%;
-    height: 100%;
-    box-sizing: border-box;
-    font-size: 26rpx;
-    color: #353535;
-    text-align: center;
-    line-height: 60rpx;
+  display: inline-block;
+  width: 20%;
+  height: 100%;
+  box-sizing: border-box;
+  font-size: 26rpx;
+  color: #353535;
+  text-align: center;
+  line-height: 60rpx;
 }
 
 #selector_time text:first-child {
-    border-radius: 8rpx 0 0 8rpx;
+  border-radius: 8rpx 0 0 8rpx;
 }
 
 #selector_time text:last-child {
-    border-radius: 0 8rpx 8rpx 0;
+  border-radius: 0 8rpx 8rpx 0;
 }
 
 /* 添加自选 */
-#section_add_zxg {
+
+/*#section_add_zxg {
     position: fixed;
-    bottom: 0;
-    width: 750rpx;
-    height: 98rpx;
-    background-color: #f7f7fa;
-    border-top: 1rpx solid #b2b2b2;
+    bottom: 20rpx;
+    right: 20rpx;
+    width: 150rpx;
+    height: 90rpx;
+    background-color: rgba(0,0,0,0.7);
+    box-shadow:0 8px 16px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    border-radius: 12rpx;
     display: flex;
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
+    z-index: 100;
+}*/
+
+.icon_search image {
+  width: 40rpx;
+  height: 40rpx;
+  margin-bottom: 8rpx;
 }
 
-#section_add_zxg image {
-    width: 48rpx;
-    height: 48rpx;
-    margin-right: 12rpx;
-}
-
-#section_add_zxg text {
-    color: #576b95;
-    font-size: 31rpx;
+.icon_search text {
+  color: #576b95;
+  font-size: 26rpx;
 }
 
 /* 关联个股标题 */
+
 #section_relative_title {
-    width: 100%;
-    height: 71rpx;
-    background-color: #efeff4;
-    box-sizing: border-box;
-    border-top: 1rpx solid #e4e4e4;
-    border-bottom: 1rpx solid #e4e4e4;
-    position: relative;
+  width: 100%;
+  height: 71rpx;
+  background-color: #efeff4;
+  box-sizing: border-box;
+  border-top: 1rpx solid #e4e4e4;
+  border-bottom: 1rpx solid #e4e4e4;
+  position: relative;
 }
 
 #section_relative_title text {
-    font-size: 26rpx;
-    color: #888888;
-    display: inline-block;
-    height: 71rpx;
-    line-height: 71rpx;
-    position: absolute;
+  font-size: 26rpx;
+  color: #888;
+  display: inline-block;
+  height: 71rpx;
+  line-height: 71rpx;
+  position: absolute;
 }
 
 #section_relative_title .name {
-    left: 23rpx;
+  left: 23rpx;
 }
 
 #section_relative_title .zxj {
-    left: 50%;
-    transform: translate(-50%)
+  left: 50%;
+  transform: translate(-50%);
 }
 
 #section_relative_title .zdf {
-    right: 45rpx;
-    color: #eb333b;
-}
-
-#section_relatives {
-    padding-bottom: 98rpx;
+  right: 45rpx;
+  color: #eb333b;
 }
 
 /* 关联个股列表条目 */
+
 #section_relative_item {
-    width: 100%;
-    height: 100rpx;
-    box-sizing: border-box;
-    border-bottom: 1rpx solid #e4e4e4;
-    position: relative;
+  width: 100%;
+  height: 100rpx;
+  box-sizing: border-box;
+  border-bottom: 1rpx solid #e4e4e4;
+  position: relative;
 }
 
 #section_relative_item text {
-    position: absolute;
+  position: absolute;
 }
 
 #section_relative_item .name {
-    left: 22rpx;
-    top: 17rpx;
-    color: #353535;
-    font-size: 31rpx;
+  left: 22rpx;
+  top: 17rpx;
+  color: #353535;
+  font-size: 31rpx;
 }
 
 #section_relative_item .code {
-    left: 22rpx;
-    bottom: 8rpx;
-    color: #888888;
-    font-size: 22rpx;
+  left: 22rpx;
+  bottom: 8rpx;
+  color: #888;
+  font-size: 22rpx;
 }
 
 #section_relative_item .zxj {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: #353535;
-    font-size: 26rpx;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #353535;
+  font-size: 26rpx;
 }
 
 #section_relative_item .zdf {
-    width: 140rpx;
-    height: 59rpx;
-    top: 50%;
-    transform: translate(0, -50%);
-    line-height: 59rpx;
-    text-align: center;
-    display: inline-block;
-    right: 28rpx;
-    color: white;
-    font-size: 26rpx;
-    border-radius: 8rpx;
+  width: 140rpx;
+  height: 59rpx;
+  top: 50%;
+  transform: translate(0, -50%);
+  line-height: 59rpx;
+  text-align: center;
+  display: inline-block;
+  right: 28rpx;
+  color: white;
+  font-size: 26rpx;
+  border-radius: 8rpx;
 }

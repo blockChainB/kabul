@@ -1,6 +1,6 @@
 /* pages/optional/optional.wxss */
 
-.container-frame{
+.container-frame {
   position: absolute;
   left: 0;
   top: 0;
@@ -9,12 +9,34 @@
   box-sizing: border-box;
 }
 
+index_container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.index_item_container {
+  width: 250rpx;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.index_item_data_container {
+  width: 249rpx;
+  height: 170rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .container_h-justify-index {
   position: relative;
-  height: 120rpx;
+  height: 170rpx;
   width: 100%;
   box-sizing: border-box;
-  padding: 18rpx 0;
 }
 
 .container_v-indexcell-left {
@@ -23,6 +45,7 @@
   height: 100%;
   display: inline-block;
   box-sizing: border-box;
+  padding: 18rpx 0;
 }
 
 .container_v-indexcell-center {
@@ -30,9 +53,9 @@
   width: 33%;
   height: 100%;
   display: inline-block;
-  border-left: 1rpx solid #e4e4e4;
-  border-right: 1rpx solid #e4e4e4;
+  /*border-left: 1rpx solid #e4e4e4;*//*border-right: 1rpx solid #e4e4e4;*/
   box-sizing: border-box;
+  padding: 18rpx 0;
 }
 
 .container_v-indexcell-right {
@@ -41,6 +64,7 @@
   height: 100%;
   display: inline-block;
   box-sizing: border-box;
+  padding: 18rpx 0;
 }
 
 .indexcell-name {
@@ -52,7 +76,7 @@
 
 .container_h-indexcell-zd {
   margin-top: 10rpx;
-  position: absolute;
+  position: relative;
   width: 100%;
   display: flex;
   flex-direction: row;

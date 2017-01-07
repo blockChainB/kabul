@@ -24,7 +24,6 @@ Page({
         return {
             title: '搜索',
             desc: `${getApp().globalData.shareDesc}`,
-            // path: `/pages/search/search`
             path: `/pages/kanpan/kanpan?page=search`
         }
     },
@@ -33,8 +32,6 @@ Page({
         var that = this
         SearchBar.onSearchBarClearEvent(e, that)
 
-        that.data.stockArray = []
-        that.setData(that.data)
         that.setData({
             stockArray: viewmodel.getDefaultData()
         })
@@ -48,17 +45,20 @@ Page({
             Api.stock.search({
                 key: e.detail.value
             }).then(function (result) {
-                that.data.stockArray = []
-                that.setData(that.data)
                 that.data.stockArray = result
                 that.setData(that.data)
+
+                if (that.data.stockArray.length == 1) {
+                    wx.hideKeyboard()
+                    var stock = that.data.stockArray[0]
+                    Util.gotoQuote(stock.goodsId, stock.name, stock.code)
+                }
+
             }, function (res) {
                 console.log("------fail----", res)
             });
 
         } else {
-            that.data.stockArray = []
-            that.setData(that.data)
             that.setData({
                 stockArray: viewmodel.getDefaultData()
             })
@@ -68,25 +68,17 @@ Page({
     onAddOrDelStock: function (e) {
         console.log("onAddOrDelStock", e)
         var that = this
-
-        var stocks = that.data.stockArray
-
-        that.data.stockArray = []
-        that.setData(that.data)
-
-        var stock = stocks[e.currentTarget.id]
-        stock.setOptional(!stock.optional)
-
-        that.data.stockArray = stocks
-
-        that.setData(that.data)
+        var stock = that.data.stockArray[e.currentTarget.id]
 
         Api.stock.commitOptionals({
             goodsId: stock.goodsId
         }).then(function (res) {
-            console.log("添加自选股", res)
+            if (res == 0) {
+                stock.setOptional(!stock.optional)
+                that.setData(that.data)
+            }
         }, function (res) {
-            console.log("添加自选股", res)
+            console.log("添加自选股失败", res)
         })
     },
 

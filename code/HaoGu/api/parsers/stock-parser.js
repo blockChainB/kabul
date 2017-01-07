@@ -84,35 +84,40 @@ function parseNewsData(data) {
 
 // 解析个股行情数据
 function parseStockQuotationValue(data) {
+    console.log('parseStockQuotationValue', data)
     var quotas = data.quota_value
     if (quotas != null && quotas.length > 0) {
         var ids = data.rep_fields
         var values = data.quota_value[0].rep_field_value
 
-        var price = Util.formatPrice(PbUtil.getPbValue(ids, values, GoodsParams.ZXJ))
-        var zd = Util.formatZd(PbUtil.getPbValue(ids, values, GoodsParams.ZHANGDIE))
-        var zdf = Util.formatZdf(PbUtil.getPbValue(ids, values, GoodsParams.ZDF))
-        var zdColor = Util.getColorByZd(PbUtil.getPbValue(ids, values, GoodsParams.ZHANGDIE))
+        // 是否停牌
+        var suspendFlag = PbUtil.getPbValue(ids, values, GoodsParams.SUSPENSION)
+        var isSusPend = suspendFlag == '1'
+
+        var price = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.ZXJ), isSusPend, Util.formatPrice, '停牌')
+        var zd = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.ZHANGDIE), isSusPend, Util.formatZd, '--')
+        var zdColor = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.ZHANGDIE), isSusPend, Util.getColorByZd, '#e64340')
+        var zdf = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.ZDF), isSusPend, Util.formatZdf, '--')
         // console.log(price,zd,zdf, zdColor)
 
-        var open = Util.formatPrice(PbUtil.getPbValue(ids, values, GoodsParams.OPEN))
-        var high = Util.formatPrice(PbUtil.getPbValue(ids, values, GoodsParams.HiGH))
-        var low = Util.formatPrice(PbUtil.getPbValue(ids, values, GoodsParams.LOW))
+        var open = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.OPEN), isSusPend, Util.formatPrice, '--')
+        var high = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.HiGH), isSusPend, Util.formatPrice, '--')
+        var low = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.LOW), isSusPend, Util.formatPrice, '--')
         // console.log(open,high,low)
 
-        var hsl = Util.formatHsl(PbUtil.getPbValue(ids, values, GoodsParams.HSL))
-        var syl = Util.formatSyl(PbUtil.getPbValue(ids, values, GoodsParams.SYL))
-        var sjl = Util.formatSyl(PbUtil.getPbValue(ids, values, GoodsParams.SJL))
+        var hsl = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.HSL), isSusPend, Util.formatHsl, '--')
+        var syl = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.SYL), isSusPend, Util.formatSyl, '--')
+        var sjl = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.SJL), isSusPend, Util.formatSyl, '--')
         // console.log(hsl, syl, sjl)
 
-        var cjl = Util.formatVolumn(PbUtil.getPbValue(ids, values, GoodsParams.VOLUME) / 100)
-        var jl = Util.formatJl(PbUtil.getPbValue(ids, values, GoodsParams.JL))
-        var zsz = Util.formatAmount(PbUtil.getPbValue(ids, values, GoodsParams.ZSZ))
+        var cjl = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.VOLUME) / 100, isSusPend, Util.formatVolumn, '--')
+        var jl = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.JL), isSusPend, Util.formatJl, '--')
+        var zsz = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.ZSZ), isSusPend, Util.formatAmount, '--')
         // console.log(cjl, jl, zsz)
 
-        var amount = Util.formatAmount(PbUtil.getPbValue(ids, values, GoodsParams.AMOUNT))
-        var lb = Util.formatSyl(PbUtil.getPbValue(ids, values, GoodsParams.LB))
-        var ltsz = Util.formatAmount(PbUtil.getPbValue(ids, values, GoodsParams.LTSZ))
+        var amount = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.AMOUNT) / 1000, isSusPend, Util.formatAmount, '--')
+        var lb = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.LB), isSusPend, Util.formatSyl, '--')
+        var ltsz = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.LTSZ), isSusPend, Util.formatAmount, '--')
         // console.log(amount, lb, ltsz)
 
         var date = data.cur_update_market_date
@@ -133,31 +138,35 @@ function parseBkQuotationValue(data) {
         var ids = data.rep_fields
         var values = data.quota_value[0].rep_field_value
 
-        var price = Util.formatPrice(PbUtil.getPbValue(ids, values, GoodsParams.ZXJ))
-        var zd = Util.formatZd(PbUtil.getPbValue(ids, values, GoodsParams.ZHANGDIE))
-        var zdf = Util.formatZdf(PbUtil.getPbValue(ids, values, GoodsParams.ZDF))
-        var zdColor = Util.getColorByZd(PbUtil.getPbValue(ids, values, GoodsParams.ZHANGDIE))
+        // 是否停牌
+        var suspendFlag = PbUtil.getPbValue(ids, values, GoodsParams.SUSPENSION)
+        var isSusPend = suspendFlag == '1'
+
+        var price = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.ZXJ), isSusPend, Util.formatPrice, '停牌')
+        var zd = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.ZHANGDIE), isSusPend, Util.formatZd, '--')
+        var zdColor = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.ZHANGDIE), isSusPend, Util.getColorByZd, '#e64340')
+        var zdf = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.ZDF), isSusPend, Util.formatZdf, '--')
         // console.log(price,zd,zdf, zdColor)
 
-        var open = Util.formatPrice(PbUtil.getPbValue(ids, values, GoodsParams.OPEN))
-        var high = Util.formatPrice(PbUtil.getPbValue(ids, values, GoodsParams.HiGH))
-        var low = Util.formatPrice(PbUtil.getPbValue(ids, values, GoodsParams.LOW))
+        var open = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.OPEN), isSusPend, Util.formatPrice, '--')
+        var high = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.HiGH), isSusPend, Util.formatPrice, '--')
+        var low = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.LOW), isSusPend, Util.formatPrice, '--')
         // console.log(open,high,low)
 
-        var hsl = Util.formatHsl(PbUtil.getPbValue(ids, values, GoodsParams.HSL))
-        var zs = PbUtil.getPbValue(ids, values, GoodsParams.RISE)
-        var ds = PbUtil.getPbValue(ids, values, GoodsParams.FALL)
+        var hsl = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.HSL), isSusPend, Util.formatHsl, '--')
+        var zs = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.RISE), isSusPend, null, '--')
+        var ds = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.FALL), isSusPend, null, '--')
         // console.log(hsl, zs, ds)
 
-        var cjl = Util.formatVolumn(PbUtil.getPbValue(ids, values, GoodsParams.VOLUME) / 100)
-        var jl = Util.formatJl(PbUtil.getPbValue(ids, values, GoodsParams.JL))
-        var pj = PbUtil.getPbValue(ids, values, GoodsParams.EQUAL)
+        var cjl = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.VOLUME), isSusPend, Util.formatVolumn, '--')
+        var jl = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.JL), isSusPend, Util.formatJl, '--')
+        var pj = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.EQUAL), isSusPend, null, '--')
         // console.log(cjl, jl, pj)
 
-        var amount = Util.formatAmount(PbUtil.getPbValue(ids, values, GoodsParams.AMOUNT))
-        var lb = Util.formatSyl(PbUtil.getPbValue(ids, values, GoodsParams.LB))
-        var zf = Util.formatZdf(PbUtil.getPbValue(ids, values, GoodsParams.ZHENFU))
-        // console.log(amount, lb, zf)
+        var amount = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.AMOUNT) / 1000, isSusPend, Util.formatAmount, '--')
+        var lb = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.LB), isSusPend, Util.formatSyl, '--')
+        var zf = formatQuota(PbUtil.getPbValue(ids, values, GoodsParams.ZHENFU), isSusPend, Util.formatZdf, '--')
+        // console.log(amount, lb, zf, PbUtil.getPbValue(ids, values, GoodsParams.AMOUNT))
 
         var date = data.cur_update_market_date
         var time = data.cur_update_market_time
@@ -168,6 +177,28 @@ function parseBkQuotationValue(data) {
     }
 
     return null
+}
+
+// 是否格式化数据
+function isformatData(value, isSusPend) {
+    // 如果停牌且值为0，显示--，否则显示本值
+    if (isSusPend && (value == 0 || value == '0')) {
+        return false
+    } else {
+        return true
+    }
+}
+
+function formatQuota(value, isSusPend, formatFunction, defaultValue) {
+    if (isformatData(value, isSusPend)) {
+        if (formatFunction == null) {
+            return value
+        } else {
+            return formatFunction(value)
+        }
+    } else {
+        return defaultValue
+    }
 }
 
 // 解析关联item
@@ -214,6 +245,7 @@ function parseCustomDetail(data) {
             var tName = PbUtil.getPbValue(fields, values, GoodsParams.GOODS_NAME);
             var tZxj = Util.formatPrice(PbUtil.getPbValue(fields, values, GoodsParams.ZXJ));
             var tZdf =  Util.formatZdf(PbUtil.getPbValue(fields, values, GoodsParams.ZDF));
+            var tZdfValue=PbUtil.getPbValue(fields, values, GoodsParams.ZDF);
             var tZd_original = PbUtil.getPbValue(fields, values, GoodsParams.ZHANGDIE);
             var tIntZd = parseInt(tZd_original);
             var tZd = Util.formatPrice(tZd_original);
@@ -230,7 +262,8 @@ function parseCustomDetail(data) {
                 zdf: tZdf,
                 zd: tZd,
                 intZd: tIntZd,
-                suspension:tsuspension
+                suspension:tsuspension,
+                zdfValue:tZdfValue
             }
 
 

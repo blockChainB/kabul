@@ -2,8 +2,9 @@
 
 <!--指数cell模板-->
 <template name="indexCell">
-  <view class="{{itsclass}}" bindtap="onIndexTap" data-id="{{goodsid}}" data-name="{{name}}">
+  <view class="{{itsclass}}" hover="true" hover-class="navigator-hover" bindtap="onIndexTap" data-id="{{goodsid}}" data-name="{{name}}">
     <text class="S4 T3 indexcell-name">{{name}}</text>
+    <text class="S7 {{intZd == 0? 'T2' :(intZd > 0? 'C1-font': 'C2-font')}} indexcell-name" style="top:6rpx">{{zxj}}</text>
     <view class="container_h-indexcell-zd">
       <text class="S2 {{intZd == 0 ? 'T2' :(intZd > 0? 'C1-font': 'C2-font')}}">{{intZd > 0? '+' + zd : zd}}</text>
       <view style="width:15rpx"></view>
@@ -14,7 +15,7 @@
 
 <!--个股item模板-->
 <template name="optionalItem">
-  <view class="container-tooltip" data-tap-index="{{index}}" catchtap="onTapOptionalItem" catchlongtap="onLongTapOptionalItem">
+  <view class="container-tooltip" hover="true" hover-class="navigator-hover" data-tap-index="{{index}}" catchtap="onTapOptionalItem" catchlongtap="onLongTapOptionalItem">
     <view class="container_h-item">
       <view class="container_v-item-goodname">
         <text class="S5 T3">{{good.name}}</text>
@@ -29,10 +30,27 @@
 <view class="container-frame" catchtap="onscreenTap">
 
   <!--指数头部-->
-  <view class="container_h-justify-index">
+
+  <!--<view class="container_h-justify-index">
     <template is="indexCell" data="{{itsclass:'container_v-indexcell-left',...aryIndexs[0]}}"></template>
     <template is="indexCell" data="{{itsclass:'container_v-indexcell-center',...aryIndexs[1]}}"></template>
     <template is="indexCell" data="{{itsclass:'container_v-indexcell-right',...aryIndexs[2]}}"></template>
+  </view>-->
+  <view class="index_container">
+    <block wx:for="{{aryIndexs}}" wx:key="Id">
+      <view class="index_item_container" hover="true" hover-class="navigator-hover">
+        <view class="index_item_data_container"  bindtap="onIndexTap" data-id="{{item.goodsid}}" data-name="{{item.name}}">
+          <text class="S4 T3">{{item.name}}</text>
+          <text class="S7 {{intZd == 0? 'T2' :(intZd > 0? 'C1-font': 'C2-font')}} indexcell-name" style="top:6rpx">{{item.zxj}}</text>
+          <view class="container_h-indexcell-zd">
+            <text class="S2 {{intZd == 0 ? 'T2' :(intZd > 0? 'C1-font': 'C2-font')}}">{{item.intZd > 0? '+' + item.zd : item.zd}}</text>
+            <view style="width:15rpx"></view>
+            <text class="S2 {{intZd == 0? 'T2' :(intZd > 0? 'C1-font': 'C2-font')}}">{{item.zdf}}</text>
+          </view>
+        </view>
+        <view wx:if="{{index<2}}" style="height:135rpx;border-left: 1rpx solid #e4e4e4;" />
+      </view>
+    </block>
   </view>
 
   <!--排序头-->
@@ -50,7 +68,9 @@
 </view>
 
 <!--搜索按钮-->
-<view class="icon_search" bindtap="onStockSearchEvent">
+<image class="icon_search" src="../../images/icon_optional_search.png" bindtap="onStockSearchEvent"></image>
+
+<!--<view class="icon_search" bindtap="onStockSearchEvent">
     <icon type="search" size="23"/>
     <text style="color: #dddddd; font-size: 26rpx;">搜索</text>
-</view>
+</view>-->

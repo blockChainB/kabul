@@ -13,9 +13,9 @@ Page({
     data: {
         // 个股头部数据
         quotation: {},
-        goodsId: 600600,
-        goodsName: '青岛啤酒',
-        goodsCode: '600600',
+        goodsId: 1832950,
+        goodsName: '益盟股份',
+        goodsCode: '832950',
         quotationColor: '#eb333b',
         currentTimeIndex: 0,
         currentInfoIndex: 0,
@@ -39,6 +39,7 @@ Page({
     },
 
     onLoad: function (option) {
+        fundview.reset();
         if (option.hasOwnProperty('id') && option.hasOwnProperty('name') && option.hasOwnProperty('code')) {
             this.setData({
                 goodsId: parseInt(option.id),
@@ -64,17 +65,19 @@ Page({
     },
 
     onShow: function () {
-        this.startAutoRequest()
+        // this.startAutoRequest()
         this.isCurrentGoodsInZxgList()
         // 刷新资讯列表颜色
         updateItemColor(this)
     },
 
     onHide: function () {
+        fundview.reset();
         this.stopAutoRequest()
     },
 
     onUnload: function () {
+        fundview.reset();
         // 页面退出时，不会调用onHide
         this.stopAutoRequest()
     },
@@ -228,20 +231,26 @@ Page({
             }
 
             if (results.hasOwnProperty('news')) {
-                that.setIsInfoLoad('0')
                 that.setData({
                     news: results.news
                 })
+                if (results.news != null && results.news.length > 0) {
+                    that.setIsInfoLoad('0')
+                }
             } else if (results.hasOwnProperty('notices')) {
-                that.setIsInfoLoad('2')
                 that.setData({
                     notices: results.notices
                 })
+                if (results.notices != null && results.notices.length > 0) {
+                    that.setIsInfoLoad('2')
+                }
             } else if (results.hasOwnProperty('research')) {
-                that.setIsInfoLoad('3')
                 that.setData({
                     research: results.research
                 })
+                if (results.research != null && results.research.length > 0) {
+                    that.setIsInfoLoad('3')
+                }
             }
 
             // 刷新资讯列表颜色
@@ -333,12 +342,12 @@ Page({
     onNewsDetailEvent: function (e) {
         var newsItem = e.currentTarget.dataset.newsItem
         var newsType = e.currentTarget.dataset.newsType
-
+        
         var data = e.currentTarget.dataset
         var url = Util.urlNavigateEncode(newsItem.url)
         var stockName = this.data.goodsName
         wx.navigateTo({
-            url: `../newsdetail/newsdetail?time=${newsItem.time}&id=${newsItem.newsId}&url=${url}&type=${newsType}&goodsName=${stockName}`
+            url: `../newsdetail/newsdetail?time=${newsItem.time}&from=${newsItem.from}&id=${newsItem.newsId}&url=${url}&type=${newsType}&goodsName=${stockName}`
         })
     },
 
@@ -346,16 +355,32 @@ Page({
     onZxgTap: function (e) {
         console.log("page stock onZxgTap", e)
         var that = this
-
+        wx.showNavigationBarLoading()
+        
         Api.stock.commitOptionals({
             goodsId: that.data.goodsId
         }).then(function (res) {
             console.log("添加自选股", res)
+            wx.hideNavigationBarLoading()
+
             if (res == 0 || res == '0') {
                 that.isCurrentGoodsInZxgList()
+                // 弹出toast提示成功
+                var title = ''
+                if (that.data.isAddToZxg) {
+                    title = '添加自选成功'
+                } else {
+                    title = '删除自选成功'
+                }
+                wx.showToast({
+                    title: title,
+                    icon: 'none',
+                    duration: 500
+                })
             }
         }, function (res) {
             console.log("添加自选股", res)
+            wx.hideNavigationBarLoading()
         })
     },
 

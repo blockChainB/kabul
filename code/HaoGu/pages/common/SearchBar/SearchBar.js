@@ -1,6 +1,5 @@
 
 function init(placeholder, that, callback) {
-    console.log("===init==before", that.data)
     var tempData = Object.assign({
         searchData: {
             searchContent: '',
@@ -9,17 +8,12 @@ function init(placeholder, that, callback) {
         }
     }, that.data)
     that.setData(tempData)
-    console.log("===init==after", tempData, that.data)
-
     if (typeof (callback) == 'function') {
         callback()
     }
 }
 
 function onSearchBarClearEvent(e, that, callback) {
-
-    console.log("===onSearchBarClearEvent==", that.data)
-
     that.data.searchData.showClearButton = false
     that.data.searchData.searchContent = ""
 
@@ -31,13 +25,10 @@ function onSearchBarClearEvent(e, that, callback) {
 }
 
 function onSearchBarChangedEvent(e, that, callback) {
-
-    console.log("===onSearchBarChangedEvent==", that.data)
-
     that.data.searchData.showClearButton = e.detail.value.length > 0
-    that.data.searchData.searchContent = e.detail.value
 
     that.setData(that.data)
+    that.data.searchData.searchContent = e.detail.value
 
     if (typeof (callback) == 'function') {
         callback()

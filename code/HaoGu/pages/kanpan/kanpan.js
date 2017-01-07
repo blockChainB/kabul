@@ -20,6 +20,7 @@ var currCategory = CATEGORY_All;
 Page({
     data: {
         currIndex: 0,//当前选择的tab
+        isZdfSort: true,//涨跌幅排序：true,终选时间排序:false
         sortState: -1,//-1降序,1升序
         bkArr: [],
         tabArr: ["全部", "强者", "缺口", "题材", "黄金"],//tab
@@ -39,7 +40,7 @@ Page({
                     }
                 } else if (page == 'search') {
                     wx.navigateTo({
-                      url: '/pages/search/search'
+                        url: '/pages/search/search'
                     })
                 }
             }
@@ -224,17 +225,29 @@ Page({
 
         var that = this;
 
-        data.sort(function (a, b) {
-            var zdf1 = a.zdf
-            var zdf2 = b.zdf
-            if (!zdf1) {
-                zdf1 = that.data.sortState*20000
-            }
-            if (!zdf2) {
-                zdf2 = that.data.sortState*20000
-            }
-            return that.data.sortState * (zdf1 - zdf2);
-        });
+        if (this.data.isZdfSort) {
+            data.sort(function (a, b) {
+                var zdf1 = a.zdf
+                var zdf2 = b.zdf
+
+                if (a.suspension == 1) {
+                    //停牌
+                    zdf1 = that.data.sortState * 20000
+                }
+                if (b.suspension == 1) {
+                    //停牌
+                    zdf2 = that.data.sortState * 20000
+                }
+
+                return that.data.sortState * (zdf1 - zdf2);
+            });
+        } else {
+            data.sort(function (a, b) {
+                // console.log('***************time1:',a.time,',time2:',b.time)
+                return  that.data.sortState *(a.time - b.time);
+            });
+        }
+
 
         this.setData({
             goodsArr: data
@@ -249,10 +262,36 @@ Page({
 
     //涨跌幅排序
     onZDFSort: function (e) {
-        var tempSortState = -this.data.sortState;
-        this.setData({
-            sortState: tempSortState
-        })
+        if (this.data.isZdfSort) {
+            //当前是涨跌
+            var tempSortState = -this.data.sortState;
+            this.setData({
+                sortState: tempSortState
+            })
+
+        } else {
+            this.setData({
+                isZdfSort: true
+            })
+        }
+
+        //更新数据并排序
+        this.updateData()
+    },
+
+    //时间排序
+    onDateSort: function (e) {
+        if (this.data.isZdfSort) {
+            //当前是涨跌，则切换成时间
+            this.setData({
+                isZdfSort: false
+            })
+        } else {
+            var tempSortState = -this.data.sortState;
+            this.setData({
+                sortState: tempSortState
+            })
+        }
 
         //更新数据并排序
         this.updateData()

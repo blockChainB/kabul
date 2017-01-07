@@ -8,18 +8,12 @@
   </view>
 
   <!--列表-->
-  <block wx:key="optional" wx:for="{{stockArray}}" wx:for-item="item" wx:for-index="index">
-    <view class="list_item" catchtap="onShowStockDetail" data-stock="{{item}}">
-      <!--<block wx:if="{{item.type.length > 0}}">
-        <text class="item_type C3-font S1">{{item.type}}</text>
-      </block>
-      <block wx:else>
-        <text class="item_type C3-font S1" style="border:{{item.type.length > 0 ? 1 : 0}}px">{{item.type}}</text>
-      </block>-->
-        <text class="item_type C3-font S1" style="border-width:{{item.type.length > 0 ? 1 : 0}}px">{{item.type}}</text>
+  <block wx:key="{{item.goodsId}}" wx:for="{{stockArray}}" wx:for-item="item" wx:for-index="index">
+    <view class="list_item" bindtap="onShowStockDetail" data-stock="{{item}}">
+      <text class="item_type C3-font S1" style="border-width:{{item.type.length > 0 ? 1 : 0}}px">{{item.type}}</text>
       <text class="item_name T3 S5">{{item.name}}</text>
       <text class="item_code T1 S7">{{item.code}}</text>
-      <image id="{{index}}" src="{{item.optionPath}}" mode="aspectFit" catchtap="onAddOrDelStock"></image>
+      <image id="{{index}}" src="{{item.optionPath}}" mode="aspectFit" catchtap="onAddOrDelStock" data-stock="{{item}}"></image>
     </view>
     <template is="lineView"></template>
   </block>

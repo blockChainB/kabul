@@ -188,7 +188,21 @@ Page({
 
 function sortAndSetGoods(that, stype, ary) {
   ary.sort(function (goods1, goods2) {
-    return stype * (goods2.zd - goods1.zd);
+    var zdf1 = goods1.zdfValue
+    var zdf2 = goods2.zdfValue
+
+    if (goods1.suspension == 1) {
+      //停牌
+      zdf1 = stype * -20000
+    }
+    if (goods2.suspension == 1) {
+      //停牌
+      zdf2 = stype * -20000
+    }
+
+    return stype * (zdf2 - zdf1);
+
+    // return stype * (goods2.zd - goods1.zd);
   })
   that.setData({
     sortType: stype,
@@ -203,13 +217,9 @@ function requestCustomGoodsInfo(that) {
   var tOptional = getApp().globalData.optionals;
   var tCustom = tIndex.concat(tOptional);
 
-  console.log("sky optional 1", tCustom)
-
   api.stock.getCustomDetail(tCustom).then(
     function (res) {
-      console.log("sky optional detail:", res);
       var tSortType = that.data.sortType;
-
 
       if (res.customDetail.length == tCustom.length) {
         var resIndexs = res.customDetail.slice(0, 3);

@@ -11,7 +11,7 @@ function BKInfo(id,code, bkName, goodsName, zxj, zdf,zdfDisplay) {
     }
 }
 
-function Goods(id,code, name, price, zdf, zdfDisplay, time,suspension) {
+function Goods(id,code, name, price, zdf, zdfDisplay, time,timeDisplay,suspension) {
     this.id=id;
     this.code = code;
     this.name = name;
@@ -19,6 +19,7 @@ function Goods(id,code, name, price, zdf, zdfDisplay, time,suspension) {
     this.zdf = zdf;
     this.zdfDisplay = zdfDisplay;
     this.time = time;
+    this.timeDisplay=timeDisplay;
     this.suspension=suspension;
     this.toString = function () {
         return id+','+code + ', ' + name + ', ' + price + ', ' + zdf + ',' + zdfDisplay + ', ' + time + ','+suspension+'\n'

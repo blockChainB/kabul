@@ -12,7 +12,12 @@ function updateOptional(goodsId) {
     if (isOptional(goodsId)) {
         getApp().globalData.optionals.removeObject(goodsId)
     } else {
-        getApp().globalData.optionals.unshift(goodsId)
+
+        if (typeof (goodsId) == 'number') {
+            getApp().globalData.optionals.unshift(goodsId)
+        } else {
+            console.log("========自选股ID类型不对")
+        }
     }
 }
 

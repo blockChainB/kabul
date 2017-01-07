@@ -1,8 +1,7 @@
 {
   "pages": [
-    "pages/optional/optional",
     "pages/kanpan/kanpan",
-    
+    "pages/optional/optional",
     "pages/haogu/haogu",
     "pages/search/search",
     "pages/stock/stock",
@@ -18,8 +17,8 @@
     "enablePullDownRefresh": true
   },
   "tabBar": {
-    "selectedColor": "#09bb07",
-    "color": "#353535",
+    "color": "#7a7d82",
+    "selectedColor": "#ef333b",
     "list": [
       {
         "pagePath": "pages/optional/optional",

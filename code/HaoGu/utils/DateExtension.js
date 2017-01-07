@@ -14,3 +14,19 @@ Date.prototype.today = function (date) {
         }
     }
 }
+
+// 判断日期是否为的今年 date
+Date.prototype.thisYear = function (date) {
+    if (this != undefined && this.constructor == Date) {
+
+        if (date == undefined) {
+            date = new Date()
+        }
+
+        if (this.getYear() == date.getYear()) {
+            return true
+        } else {
+            return false
+        }
+    }
+}

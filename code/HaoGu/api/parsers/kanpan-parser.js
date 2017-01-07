@@ -32,18 +32,18 @@ function parseKanpanData(data) {
         for (var i = 0; i < size; i++) {
             var id = data[i].stock_code
             var code = Util.formatCode(data[i].stock_code)
-            var name = data[i].stock_name
+            var name = data[i].rep_field_value[3]
             var price = Util.formatPrice(data[i].rep_field_value[0])
             var zdf = data[i].rep_field_value[1]
             var zdfDisplay = Util.formatZdf(data[i].rep_field_value[1])
             var date = new Date(Date.parse(data[i].date_time.replace(/-/g, "/")))
-            var formate = date.today() ? "HH:mm" : "MM-dd"
-            var time = Util.formateTime(date, formate)
+            var formate = date.thisYear()?(date.today() ? "HH:mm" : "MM-dd"):"yy-MM-dd"
+            var timeDisplay = Util.formateTime(date, formate)
             var suspension = data[i].rep_field_value[2];
             if (suspension == 1) {
                 zdf = 0;
             }
-            goodsArr.push(new Kanpan.Goods(id, code, name, price, zdf, zdfDisplay, time, suspension))
+            goodsArr.push(new Kanpan.Goods(id, code, name, price, zdf, zdfDisplay, date,timeDisplay,suspension))
         }
     }
 

@@ -1,7 +1,9 @@
-
 function updateReadNews(newsId) {
-    getApp().globalData.readNews.unshift(newsId)
+    if (isNewsRead(newsId)) {
+        return
+    }
 
+    getApp().globalData.readNews.unshift(newsId)
     var newsString = getApp().globalData.readNews.join(',')
     wx.setStorage({
         key: 'NewsReadList',
@@ -26,7 +28,7 @@ function loadReadNews() {
 }
 
 function isNewsRead(newsId) {
-    var index = getApp().globalData.readNews.indexOf(newsId + '')
+    var index = getApp().globalData.readNews.indexOf(newsId + "")
     if (index >= 0) {
         return true
     } else {

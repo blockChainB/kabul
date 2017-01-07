@@ -8,20 +8,20 @@ function SearchItem(name, goodsId) {
     this.goodsId = goodsId
     this.code = Util.formateNumber(goodsId % 1000000, 6)
 
-    // console.log("===========name, coee", name, goodsId, this.code)
-
     if (Util.isZS(goodsId)) {
         this.type = "指数"
     } else if (Util.isJiJin(goodsId)) {
         this.type = "基金"
-    } else {
+    } else if (Util.isBK(goodsId)) {
+        this.type = "板块"
+    } else if (Util.isAG(goodsId)) {
         if (this.code.indexOf("60") == 0) {
             this.type = "沪A"
         } else if (this.code.indexOf("000") == 0 || this.code.indexOf("002") == 0 || this.code.indexOf("300") == 0) {
             this.type = "深A"
-        } else {
-            this.type = ""
         }
+    } else {
+        this.type = ""
     }
 
     this.setOptional(optionalUtil.isOptional(this.goodsId))

@@ -20,11 +20,11 @@ App({
     optionals: [],
     readNews: [],
     netWorkType: "",
-    WIFI_REFRESH_INTERVAL: 5 * 1000,//wifi网络时刷新间隔 秒
-    MOBILE_REFRESH_INTERVAL: 30 * 1000,//手机网络时刷新间隔 秒
+    WIFI_REFRESH_INTERVAL: 5 * 1000,//wifi网络时刷新间隔5秒
+    MOBILE_REFRESH_INTERVAL: 30 * 1000,//手机网络时刷新间隔30秒
     shareDesc: '好股365，帮你选出好股票，节省选股时间；帮你做盯盘，每个有价值的异动都能看到；帮你做决策，买卖有据水到渠成。',
-    currSystemDate: '',//当前系统日期,格式：2016-01-01
-    currSystemTime: '',//当前系统时间,格式：133050
+    currSystemDate: '',//当前服务器日期,格式：2016-01-01
+    currSystemTime: '',//当前服务器时间,格式：133050
   },
 
   onLaunch: function () {

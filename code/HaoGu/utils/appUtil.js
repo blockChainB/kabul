@@ -109,7 +109,12 @@ function requestOptionals() {
     Api.stock.requestOptionals({
 
     }).then(function (res) {
-        getApp().globalData.optionals = res.GoodsId;
+        for (let i = 0; i < res.GoodsId.length; i++) {
+            if (typeof (res.GoodsId[i]) == 'number') {
+                getApp().globalData.optionals.push(res.GoodsId[i])
+            }
+        }
+
     }, function (res) {
 
     })

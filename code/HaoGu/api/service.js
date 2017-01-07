@@ -5,7 +5,7 @@ let StaticStrings = require('../utils/StaticStrings.js')
 // let BaseUrl = "http://192.168.3.51:8094/?X-Protocol-Id="    // 邬  K线
 // let BaseUrl = "http://120.55.169.35:1121/?X-Protocol-Id="    // 郭磊  K线
 // let BaseUrl = "http://192.168.8.189:2368/?X-Protocol-Id="      // 郭磊   个股新闻
-// let BaseUrl = "http://192.168.8.189:1122/?X-Protocol-Id="    // 邬  股票行情
+//let BaseUrl = "http://192.168.8.189:1122/?X-Protocol-Id="    // 邬  股票行情
 // var TranferUrl = "https://mobiletest.emoney.cn/wxapp/transfer"
 // let BaseOptionalUrl = "http://192.168.8.189:1131/?X-Protocol-Id="   // 男神   自选股
 
@@ -27,7 +27,7 @@ function request(options) {
         showLoading: true,
         showFailMsg: true
     }, options);
-    console.log('====request opts', opts)
+    // console.log('====request opts', opts)
 
     var promise = new Promise(function (resolve, reject) {
         opts.success = function (res) {
