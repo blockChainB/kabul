@@ -72,7 +72,4 @@
 </view>
 
 <!-- 添加自选 -->
-<view class="icon_search" bindtap="onZxgTap">
-  <image src="{{isAddToZxg ? '/images/remove_zxg.png' : '/images/add_zxg.png'}}"></image>
-  <text style="color: {{isAddToZxg ? '#f5cbb7' : '#b7cbf5'}};">自选</text>
-</view>
+<image src="{{isAddToZxg ? '/images/remove_zxg.png' : '/images/add_zxg.png'}}" class="icon_search" bindtap="onZxgTap"></image>

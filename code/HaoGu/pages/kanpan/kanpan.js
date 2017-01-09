@@ -98,11 +98,12 @@ Page({
 
     getData: function () {
         var that = this
-
+       
         //板块
         Api.kanpan.getHotBK({
             uid: getApp().globalData.uid
         }).then(function (results) {
+            console.log('*****************kanpan:',results)
             that.setData({
                 bkArr: results
             })
@@ -120,7 +121,7 @@ Page({
             secucategory: currCategory,
             uid: getApp().globalData.uid
         }).then(function (results) {
-            //console.log('*******************kanpan category:',results.category)
+            console.log('*******************kanpan:',results)
             if (results) {
                 //设数据 
                 if (results.category == CATEGORY_All) {
@@ -244,7 +245,7 @@ Page({
         } else {
             data.sort(function (a, b) {
                 // console.log('***************time1:',a.time,',time2:',b.time)
-                return  that.data.sortState *(a.time - b.time);
+                return that.data.sortState * (a.time - b.time);
             });
         }
 

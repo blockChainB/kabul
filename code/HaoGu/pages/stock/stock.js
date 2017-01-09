@@ -65,7 +65,7 @@ Page({
     },
 
     onShow: function () {
-        // this.startAutoRequest()
+        this.startAutoRequest()
         this.isCurrentGoodsInZxgList()
         // 刷新资讯列表颜色
         updateItemColor(this)

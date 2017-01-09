@@ -148,7 +148,7 @@ Page({
     this.setData({
       displayDelIndex: -1
     });
-    api.stock.commitOptionals(tAryGoods[tDelIndex].goodsid)
+    api.stock.commitOptionals({goodsId:tAryGoods[tDelIndex].goodsid})
       .then(
       function (res) { },
       function (err) { }
